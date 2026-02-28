@@ -1,5 +1,7 @@
 # Coexisting with Birds
 
+**Live demo**: https://coexisting-with-birds.vercel.app/
+
 Interactive heatmap of bird observations across Norway. Built as a pre-stage screening tool for understanding bird distribution before infrastructure projects (wind farms, construction, etc.).
 
 ## Quick start

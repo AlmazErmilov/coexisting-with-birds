@@ -116,11 +116,195 @@
             z-index: 2000; background: rgba(10,10,10,0.95); padding: 24px 32px;
             border-radius: 12px; font-size: 14px; color: #4ecdc4;
         }
+
+        .info-btn {
+            position: fixed; top: 16px; right: 56px; z-index: 1000;
+            width: 36px; height: 36px; border-radius: 8px;
+            background: rgba(10,10,10,0.92); backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #4ecdc4; font-size: 16px; font-weight: 700;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: border-color 0.2s;
+        }
+        .info-btn:hover { border-color: rgba(78,205,196,0.5); }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+            z-index: 3000; display: none; align-items: center; justify-content: center;
+        }
+        .modal-overlay.open { display: flex; }
+
+        .modal {
+            background: #111; border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px; width: 640px; max-width: 90vw;
+            max-height: 85vh; overflow-y: auto; padding: 32px;
+            color: #ddd; position: relative;
+        }
+        .modal-close {
+            position: absolute; top: 16px; right: 16px;
+            background: none; border: none; color: #888; font-size: 20px;
+            cursor: pointer; width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 6px;
+        }
+        .modal-close:hover { background: rgba(255,255,255,0.05); color: #fff; }
+
+        .modal h2 { font-size: 20px; color: #fff; margin-bottom: 6px; }
+        .modal h3 { font-size: 14px; color: #4ecdc4; margin: 20px 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px; }
+        .modal p { font-size: 13px; line-height: 1.6; color: #bbb; margin-bottom: 10px; }
+        .modal .concept-text { font-size: 14px; color: #ddd; line-height: 1.7; }
+
+        .legend-table { width: 100%; border-collapse: collapse; margin: 8px 0 12px 0; }
+        .legend-table td { padding: 6px 10px; font-size: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .legend-table td:first-child { width: 60px; text-align: center; }
+
+        .source-card {
+            background: rgba(255,255,255,0.03); border-radius: 8px;
+            padding: 12px 14px; margin-bottom: 8px;
+        }
+        .source-card .src-name { font-size: 13px; color: #fff; font-weight: 600; }
+        .source-card .src-detail { font-size: 11px; color: #888; margin-top: 3px; }
+        .source-card a { color: #4ecdc4; text-decoration: none; }
+        .source-card a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
     <div id="loading" class="loading">Loading bird data...</div>
     <div id="map"></div>
+
+    <button class="info-btn" onclick="document.getElementById('info-modal').classList.add('open')" title="About this project">?</button>
+
+    <div class="modal-overlay" id="info-modal" onclick="if(event.target===this)this.classList.remove('open')">
+        <div class="modal">
+            <button class="modal-close" onclick="document.getElementById('info-modal').classList.remove('open')">&times;</button>
+
+            <h2>Coexisting with Birds</h2>
+            <p class="concept-text">
+                Human infrastructure (wind farms, power lines, buildings) causes significant bird mortality worldwide.
+                This tool visualizes the overlap between bird habitats and wind energy infrastructure in Norway,
+                enabling data driven pre-stage screening before new projects are planned.
+            </p>
+            <p class="concept-text">
+                By combining open biodiversity data with turbine locations and species flight altitudes,
+                we can identify areas where endangered species are most at risk from rotor collisions,
+                helping developers and regulators make informed decisions about site selection.
+            </p>
+
+            <h3>Red list categories</h3>
+            <p>Norwegian Red List for Species 2021, published by Artsdatabanken. Categories follow the IUCN framework.</p>
+            <table class="legend-table">
+                <tr>
+                    <td><span class="rl-badge" style="background:#8b0000;font-size:11px;padding:2px 6px">CR</span></td>
+                    <td><b style="color:#e0e0e0">Critically endangered</b><br>Extremely high risk of extinction. Fewer than 50 mature individuals or 80%+ population decline over 3 generations.</td>
+                </tr>
+                <tr>
+                    <td><span class="rl-badge" style="background:#d32f2f;font-size:11px;padding:2px 6px">EN</span></td>
+                    <td><b style="color:#e0e0e0">Endangered</b><br>Very high risk of extinction. 50 to 250 mature individuals or 50-80% population decline over 3 generations.</td>
+                </tr>
+                <tr>
+                    <td><span class="rl-badge" style="background:#f57c00;font-size:11px;padding:2px 6px">VU</span></td>
+                    <td><b style="color:#e0e0e0">Vulnerable</b><br>High risk of extinction. 30-50% population decline or fewer than 10,000 mature individuals.</td>
+                </tr>
+                <tr>
+                    <td><span class="rl-badge" style="background:#fbc02d;color:#333;font-size:11px;padding:2px 6px">NT</span></td>
+                    <td><b style="color:#e0e0e0">Near threatened</b><br>Close to qualifying for a threatened category. Declining trends that may worsen.</td>
+                </tr>
+            </table>
+
+            <h3>Rotor zone risk</h3>
+            <p>
+                Norwegian wind turbines have hub heights of 31 to 145m and rotor diameters of 27 to 150m.
+                The rotor swept zone (where blades spin) is approximately <b style="color:#ff6b6b">30 to 200m</b> above ground level.
+            </p>
+            <table class="legend-table">
+                <tr>
+                    <td style="color:#ff6b6b;font-size:16px">&#9888;</td>
+                    <td><b style="color:#e0e0e0">High overlap</b><br>More than 50% of the species' typical flight altitude band falls within the rotor zone. Examples: white-tailed eagle (50-300m), buzzards (30-200m), gulls (10-150m).</td>
+                </tr>
+                <tr>
+                    <td style="color:#fbc02d;font-size:16px">&#9679;</td>
+                    <td><b style="color:#e0e0e0">Partial overlap</b><br>Some flight altitude overlaps with the rotor zone but less than 50%. Examples: barn swallows (5-100m), starlings (5-100m).</td>
+                </tr>
+                <tr>
+                    <td style="color:#888;font-size:11px">no icon</td>
+                    <td><b style="color:#e0e0e0">Low or no overlap</b><br>Species typically flies below 30m or above 200m. Examples: small passerines (2-30m), high-migrating geese (50-800m in transit).</td>
+                </tr>
+            </table>
+            <p>Flight altitudes are based on ornithological literature (Band et al. 2007, Johnston et al. 2014) and represent typical local flight, not migration altitude.</p>
+
+            <h3>Heatmap and observation density</h3>
+            <p>
+                The heatmap shows observation density from a 10,000 record sample. Brighter areas have more
+                reported bird observations. This reflects <em>where people observe birds</em>, not necessarily where
+                bird density is highest. Urban areas and popular birding sites are overrepresented.
+            </p>
+            <table class="legend-table">
+                <tr><td style="width:100px;background:linear-gradient(to right,#1a0533,#3b0f70,#8c2981,#de4968,#fe9f6d,#fcfdbf);border-radius:4px;height:14px"></td><td>Low to high observation density (inferno color scale)</td></tr>
+                <tr><td style="text-align:center"><span style="color:#ff6b6b;font-size:16px">&#9679;</span></td><td>Wind turbine park (circle size = installed capacity in MW)</td></tr>
+            </table>
+
+            <h3>Data sources</h3>
+
+            <div class="source-card">
+                <div class="src-name">Bird observations</div>
+                <div class="src-detail">
+                    <a href="https://www.gbif.org/" target="_blank">GBIF</a> (Global Biodiversity Information Facility)<br>
+                    33.7M georeferenced bird records in Norway. Sample: 10,000 records (833 per month).<br>
+                    API: <code style="font-size:10px;color:#999">api.gbif.org/v1/occurrence/search</code> | License: CC BY 4.0 / CC0 | No auth required
+                </div>
+            </div>
+
+            <div class="source-card">
+                <div class="src-name">Wind turbines</div>
+                <div class="src-detail">
+                    <a href="https://www.nve.no/" target="_blank">NVE</a> (Norwegian Water Resources and Energy Directorate)
+                    via <a href="https://huggingface.co/datasets/rebase-energy/nve-windpower-data" target="_blank">HuggingFace</a><br>
+                    393 active turbines across 62 wind parks. Includes hub height, rotor diameter, capacity.<br>
+                    License: NVE open data | No auth required
+                </div>
+            </div>
+
+            <div class="source-card">
+                <div class="src-name">Municipality boundaries</div>
+                <div class="src-detail">
+                    <a href="https://www.kartverket.no/" target="_blank">Kartverket</a> via
+                    <a href="https://github.com/robhop/fylker-og-kommuner" target="_blank">GitHub</a><br>
+                    357 Norwegian municipalities (kommuner), simplified GeoJSON.<br>
+                    License: CC BY 4.0 | No auth required
+                </div>
+            </div>
+
+            <div class="source-card">
+                <div class="src-name">Red list</div>
+                <div class="src-detail">
+                    <a href="https://artsdatabanken.no/rodlisteforarter2021/Artsgruppene/fugler" target="_blank">Artsdatabanken</a>
+                    Norwegian Red List for Species 2021<br>
+                    56 bird species with IUCN categories (CR, EN, VU, NT). Manually curated.
+                </div>
+            </div>
+
+            <div class="source-card">
+                <div class="src-name">Flight altitude</div>
+                <div class="src-detail">
+                    Ornithological literature (Band et al. 2007, Johnston et al. 2014, SNH guidance)<br>
+                    98 species with typical flight altitude ranges. Represents local flight, not migration.
+                </div>
+            </div>
+
+            <h3>Limitations</h3>
+            <p>
+                This is a screening tool, not a regulatory environmental impact assessment.
+                Observation density reflects citizen-science reporting patterns, not true abundance.
+                Flight altitudes are literature estimates, not site-specific measurements.
+                For actual wind farm planning, site-specific radar surveys and environmental assessments are required.
+            </p>
+
+            <p style="color:#666;font-size:11px;margin-top:20px;text-align:center">
+                Built at a hackathon, February 2026. All data from open sources.
+            </p>
+        </div>
+    </div>
 
     <div class="panel" id="panel">
         <h1>Coexisting with Birds</h1>
