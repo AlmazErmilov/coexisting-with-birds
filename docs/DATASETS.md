@@ -157,7 +157,8 @@ This document describes all datasets used in the project, their sources, transfo
 ## 5. Flight altitude data (hardcoded in `index.html`)
 
 ### Source
-- **Type**: aggregated from multiple published sources (not a single downloadable dataset)
+- **Type**: approximate estimates based on general ornithological knowledge (not extracted from a single dataset or publication)
+- **Note**: the specific [min, max] values were not directly extracted from the references below. They represent typical flight bands as understood from broader ornithological knowledge. The references informed the general approach and provided context for specific species groups.
 - **References**:
   - Johnston A. et al. (2014) "Modelling flight heights of marine birds to more accurately assess collision risk with offshore wind turbines." *J. Applied Ecology* 51(1), 31-41. [doi:10.1111/1365-2664.12191](https://doi.org/10.1111/1365-2664.12191)
   - Band W. et al. (2007) "Developing field and analytical methods to assess avian collision risk at wind farms." In: de Lucas M., Janss G., Ferrer M. (eds) *Birds and Wind Farms*. Quercus, Madrid.
@@ -172,13 +173,16 @@ This document describes all datasets used in the project, their sources, transfo
 
 ### Rotor zone overlap calculation
 ```
-rotor_zone = [30m, 200m]  (derived from NVE data: hub heights 31-145m, rotor diameters 27-150m)
+rotor_zone = [park.rotor_min, park.rotor_max]  // per-park, from NVE data
+// range across all 62 parks: 14-220m AGL
 
-overlap = max(0, min(bird_max, 200) - max(bird_min, 30))
+overlap = max(0, min(bird_max, park.rotor_max) - max(bird_min, park.rotor_min))
 risk = "high"   if overlap > 50% of bird's flight range
 risk = "medium" if overlap > 0 but <= 50%
 risk = "low"    if no overlap
 ```
+
+A global fallback of [30m, 200m] is used for species-level views (filters, tooltips) where no specific park context is available.
 
 ### Audit results
 | Check | Result |
@@ -191,7 +195,7 @@ risk = "low"    if no overlap
 ### Known limitations
 - **Approximate values**: flight altitudes vary by individual, season, weather, terrain and behavior. The ranges represent typical conditions, not extremes.
 - **Local vs migration**: some species fly much higher during migration. The data reflects local/foraging flight, which is more relevant for turbine collision risk.
-- **Literature based, not measured**: these are not GPS tracking derived altitudes. For precise collision risk assessment, site-specific radar or tracking data should be used.
+- **Estimated, not measured**: these are approximate values based on general ornithological knowledge, not GPS tracking or radar derived altitudes. The cited references informed the approach but the specific values were not extracted from their data tables. For precise collision risk assessment, site-specific survey data should be used.
 - **Not species-specific to Norway**: altitude ranges are general for the species, not adjusted for Norwegian terrain or wind conditions.
 
 ---
@@ -219,7 +223,7 @@ Artsdatabanken Red List 2021 (manual curation)
     |
     +--> RED_LIST object in index.html (56 species)
     |
-Ornithological literature (manual curation)
+General ornithological knowledge (approximate estimates)
     |
     +--> FLIGHT_ALT object in index.html (98 species)
 ```

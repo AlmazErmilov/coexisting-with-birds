@@ -4,7 +4,7 @@ Source: [GBIF](https://www.gbif.org/) (10,000 observations across Norway)
 
 Red list: [Norwegian Red List 2021](https://artsdatabanken.no/) (Artsdatabanken)
 
-Rotor zone: 30 to 200m AGL (typical Norwegian wind turbine swept area)
+Rotor zone: 30 to 200m AGL (typical range; app uses per-park zones for conflict scoring)
 
 **Total unique species: 250** | Red listed: 54 | With flight altitude data: 93
 
@@ -293,4 +293,4 @@ Red list breakdown: 4 CR, 14 EN, 18 VU, 18 NT
 
 ---
 
-*Generated from `data/birds_norway.json`. Flight altitudes are typical ranges from ornithological literature, not direct measurements from this dataset.*
+*Generated from `data/birds_norway.json`. Flight altitudes are approximate estimates based on general ornithological knowledge, not direct measurements from this dataset.*

@@ -216,7 +216,7 @@
             <h3>Rotor zone risk</h3>
             <p>
                 Norwegian wind turbines have hub heights of 31 to 145m and rotor diameters of 27 to 150m.
-                The rotor swept zone (where blades spin) is approximately <b style="color:#ff6b6b">30 to 200m</b> above ground level.
+                The rotor swept zone varies per park. In the conflict scoring, each park is evaluated against its own rotor zone from NVE data.
             </p>
             <table class="legend-table">
                 <tr>
@@ -232,7 +232,7 @@
                     <td><b style="color:#e0e0e0">Low or no overlap</b><br>Species typically flies below 30m or above 200m. Examples: small passerines (2-30m), high-migrating geese (50-800m in transit).</td>
                 </tr>
             </table>
-            <p>Flight altitudes are based on ornithological literature (Johnston et al. 2014, Band et al. 2007, SNH guidance, Dahl et al. 2012, BirdLife Norge). Values represent typical local flight, not migration altitude. See full references in Data sources below.</p>
+            <p>Flight altitudes are approximate estimates based on general ornithological knowledge of each species' typical flight behavior. They are informed by published literature on collision risk and marine bird flight heights (see references below) but the specific [min, max] values were not directly extracted from those papers. Values represent typical local flight, not migration altitude.</p>
 
             <h3>Heatmap and observation density</h3>
             <p>
@@ -300,12 +300,12 @@ Color mapping:
             <h3>Rotor zone overlap calculation</h3>
             <p style="font-size:11px;color:#aaa;">
                 For each species with known flight altitude data, we calculate how much of its typical
-                flight band overlaps with the rotor swept zone (30 to 200m AGL, derived from NVE turbine data).
+                flight band overlaps with the park's specific rotor swept zone (derived from NVE hub height and rotor diameter data for each park).
             </p>
-            <pre style="background:rgba(255,255,255,0.04);border-radius:6px;padding:10px;font-size:11px;color:#ccc;overflow-x:auto;margin:8px 0;">rotor_zone = [30m, 200m]
+            <pre style="background:rgba(255,255,255,0.04);border-radius:6px;padding:10px;font-size:11px;color:#ccc;overflow-x:auto;margin:8px 0;">rotor_zone = [park.rotor_min, park.rotor_max]  // per-park, from NVE data
 bird_flight = [min_m, max_m]
 
-overlap = max(0, min(bird_max, 200) - max(bird_min, 30))
+overlap = max(0, min(bird_max, rotor_max) - max(bird_min, rotor_min))
 flight_range = bird_max - bird_min
 overlap_ratio = overlap / flight_range
 
@@ -314,8 +314,9 @@ Risk classification:
   overlap_ratio > 50%   →  high   (&#9650; red triangle)
   overlap_ratio ≤ 50%   →  medium (&#9679; yellow dot)</pre>
             <p style="font-size:11px;color:#aaa;">
-                Example: white-tailed eagle flies at 50 to 300m. Overlap with rotor zone (30-200m) = min(300,200) - max(50,30) = 150m.
-                Flight range = 250m. Overlap ratio = 150/250 = 60% → <span style="color:#ff6b6b;font-weight:700">high</span>.
+                Example: white-tailed eagle flies at 50 to 300m.
+                At Smøla (rotor zone 30-110m): overlap = min(300,110) - max(50,30) = 60m. Range = 250m. Ratio = 24% → <span style="color:#fbc02d;font-weight:700">medium</span>.
+                At Kjølberget (rotor zone 70-220m): overlap = min(300,220) - max(50,70) = 150m. Ratio = 60% → <span style="color:#ff6b6b;font-weight:700">high</span>.
             </p>
 
             <h3>Data confidence layer</h3>
@@ -386,7 +387,7 @@ Risk classification:
                 <div class="src-detail">
                     98 species with typical flight altitude ranges [min, max] in meters AGL.
                     Represents local/foraging flight, not migration altitude.
-                    Aggregated from the following published sources:
+                    Values are approximate estimates based on general ornithological knowledge. The following publications informed the overall approach and provided context for specific species groups:
                 </div>
                 <div class="src-detail" style="margin-top:6px;font-size:10px;line-height:1.6;color:#777;">
                     <b style="color:#aaa">Johnston A. et al. (2014)</b>
@@ -581,7 +582,9 @@ Risk classification:
         };
 
         // Typical flight altitude ranges [min_m, max_m] in meters AGL.
-        // Sources: Johnston et al. 2014, Band et al. 2007, SNH guidance, Dahl et al. 2012, BirdLife Norge.
+        // Values are approximate estimates based on general ornithological knowledge.
+        // Informed by (not directly extracted from): Johnston et al. 2014, Band et al. 2007,
+        // SNH guidance, Dahl et al. 2012, BirdLife Norge. For precise assessments use site-specific data.
         // "rotor zone" for Norwegian wind turbines is roughly 30-200m AGL.
         const FLIGHT_ALT = {
             // Seabirds
@@ -642,15 +645,17 @@ Risk classification:
             'Poecile montanus': [2, 25],
         };
 
-        // Typical rotor swept zone in Norway (derived from NVE data)
+        // Typical rotor swept zone in Norway (derived from NVE data).
+        // Used as default for species-level views. Park scoring uses per-park rotor_min/rotor_max.
         const ROTOR_ZONE = { min: 30, max: 200 };
 
-        function getAltRisk(species) {
+        function getAltRisk(species, rotorMin, rotorMax) {
             const alt = FLIGHT_ALT[species];
             if (!alt) return null;
-            // Check overlap with rotor zone
+            const rMin = rotorMin != null ? rotorMin : ROTOR_ZONE.min;
+            const rMax = rotorMax != null ? rotorMax : ROTOR_ZONE.max;
             const overlap = Math.max(0,
-                Math.min(alt[1], ROTOR_ZONE.max) - Math.max(alt[0], ROTOR_ZONE.min));
+                Math.min(alt[1], rMax) - Math.max(alt[0], rMin));
             const range = alt[1] - alt[0];
             if (overlap === 0) return 'low';
             if (overlap / range > 0.5) return 'high';
@@ -752,7 +757,7 @@ Risk classification:
                         let w = 1; // base weight
                         const rl = RED_LIST[o.species];
                         if (rl) w *= (RL_WEIGHT[rl] || 1);
-                        const risk = getAltRisk(o.species);
+                        const risk = getAltRisk(o.species, park.rotor_min, park.rotor_max);
                         if (risk === 'high') w *= 3;
                         else if (risk === 'medium') w *= 1.5;
                         score += w;
