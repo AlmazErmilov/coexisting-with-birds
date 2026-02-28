@@ -131,6 +131,21 @@
         }
         .info-btn:hover { background: rgba(78,205,196,0.2); border-color: rgba(78,205,196,0.4); }
 
+        .hide-ui-btn {
+            position: fixed; top: 16px; right: 16px; z-index: 1000;
+            background: rgba(10, 10, 10, 0.92); backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.08); border-radius: 8px;
+            padding: 6px 10px; color: #888; font-size: 11px;
+            cursor: pointer; transition: all 0.2s;
+            font-family: 'Roboto Mono', monospace;
+        }
+        .hide-ui-btn:hover { background: rgba(10, 10, 10, 1); color: #fff; border-color: rgba(255,255,255,0.2); }
+        .hide-ui-btn .shortcut { color: #555; margin-left: 4px; }
+
+        .ui-hidden .panel,
+        .ui-hidden .legend,
+        .ui-hidden .info-badge { display: none; }
+
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
@@ -552,9 +567,25 @@ Risk classification:
         Birds: <a href="https://www.gbif.org/" target="_blank">GBIF</a> | Turbines: <a href="https://www.nve.no/" target="_blank">NVE</a>
     </div>
 
+    <button class="hide-ui-btn" id="hide-ui-btn" onclick="toggleUI()">
+        Hide UI <span class="shortcut">[H]</span>
+    </button>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
     <script>
+        function toggleUI() {
+            const btn = document.getElementById('hide-ui-btn');
+            document.body.classList.toggle('ui-hidden');
+            const hidden = document.body.classList.contains('ui-hidden');
+            btn.innerHTML = hidden ? 'Show UI <span class="shortcut">[H]</span>' : 'Hide UI <span class="shortcut">[H]</span>';
+        }
+        document.addEventListener('keydown', function(e) {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') return;
+            if (e.key === 'h' || e.key === 'H') toggleUI();
+            if (e.key === 'Escape') document.getElementById('info-modal').classList.remove('open');
+        });
+
         const MONTH_NAMES = ['All months', 'January', 'February', 'March', 'April', 'May', 'June',
                              'July', 'August', 'September', 'October', 'November', 'December'];
 
