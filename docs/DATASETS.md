@@ -157,9 +157,13 @@ This document describes all datasets used in the project, their sources, transfo
 ## 5. Flight altitude data (hardcoded in `index.html`)
 
 ### Source
-- **Type**: prior knowledge from ornithological literature
-- **References**: Band et al. (2007) collision risk model, Johnston et al. (2014) flight height distributions, SNH (Scottish Natural Heritage) guidance, BirdLife Norge field guides
-- **Not from a single downloadable dataset**: aggregated from multiple published sources
+- **Type**: aggregated from multiple published sources (not a single downloadable dataset)
+- **References**:
+  - Johnston A. et al. (2014) "Modelling flight heights of marine birds to more accurately assess collision risk with offshore wind turbines." *J. Applied Ecology* 51(1), 31-41. [doi:10.1111/1365-2664.12191](https://doi.org/10.1111/1365-2664.12191)
+  - Band W. et al. (2007) "Developing field and analytical methods to assess avian collision risk at wind farms." In: de Lucas M., Janss G., Ferrer M. (eds) *Birds and Wind Farms*. Quercus, Madrid.
+  - Scottish Natural Heritage (2000, rev. 2017) "Windfarms and birds: calculating a theoretical collision risk assuming no avoiding action." SNH Guidance Note.
+  - Dahl E.L. et al. (2012) "Reduced breeding success in white-tailed eagles at Smøla windfarm, western Norway." *Environmental Research Letters* 7(4). [doi:10.1088/1748-9326/7/4/044009](https://doi.org/10.1088/1748-9326/7/4/044009)
+  - BirdLife Norge species fact sheets and field guides. [birdlife.no](https://www.birdlife.no/)
 
 ### Transformation
 - 98 bird species with typical flight altitude ranges [min_m, max_m]

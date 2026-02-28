@@ -232,7 +232,7 @@
                     <td><b style="color:#e0e0e0">Low or no overlap</b><br>Species typically flies below 30m or above 200m. Examples: small passerines (2-30m), high-migrating geese (50-800m in transit).</td>
                 </tr>
             </table>
-            <p>Flight altitudes are based on ornithological literature (Band et al. 2007, Johnston et al. 2014) and represent typical local flight, not migration altitude.</p>
+            <p>Flight altitudes are based on ornithological literature (Johnston et al. 2014, Band et al. 2007, SNH guidance, Dahl et al. 2012, BirdLife Norge). Values represent typical local flight, not migration altitude. See full references in Data sources below.</p>
 
             <h3>Heatmap and observation density</h3>
             <p>
@@ -384,8 +384,28 @@ Risk classification:
             <div class="source-card">
                 <div class="src-name">Flight altitude</div>
                 <div class="src-detail">
-                    Ornithological literature (Band et al. 2007, Johnston et al. 2014, SNH guidance)<br>
-                    98 species with typical flight altitude ranges. Represents local flight, not migration.
+                    98 species with typical flight altitude ranges [min, max] in meters AGL.
+                    Represents local/foraging flight, not migration altitude.
+                    Aggregated from the following published sources:
+                </div>
+                <div class="src-detail" style="margin-top:6px;font-size:10px;line-height:1.6;color:#777;">
+                    <b style="color:#aaa">Johnston A. et al. (2014)</b>
+                    Modelling flight heights of marine birds to more accurately assess collision risk with offshore wind turbines.
+                    <i>Journal of Applied Ecology</i>, 51(1), 31-41.
+                    <a href="https://doi.org/10.1111/1365-2664.12191" target="_blank">doi:10.1111/1365-2664.12191</a><br>
+                    <b style="color:#aaa">Band W. et al. (2007)</b>
+                    Developing field and analytical methods to assess avian collision risk at wind farms.
+                    In: de Lucas M., Janss G., Ferrer M. (eds) <i>Birds and Wind Farms</i>. Quercus, Madrid.<br>
+                    <b style="color:#aaa">Scottish Natural Heritage (2000, rev. 2017)</b>
+                    Windfarms and birds: calculating a theoretical collision risk assuming no avoiding action.
+                    <i>SNH Guidance Note</i>.<br>
+                    <b style="color:#aaa">Dahl E.L. et al. (2012)</b>
+                    Reduced breeding success in white-tailed eagles at Smøla windfarm, western Norway.
+                    <i>Environmental Research Letters</i>, 7(4).
+                    <a href="https://doi.org/10.1088/1748-9326/7/4/044009" target="_blank">doi:10.1088/1748-9326/7/4/044009</a><br>
+                    <b style="color:#aaa">BirdLife Norge</b>
+                    Species fact sheets and field guides.
+                    <a href="https://www.birdlife.no/" target="_blank">birdlife.no</a>
                 </div>
             </div>
 
@@ -560,7 +580,8 @@ Risk classification:
             'CR': 'Critically endangered', 'EN': 'Endangered', 'VU': 'Vulnerable', 'NT': 'Near threatened'
         };
 
-        // Typical flight altitude ranges [min_m, max_m] from ornithology literature.
+        // Typical flight altitude ranges [min_m, max_m] in meters AGL.
+        // Sources: Johnston et al. 2014, Band et al. 2007, SNH guidance, Dahl et al. 2012, BirdLife Norge.
         // "rotor zone" for Norwegian wind turbines is roughly 30-200m AGL.
         const FLIGHT_ALT = {
             // Seabirds
