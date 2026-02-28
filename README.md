@@ -87,6 +87,30 @@ data/
 - Aggregate by kommune for choropleth "risk score" per municipality
 - Computer vision layer: live camera feeds with bird detection models
 
+## References
+
+Artsdatabanken. (2021). *Norwegian Red List for Species 2021* (Rødlista for arter 2021). Norwegian Biodiversity Information Centre. https://artsdatabanken.no/rodlisteforarter2021/Artsgruppene/fugler
+
+Band, W., Madders, M., & Whitfield, D.P. (2007). Developing field and analytical methods to assess avian collision risk at wind farms. In M. de Lucas, G.F.E. Janss, & M. Ferrer (Eds.), *Birds and Wind Farms: Risk Assessment and Mitigation* (pp. 259–275). Quercus.
+
+CARTO. (n.d.). *CARTO Basemaps*. https://carto.com/basemaps/
+
+GBIF.org. (2026). GBIF Occurrence Download. Global Biodiversity Information Facility. https://www.gbif.org/
+
+Johnston, A., Cook, A.S.C.P., Wright, L.J., Humphreys, E.M., & Burton, N.H.K. (2014). Modelling flight heights of marine birds to more accurately assess collision risk with offshore wind turbines. *Journal of Applied Ecology*, 51(1), 31–41. https://doi.org/10.1111/1365-2664.12191
+
+Kartverket. (2024). *Administrative boundaries of Norway* [GeoJSON]. Norwegian Mapping Authority. Redistributed via https://github.com/robhop/fylker-og-kommuner
+
+NVE. (n.d.). *Norwegian wind power data*. Norwegian Water Resources and Energy Directorate. Redistributed via https://huggingface.co/datasets/rebase-energy/nve-windpower-data
+
+OpenStreetMap contributors. (n.d.). *OpenStreetMap*. https://www.openstreetmap.org/
+
+Scottish Natural Heritage. (n.d.). *Guidance on assessing collision risk between birds and onshore wind turbines*. NatureScot.
+
+Agafonkin, V. (2023). *Leaflet: an open source JavaScript library for interactive maps* (Version 1.9.4) [Software]. https://leafletjs.com/
+
+Agafonkin, V. (n.d.). *Leaflet.heat: a tiny, simple and fast heatmap plugin for Leaflet* (Version 0.2.0) [Software]. https://github.com/Leaflet/Leaflet.heat
+
 ## License
 
 Data licenses as noted above. Code is open for hackathon purposes.
