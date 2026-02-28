@@ -918,6 +918,10 @@ Risk classification:
             // Update points
             pointsLayer.clearLayers();
             if (currentView === 'points') {
+                // Pre-compute species counts for stats in popups
+                const speciesCounts = new Map();
+                filtered.forEach(o => speciesCounts.set(o.species, (speciesCounts.get(o.species) || 0) + 1));
+
                 const maxPoints = 5000;
                 const step = Math.max(1, Math.floor(filtered.length / maxPoints));
                 for (let i = 0; i < filtered.length; i += step) {
@@ -934,7 +938,14 @@ Risk classification:
                     const altHtml = alt ? `<br>Flight altitude: ${alt[0]}-${alt[1]}m` : '';
                     const riskHtml = risk === 'high' ? '<br><span style="color:#ff6b6b;font-weight:700">&#9650; High rotor zone overlap</span>'
                         : risk === 'medium' ? '<br><span style="color:#fbc02d">&#9679; Partial rotor zone overlap</span>' : '';
-                    marker.bindPopup(`<b style="font-style:italic">${d.species}</b>${rlHtml}${altHtml}${riskHtml}<br>Month: ${MONTH_NAMES[d.month] || '?'}<br>County: ${d.county || '?'}`);
+
+                    // Stats line: species count in current view + kommune
+                    const sCount = speciesCounts.get(d.species) || 0;
+                    const pct = (sCount / filtered.length * 100).toFixed(1);
+                    const kommune = d._kl ? (d._kl.feature.properties.kommunenavn || d._kl.feature.properties.name || '') : '';
+                    const statsHtml = `<br><span style="color:#888;font-size:11px;border-top:1px solid rgba(255,255,255,0.15);display:block;margin-top:4px;padding-top:4px">${kommune ? kommune + ' · ' : ''}${sCount} obs of this species in view (${pct}%)</span>`;
+
+                    marker.bindPopup(`<b style="font-style:italic">${d.species}</b>${rlHtml}${altHtml}${riskHtml}<br>Month: ${MONTH_NAMES[d.month] || '?'}<br>County: ${d.county || '?'}${statsHtml}`);
                     pointsLayer.addLayer(marker);
                 }
             }
