@@ -919,6 +919,9 @@ Risk classification:
 
             // Update heatmap (only when visible; setLatLngs crashes if layer not on map)
             if (currentView === 'heatmap') {
+                // Dynamic normalization: fewer points → higher max → less visual saturation
+                const ratio = allData.length / Math.max(1, filtered.length);
+                heatLayer.options.max = Math.min(4.0, 0.6 * Math.pow(ratio, 0.25));
                 const heatPoints = filtered.map(d => [d.lat, d.lon, 1.0]);
                 heatLayer.setLatLngs(heatPoints);
             }
