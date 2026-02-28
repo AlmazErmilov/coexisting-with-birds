@@ -240,6 +240,102 @@
                 <tr><td style="text-align:center"><svg viewBox="0 0 24 40" width="16" height="27" style="vertical-align:middle"><line x1="12" y1="15" x2="12" y2="38" stroke="#ff6b6b" stroke-width="2.5"/><circle cx="12" cy="13" r="2.5" fill="#fff" stroke="#ff6b6b" stroke-width="1.5"/><line x1="12" y1="13" x2="12" y2="1" stroke="#ff6b6b" stroke-width="1.8"/><line x1="12" y1="13" x2="3" y2="22.5" stroke="#ff6b6b" stroke-width="1.8"/><line x1="12" y1="13" x2="21" y2="22.5" stroke="#ff6b6b" stroke-width="1.8"/></svg></td><td>Wind turbine park (icon size = installed capacity in MW)</td></tr>
             </table>
 
+            <h3>Wind park bird conflict scoring</h3>
+            <p>
+                Each wind park is color coded from
+                <span style="color:rgb(0,180,40);font-weight:700">green</span> (low conflict) through
+                <span style="color:rgb(200,150,40);font-weight:700">yellow</span> (moderate) to
+                <span style="color:rgb(255,0,40);font-weight:700">red</span> (high conflict)
+                based on a composite score of nearby bird observations.
+            </p>
+            <p style="font-size:12px;margin-top:8px;"><b style="color:#e0e0e0">Step 1. Find nearby observations</b></p>
+            <p style="font-size:11px;color:#aaa;">
+                For each park, all bird observations within a <b>30 km radius</b> are collected.
+                Distance is computed using a flat-Earth approximation (sufficient at Norway's scale).
+            </p>
+            <pre style="background:rgba(255,255,255,0.04);border-radius:6px;padding:10px;font-size:11px;color:#ccc;overflow-x:auto;margin:8px 0;">dx = (obs.lon - park.lon) × 111 × cos(park.lat)
+dy = (obs.lat - park.lat) × 111
+distance = sqrt(dx² + dy²)     // in km</pre>
+
+            <p style="font-size:12px;margin-top:10px;"><b style="color:#e0e0e0">Step 2. Weight each observation</b></p>
+            <p style="font-size:11px;color:#aaa;">
+                Each observation starts with a base weight of 1. Two multipliers are applied.
+            </p>
+            <table class="legend-table" style="font-size:11px;">
+                <tr><td colspan="2" style="color:#aaa;font-weight:600;border-bottom:1px solid rgba(255,255,255,0.1)">Red list multiplier</td></tr>
+                <tr><td><span class="rl-badge" style="background:#8b0000;font-size:10px;padding:1px 5px">CR</span></td><td>× 8</td></tr>
+                <tr><td><span class="rl-badge" style="background:#d32f2f;font-size:10px;padding:1px 5px">EN</span></td><td>× 5</td></tr>
+                <tr><td><span class="rl-badge" style="background:#f57c00;font-size:10px;padding:1px 5px">VU</span></td><td>× 3</td></tr>
+                <tr><td><span class="rl-badge" style="background:#fbc02d;color:#333;font-size:10px;padding:1px 5px">NT</span></td><td>× 1.5</td></tr>
+                <tr><td style="color:#888">Not listed</td><td>× 1 (no change)</td></tr>
+                <tr><td colspan="2" style="color:#aaa;font-weight:600;border-bottom:1px solid rgba(255,255,255,0.1);padding-top:6px">Rotor zone overlap multiplier</td></tr>
+                <tr><td style="color:#ff6b6b">High overlap</td><td>× 3</td></tr>
+                <tr><td style="color:#fbc02d">Partial overlap</td><td>× 1.5</td></tr>
+                <tr><td style="color:#888">Low / unknown</td><td>× 1 (no change)</td></tr>
+            </table>
+            <pre style="background:rgba(255,255,255,0.04);border-radius:6px;padding:10px;font-size:11px;color:#ccc;overflow-x:auto;margin:8px 0;">weight = 1.0
+if species in Red List:    weight × red_list_multiplier
+if species rotor overlap:  weight × rotor_multiplier
+
+score = sum of all weighted observations within 30 km</pre>
+
+            <p style="font-size:12px;margin-top:10px;"><b style="color:#e0e0e0">Step 3. Normalize and color</b></p>
+            <p style="font-size:11px;color:#aaa;">
+                The raw score is normalized to a 0 to 1 range by dividing by 300 (empirical threshold based on our 10K sample), clamped at 1.0.
+                The color is interpolated: green channel fades out above 0.5, red channel fades in below 0.5.
+            </p>
+            <pre style="background:rgba(255,255,255,0.04);border-radius:6px;padding:10px;font-size:11px;color:#ccc;overflow-x:auto;margin:8px 0;">normalized = min(1, score / 300)
+
+Color mapping:
+  0.0 - 0.2  →  green   (low bird conflict)
+  0.2 - 0.5  →  yellow  (moderate bird conflict)
+  0.5 - 0.75 →  orange  (high bird conflict)
+  0.75 - 1.0 →  red     (very high bird conflict)</pre>
+
+            <h3>Rotor zone overlap calculation</h3>
+            <p style="font-size:11px;color:#aaa;">
+                For each species with known flight altitude data, we calculate how much of its typical
+                flight band overlaps with the rotor swept zone (30 to 200m AGL, derived from NVE turbine data).
+            </p>
+            <pre style="background:rgba(255,255,255,0.04);border-radius:6px;padding:10px;font-size:11px;color:#ccc;overflow-x:auto;margin:8px 0;">rotor_zone = [30m, 200m]
+bird_flight = [min_m, max_m]
+
+overlap = max(0, min(bird_max, 200) - max(bird_min, 30))
+flight_range = bird_max - bird_min
+overlap_ratio = overlap / flight_range
+
+Risk classification:
+  overlap = 0           →  low    (no icon)
+  overlap_ratio > 50%   →  high   (&#9650; red triangle)
+  overlap_ratio ≤ 50%   →  medium (&#9679; yellow dot)</pre>
+            <p style="font-size:11px;color:#aaa;">
+                Example: white-tailed eagle flies at 50 to 300m. Overlap with rotor zone (30-200m) = min(300,200) - max(50,30) = 150m.
+                Flight range = 250m. Overlap ratio = 150/250 = 60% → <span style="color:#ff6b6b;font-weight:700">high</span>.
+            </p>
+
+            <h3>Data confidence layer</h3>
+            <p style="font-size:11px;color:#aaa;">
+                When enabled, each of Norway's 357 municipalities (kommuner) is colored by observation count.
+                This shows where our sample data is dense enough for meaningful analysis and where predictions should be treated with caution.
+            </p>
+            <p style="font-size:12px;margin-top:8px;"><b style="color:#e0e0e0">Method</b></p>
+            <p style="font-size:11px;color:#aaa;">
+                Each bird observation is assigned to a kommune using point in polygon spatial join (ray-casting algorithm).
+                The observation count per kommune determines the fill color.
+            </p>
+            <table class="legend-table" style="font-size:11px;">
+                <tr><td style="width:80px;text-align:center"><span style="display:inline-block;width:20px;height:12px;border-radius:2px;background:#555;"></span></td><td><b style="color:#e0e0e0">0 observations</b> — no data, lowest confidence</td></tr>
+                <tr><td style="text-align:center"><span style="display:inline-block;width:20px;height:12px;border-radius:2px;background:#d32f2f;opacity:0.7"></span></td><td><b style="color:#e0e0e0">1 to 4 observations</b> — very low confidence</td></tr>
+                <tr><td style="text-align:center"><span style="display:inline-block;width:20px;height:12px;border-radius:2px;background:#f57c00;opacity:0.6"></span></td><td><b style="color:#e0e0e0">5 to 14 observations</b> — low confidence</td></tr>
+                <tr><td style="text-align:center"><span style="display:inline-block;width:20px;height:12px;border-radius:2px;background:#fbc02d;opacity:0.5"></span></td><td><b style="color:#e0e0e0">15 to 29 observations</b> — moderate confidence</td></tr>
+                <tr><td style="text-align:center"><span style="display:inline-block;width:20px;height:12px;border-radius:2px;background:transparent;border:1px solid rgba(255,255,255,0.1)"></span></td><td><b style="color:#e0e0e0">30+ observations</b> — good coverage (transparent)</td></tr>
+            </table>
+            <p style="font-size:11px;color:#aaa;">
+                With a 10K sample across 357 kommuner, the average is ~28 observations per kommune.
+                Inland mountain and northern municipalities typically have fewer observations due to lower population and fewer citizen-science contributors.
+                Grey and red areas should not be used for risk assessment without additional data collection.
+            </p>
+
             <h3>Data sources</h3>
 
             <div class="source-card">
