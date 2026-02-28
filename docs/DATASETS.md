@@ -1,0 +1,221 @@
+# Dataset documentation
+
+This document describes all datasets used in the project, their sources, transformations applied and known limitations.
+
+## 1. Bird observations (`data/birds_norway.json`)
+
+### Source
+- **Provider**: GBIF (Global Biodiversity Information Facility)
+- **API endpoint**: `https://api.gbif.org/v1/occurrence/search`
+- **License**: CC BY 4.0 / CC0 (varies per contributing dataset)
+- **Authentication**: none required
+- **Fetch script**: `fetch_data.py`
+
+### Query parameters
+| Parameter | Value | Purpose |
+|-----------|-------|---------|
+| country | NO | Norway only |
+| classKey | 212 | Class Aves (birds) |
+| hasCoordinate | true | Only georeferenced records |
+| hasGeospatialIssue | false | Exclude records with known spatial problems |
+| month | 1-12 (iterated) | Even distribution across months |
+| limit | 300 | Records per page |
+
+### Transformation
+1. GBIF returns full occurrence records with 100+ fields
+2. Script extracts only: `decimalLatitude`, `decimalLongitude`, `species`, `month`, `stateProvince`
+3. Coordinates rounded to 4 decimal places (~11m precision)
+4. Saved as JSON with fields renamed: `lat`, `lon`, `species`, `month`, `county`
+5. Fetched 833 records per month (12 months) for even seasonal distribution
+
+### Species summary
+- Fetched separately using GBIF faceted search (`facet=speciesKey`, `facetLimit=30`)
+- Each speciesKey resolved to canonical name via `https://api.gbif.org/v1/species/{key}`
+- Contains total observation counts across all 33.7M records (not just the 10K sample)
+
+### Audit results
+| Check | Result |
+|-------|--------|
+| Total records | 9,996 |
+| Missing fields | 0 (all lat, lon, species, month present) |
+| Latitude range | 57.99 to 71.08 (within Norway) |
+| Longitude range | 3.24 to 31.16 (within Norway) |
+| Points outside Norway | 0 |
+| Unique species | 250 |
+| Month distribution | 833 per month (even) |
+| Counties represented | All major Norwegian counties |
+
+### Known limitations
+- **Sample bias**: 10K is a tiny sample of 33.7M records. Observation density reflects sample, not true population density.
+- **Observer bias**: GBIF data comes largely from citizen science (eBird, Artsobservasjoner). Urban areas and popular birding spots are overrepresented.
+- **Temporal bias**: Records come from different years. The month distribution is even within this sample, but the actual geographic distribution per month may not be representative.
+- **Species identification**: some records may have misidentifications, though GBIF applies quality filters.
+
+---
+
+## 2. Wind turbines (`data/wind_turbines.json`)
+
+### Source
+- **Provider**: NVE (Norwegian Water Resources and Energy Directorate)
+- **Redistribution**: HuggingFace dataset `rebase-energy/nve-windpower-data`
+- **Original file**: `nve-windpower-metadata-extended.csv`
+- **License**: NVE open data
+- **Authentication**: none required
+
+### Transformation
+1. Downloaded CSV with 425 rows (one per turbine, across all status)
+2. Filtered: kept only turbines without `DecommissioningDate` (active)
+3. Filtered: removed rows without coordinates (lat/lon empty)
+4. Result: 393 active turbines
+
+**Turbine record fields extracted:**
+`lat`, `lon`, `Name`, `InstalledCapacity_MW`, `County`, `Municipality`, `TurbineManufacturer`, `TurbineType`, `AvgHubHeight`, `AvgRotorDiameter`
+
+**Park aggregation:**
+- Turbines grouped by park name
+- Hub height and rotor diameter averaged across turbines in each park
+- `rotor_min` calculated as `hub_height - rotor_diameter / 2`
+- `rotor_max` calculated as `hub_height + rotor_diameter / 2`
+
+### Audit results
+| Check | Result |
+|-------|--------|
+| Active turbines | 393 |
+| Wind parks | 62 |
+| Turbines match parks total | Yes (393 = 393) |
+| Parks with hub height | 62/62 (100%) |
+| Hub height range | 31.0 to 145.0m |
+| Rotor diameter range | 27.0 to 150.0m |
+| Swept zone range | 14 to 220m |
+| Total capacity | 5,058.3 MW |
+| Lat range | 58.16 to 71.01 (within Norway) |
+
+### Known limitations
+- **Coordinate precision**: some parks share a single coordinate for all turbines (park centroid, not individual turbine positions).
+- **Hub height type inconsistency**: in the turbines array, `hub_height` and `rotor_diameter` are stored as strings (from CSV). In the parks array they are numbers (computed averages). The app only reads from parks, so this does not affect display.
+- **Decommissioned turbines**: 32 turbines excluded. These had coordinates but are no longer operational.
+
+---
+
+## 3. Municipality boundaries (`data/kommuner.geojson`)
+
+### Source
+- **Provider**: Kartverket (Norwegian Mapping Authority)
+- **Redistribution**: GitHub `robhop/fylker-og-kommuner`, file `Kommuner-S.geojson`
+- **License**: CC BY 4.0 (based on Kartverket open data)
+- **Authentication**: none required
+
+### Transformation
+- No transformation applied. File used as downloaded.
+- "S" variant (simplified geometry) chosen for smaller file size (1.2 MB vs ~15 MB for detailed).
+
+### Audit results
+| Check | Result |
+|-------|--------|
+| Municipalities | 357 |
+| Missing names | 0 |
+| Missing IDs | 0 |
+| Duplicate IDs | 0 |
+| Geometry types | 151 Polygon, 206 MultiPolygon |
+| Bounding box lat | 57.97 to 71.19 |
+| Bounding box lon | 4.64 to 31.15 |
+
+### Known limitations
+- **Simplified geometry**: boundaries are approximate due to coordinate reduction. Not suitable for precise spatial analysis, but sufficient for map visualization.
+- **Update frequency**: file from 2024 Kartverket data. Any kommune mergers after that date are not reflected.
+
+---
+
+## 4. Norwegian Red List (hardcoded in `index.html`)
+
+### Source
+- **Provider**: Artsdatabanken (Norwegian Biodiversity Information Centre)
+- **Document**: Norwegian Red List for Species 2021 (Rødlista for arter 2021)
+- **URL**: https://artsdatabanken.no/rodlisteforarter2021/Artsgruppene/fugler
+- **License**: publicly available assessment data
+
+### Transformation
+- 56 bird species manually curated from the 2021 assessment
+- Categories: CR (4), EN (14), VU (19), NT (19)
+- Stored as a JavaScript object mapping scientific name to category code
+- Only bird species (class Aves) included
+
+### Audit results
+| Check | Result |
+|-------|--------|
+| Total red-listed species | 56 |
+| Found in observation data | 54/56 (96%) |
+| Missing from observations | Perdix perdix, Anas penelope |
+
+### Known limitations
+- **Not exhaustive**: the full 2021 red list contains 78 bird species. We included 56 of the most relevant ones.
+- **Static data**: red list assessments are updated periodically (last: 2021, next expected: 2025/2026). Categories may change.
+- **Missing species**: Perdix perdix (grey partridge) and Anas penelope (Eurasian wigeon) are in the red list but not in our 10K observation sample. They would appear with a larger sample.
+
+---
+
+## 5. Flight altitude data (hardcoded in `index.html`)
+
+### Source
+- **Type**: prior knowledge from ornithological literature
+- **References**: Band et al. (2007) collision risk model, Johnston et al. (2014) flight height distributions, SNH (Scottish Natural Heritage) guidance, BirdLife Norge field guides
+- **Not from a single downloadable dataset**: aggregated from multiple published sources
+
+### Transformation
+- 98 bird species with typical flight altitude ranges [min_m, max_m]
+- Altitudes represent typical flight band during local movements (not migration altitude)
+- Stored as a JavaScript object mapping scientific name to [min, max] array
+
+### Rotor zone overlap calculation
+```
+rotor_zone = [30m, 200m]  (derived from NVE data: hub heights 31-145m, rotor diameters 27-150m)
+
+overlap = max(0, min(bird_max, 200) - max(bird_min, 30))
+risk = "high"   if overlap > 50% of bird's flight range
+risk = "medium" if overlap > 0 but <= 50%
+risk = "low"    if no overlap
+```
+
+### Audit results
+| Check | Result |
+|-------|--------|
+| Species with altitude data | 98 |
+| Found in observation data | 92/98 (94%) |
+| Max altitude | 800m (Anser brachyrhynchus, migrating geese) |
+| All ranges valid (min < max) | Yes |
+
+### Known limitations
+- **Approximate values**: flight altitudes vary by individual, season, weather, terrain and behavior. The ranges represent typical conditions, not extremes.
+- **Local vs migration**: some species fly much higher during migration. The data reflects local/foraging flight, which is more relevant for turbine collision risk.
+- **Literature based, not measured**: these are not GPS tracking derived altitudes. For precise collision risk assessment, site-specific radar or tracking data should be used.
+- **Not species-specific to Norway**: altitude ranges are general for the species, not adjusted for Norwegian terrain or wind conditions.
+
+---
+
+## Data pipeline overview
+
+```
+GBIF API (33.7M records)
+    |
+    +--> fetch_data.py (query per month, extract 5 fields)
+    |        |
+    |        +--> data/birds_norway.json (9,996 records + 30 species summary)
+    |
+NVE CSV via HuggingFace (425 rows)
+    |
+    +--> inline Python (filter active, aggregate parks, compute swept zones)
+    |        |
+    |        +--> data/wind_turbines.json (393 turbines, 62 parks)
+    |
+Kartverket via GitHub (simplified GeoJSON)
+    |
+    +--> data/kommuner.geojson (357 municipalities, no transformation)
+    |
+Artsdatabanken Red List 2021 (manual curation)
+    |
+    +--> RED_LIST object in index.html (56 species)
+    |
+Ornithological literature (manual curation)
+    |
+    +--> FLIGHT_ALT object in index.html (98 species)
+```
