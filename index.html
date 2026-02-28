@@ -1,0 +1,357 @@
+<!--
+  Coexisting with Birds - Norway
+  Interactive heatmap of bird observations from GBIF.
+
+  Data:
+    data/birds_norway.json  - 10K bird observations (GBIF API, CC BY 4.0 / CC0)
+    data/kommuner.geojson   - 357 Norwegian municipalities (Kartverket, CC BY 4.0)
+
+  Dependencies (loaded from CDN):
+    Leaflet 1.9.4           - map rendering
+    Leaflet.heat 0.2.0      - heatmap layer
+    CARTO dark basemap      - tile layer
+
+  No build step. Serve with any static HTTP server.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coexisting with Birds - Norway</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #0a0a0a; color: #e0e0e0; }
+
+        #map { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+
+        .panel {
+            position: fixed; top: 16px; left: 16px; z-index: 1000;
+            background: rgba(10, 10, 10, 0.92); backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;
+            padding: 20px; width: 320px; max-height: calc(100vh - 32px);
+            overflow-y: auto;
+        }
+        .panel h1 { font-size: 18px; font-weight: 600; margin-bottom: 4px; color: #fff; }
+        .panel .subtitle { font-size: 12px; color: #888; margin-bottom: 16px; }
+
+        .stat-row { display: flex; gap: 12px; margin-bottom: 16px; }
+        .stat-box {
+            flex: 1; background: rgba(255,255,255,0.04); border-radius: 8px;
+            padding: 10px; text-align: center;
+        }
+        .stat-box .num { font-size: 20px; font-weight: 700; color: #4ecdc4; }
+        .stat-box .label { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .filter-section { margin-bottom: 16px; }
+        .filter-section label { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px; }
+
+        select, input[type="range"] {
+            width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 6px; padding: 8px 10px; color: #e0e0e0; font-size: 13px;
+            outline: none; cursor: pointer;
+        }
+        select:hover, input[type="range"]:hover { border-color: rgba(78, 205, 196, 0.4); }
+        select option { background: #1a1a1a; color: #e0e0e0; }
+
+        .month-label { font-size: 12px; color: #4ecdc4; text-align: center; margin-top: 4px; }
+
+        .species-list { margin-top: 12px; }
+        .species-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+            font-size: 12px; cursor: pointer; transition: background 0.15s;
+        }
+        .species-item:hover { background: rgba(255,255,255,0.03); }
+        .species-name { font-style: italic; color: #ccc; }
+        .species-count {
+            background: rgba(78, 205, 196, 0.15); color: #4ecdc4;
+            padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600;
+        }
+
+        .legend {
+            position: fixed; bottom: 24px; left: 16px; z-index: 1000;
+            background: rgba(10, 10, 10, 0.92); backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.08); border-radius: 8px;
+            padding: 12px 16px;
+        }
+        .legend-title { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+        .legend-gradient {
+            width: 200px; height: 12px; border-radius: 4px;
+            background: linear-gradient(to right, #1a0533, #3b0f70, #8c2981, #de4968, #fe9f6d, #fecf92, #fcfdbf);
+        }
+        .legend-labels { display: flex; justify-content: space-between; font-size: 10px; color: #888; margin-top: 4px; }
+
+        .info-badge {
+            position: fixed; bottom: 24px; right: 16px; z-index: 1000;
+            background: rgba(10, 10, 10, 0.92); backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.08); border-radius: 8px;
+            padding: 10px 14px; font-size: 11px; color: #888;
+        }
+        .info-badge a { color: #4ecdc4; text-decoration: none; }
+
+        .view-toggle {
+            display: flex; gap: 4px; margin-bottom: 16px; background: rgba(255,255,255,0.04);
+            border-radius: 8px; padding: 3px;
+        }
+        .view-btn {
+            flex: 1; padding: 6px; text-align: center; font-size: 12px;
+            border-radius: 6px; cursor: pointer; transition: all 0.2s;
+            color: #888; border: none; background: none;
+        }
+        .view-btn.active { background: rgba(78, 205, 196, 0.2); color: #4ecdc4; }
+
+        .loading {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            z-index: 2000; background: rgba(10,10,10,0.95); padding: 24px 32px;
+            border-radius: 12px; font-size: 14px; color: #4ecdc4;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading" class="loading">Loading bird data...</div>
+    <div id="map"></div>
+
+    <div class="panel" id="panel">
+        <h1>Coexisting with Birds</h1>
+        <p class="subtitle">Bird observation density across Norway (GBIF)</p>
+
+        <div class="stat-row">
+            <div class="stat-box">
+                <div class="num" id="stat-obs">-</div>
+                <div class="label">Observations</div>
+            </div>
+            <div class="stat-box">
+                <div class="num" id="stat-species">-</div>
+                <div class="label">Species</div>
+            </div>
+        </div>
+
+        <div class="view-toggle">
+            <button class="view-btn active" data-view="heatmap" onclick="setView('heatmap')">Heatmap</button>
+            <button class="view-btn" data-view="points" onclick="setView('points')">Points</button>
+        </div>
+
+        <div class="filter-section">
+            <label>Species filter</label>
+            <select id="species-filter" onchange="applyFilters()">
+                <option value="all">All species</option>
+            </select>
+        </div>
+
+        <div class="filter-section">
+            <label>Month</label>
+            <input type="range" id="month-slider" min="0" max="12" value="0" oninput="applyFilters()">
+            <div class="month-label" id="month-label">All months</div>
+        </div>
+
+        <div class="filter-section">
+            <label>Top species in view</label>
+            <div class="species-list" id="species-list"></div>
+        </div>
+    </div>
+
+    <div class="legend">
+        <div class="legend-title">Observation density</div>
+        <div class="legend-gradient"></div>
+        <div class="legend-labels"><span>Low</span><span>Medium</span><span>High</span></div>
+    </div>
+
+    <div class="info-badge">
+        Data: <a href="https://www.gbif.org/" target="_blank">GBIF</a> | 33.7M total bird records in Norway
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+    <script>
+        const MONTH_NAMES = ['All months', 'January', 'February', 'March', 'April', 'May', 'June',
+                             'July', 'August', 'September', 'October', 'November', 'December'];
+
+        let map, heatLayer, pointsLayer, allData = [], currentView = 'heatmap';
+        let kommuneLayer = null;
+
+        // Init map centered on Norway
+        map = L.map('map', {
+            center: [64.5, 14],
+            zoom: 5,
+            zoomControl: false,
+            attributionControl: false
+        });
+
+        L.control.zoom({ position: 'topright' }).addTo(map);
+
+        // Dark tile layer
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap &copy; CARTO',
+            maxZoom: 18
+        }).addTo(map);
+
+        // Load data
+        Promise.all([
+            fetch('data/birds_norway.json').then(r => r.json()),
+            fetch('data/kommuner.geojson').then(r => r.json()).catch(() => null)
+        ]).then(([birdData, kommuneGeoJSON]) => {
+            document.getElementById('loading').style.display = 'none';
+            allData = birdData.observations;
+
+            // Stats
+            document.getElementById('stat-obs').textContent = allData.length.toLocaleString();
+            const uniqueSpecies = new Set(allData.map(d => d.species));
+            document.getElementById('stat-species').textContent = uniqueSpecies.size;
+
+            // Populate species filter from summary (top 30)
+            const select = document.getElementById('species-filter');
+            if (birdData.species_summary) {
+                birdData.species_summary.forEach(s => {
+                    const opt = document.createElement('option');
+                    opt.value = s.species;
+                    opt.textContent = `${s.species} (${(s.count / 1000).toFixed(0)}K)`;
+                    select.appendChild(opt);
+                });
+            }
+
+            // Add kommune boundaries (subtle)
+            if (kommuneGeoJSON) {
+                kommuneLayer = L.geoJSON(kommuneGeoJSON, {
+                    style: {
+                        color: 'rgba(255,255,255,0.12)',
+                        weight: 0.5,
+                        fillColor: 'transparent',
+                        fillOpacity: 0
+                    },
+                    onEachFeature: (feature, layer) => {
+                        const name = feature.properties.kommunenavn || feature.properties.name || '';
+                        layer.bindTooltip(name, {
+                            className: 'kommune-tooltip',
+                            sticky: true
+                        });
+                    }
+                }).addTo(map);
+            }
+
+            // Init layers
+            heatLayer = L.heatLayer([], {
+                radius: 25,
+                blur: 15,
+                maxZoom: 12,
+                max: 0.6,
+                minOpacity: 0.3,
+                gradient: {0.1: '#1a0533', 0.2: '#3b0f70', 0.35: '#8c2981', 0.5: '#de4968', 0.65: '#fe9f6d', 0.8: '#fecf92', 1.0: '#fcfdbf'}
+            }).addTo(map);
+
+            pointsLayer = L.layerGroup();
+
+            applyFilters();
+        });
+
+        function applyFilters() {
+            const speciesFilter = document.getElementById('species-filter').value;
+            const monthVal = parseInt(document.getElementById('month-slider').value);
+            document.getElementById('month-label').textContent = MONTH_NAMES[monthVal];
+
+            let filtered = allData;
+            if (speciesFilter !== 'all') {
+                filtered = filtered.filter(d => d.species === speciesFilter);
+            }
+            if (monthVal > 0) {
+                filtered = filtered.filter(d => d.month === monthVal);
+            }
+
+            // Update stats
+            document.getElementById('stat-obs').textContent = filtered.length.toLocaleString();
+            document.getElementById('stat-species').textContent = new Set(filtered.map(d => d.species)).size;
+
+            // Update heatmap
+            const heatPoints = filtered.map(d => [d.lat, d.lon, 1.0]);
+            heatLayer.setLatLngs(heatPoints);
+
+            // Update points
+            pointsLayer.clearLayers();
+            if (currentView === 'points') {
+                const maxPoints = 5000;
+                const step = Math.max(1, Math.floor(filtered.length / maxPoints));
+                for (let i = 0; i < filtered.length; i += step) {
+                    const d = filtered[i];
+                    const marker = L.circleMarker([d.lat, d.lon], {
+                        radius: 4, color: '#fff',
+                        fillColor: getSpeciesColor(d.species), fillOpacity: 0.8,
+                        weight: 1, opacity: 0.3
+                    });
+                    marker.bindPopup(`<b style="font-style:italic">${d.species}</b><br>Month: ${d.month || '?'}<br>County: ${d.county || '?'}`);
+                    pointsLayer.addLayer(marker);
+                }
+            }
+
+            // Update species list
+            updateSpeciesList(filtered);
+        }
+
+        function updateSpeciesList(data) {
+            const counts = {};
+            data.forEach(d => { counts[d.species] = (counts[d.species] || 0) + 1; });
+            const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 15);
+
+            const container = document.getElementById('species-list');
+            container.innerHTML = sorted.map(([name, count]) => `
+                <div class="species-item" onclick="filterSpecies('${name}')">
+                    <span class="species-name">${name}</span>
+                    <span class="species-count">${count}</span>
+                </div>
+            `).join('');
+        }
+
+        function filterSpecies(name) {
+            document.getElementById('species-filter').value = name;
+            applyFilters();
+        }
+
+        function setView(view) {
+            currentView = view;
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.view === view);
+            });
+
+            if (view === 'heatmap') {
+                map.removeLayer(pointsLayer);
+                map.addLayer(heatLayer);
+            } else {
+                map.removeLayer(heatLayer);
+                map.addLayer(pointsLayer);
+            }
+            applyFilters();
+        }
+
+        // Simple color hash for species
+        function getSpeciesColor(species) {
+            let hash = 0;
+            for (let i = 0; i < species.length; i++) {
+                hash = species.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            const h = Math.abs(hash) % 360;
+            return `hsl(${h}, 70%, 60%)`;
+        }
+    </script>
+
+    <style>
+        .kommune-tooltip {
+            background: rgba(10,10,10,0.9) !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
+            color: #e0e0e0 !important;
+            font-size: 12px !important;
+            padding: 4px 8px !important;
+            border-radius: 4px !important;
+            box-shadow: none !important;
+        }
+        .kommune-tooltip::before { display: none !important; }
+        .leaflet-popup-content-wrapper {
+            background: rgba(10,10,10,0.95) !important;
+            color: #e0e0e0 !important;
+            border-radius: 8px !important;
+            font-size: 12px !important;
+        }
+        .leaflet-popup-tip { background: rgba(10,10,10,0.95) !important; }
+        .leaflet-popup-close-button { color: #888 !important; }
+    </style>
+</body>
+</html>
