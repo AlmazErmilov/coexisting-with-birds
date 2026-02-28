@@ -716,16 +716,19 @@ Risk classification:
             const uniqueSpecies = new Set(allData.map(d => d.species));
             document.getElementById('stat-species').textContent = uniqueSpecies.size;
 
-            // Populate species filter from summary (top 30)
+            // Populate species filter from all unique species in data
             const select = document.getElementById('species-filter');
-            if (birdData.species_summary) {
-                birdData.species_summary.forEach(s => {
-                    const opt = document.createElement('option');
-                    opt.value = s.species;
-                    opt.textContent = `${s.species} (${(s.count / 1000).toFixed(0)}K)`;
-                    select.appendChild(opt);
-                });
-            }
+            const speciesCounts = new Map();
+            allData.forEach(d => speciesCounts.set(d.species, (speciesCounts.get(d.species) || 0) + 1));
+            const sortedSpecies = [...speciesCounts.entries()].sort((a, b) => b[1] - a[1]);
+            sortedSpecies.forEach(([species, count]) => {
+                const opt = document.createElement('option');
+                opt.value = species;
+                opt.textContent = count >= 1000
+                    ? `${species} (${(count / 1000).toFixed(0)}K)`
+                    : `${species} (${count})`;
+                select.appendChild(opt);
+            });
 
             // Add kommune boundaries (subtle)
             if (kommuneGeoJSON) {
@@ -1003,7 +1006,15 @@ Risk classification:
         }
 
         function filterSpecies(name) {
-            document.getElementById('species-filter').value = name;
+            const sel = document.getElementById('species-filter');
+            // Ensure the option exists (for species not in top list)
+            if (!sel.querySelector(`option[value="${CSS.escape(name)}"]`)) {
+                const opt = document.createElement('option');
+                opt.value = name;
+                opt.textContent = name;
+                sel.appendChild(opt);
+            }
+            sel.value = name;
             applyFilters();
         }
 
