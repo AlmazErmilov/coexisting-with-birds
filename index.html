@@ -65,7 +65,15 @@
             font-size: 12px; cursor: pointer; transition: background 0.15s;
         }
         .species-item:hover { background: rgba(255,255,255,0.03); }
-        .species-name { font-style: italic; color: #ccc; }
+        .species-name { font-style: italic; color: #ccc; display: flex; align-items: center; gap: 5px; }
+        .rl-badge {
+            font-style: normal; font-size: 9px; font-weight: 700; color: #fff;
+            padding: 1px 4px; border-radius: 3px; letter-spacing: 0.3px; flex-shrink: 0;
+        }
+        .alt-tag {
+            font-style: normal; font-size: 9px; color: #888;
+            margin-left: 4px; flex-shrink: 0;
+        }
         .species-count {
             background: rgba(78, 205, 196, 0.15); color: #4ecdc4;
             padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600;
@@ -138,6 +146,9 @@
             <label>Species filter</label>
             <select id="species-filter" onchange="applyFilters()">
                 <option value="all">All species</option>
+                <option value="__redlist__" style="color:#ff6b6b">Red list only (CR/EN/VU/NT)</option>
+                <option value="__threatened__" style="color:#d32f2f">Threatened only (CR/EN/VU)</option>
+                <option value="__rotorrisk__" style="color:#ff6b6b">Rotor zone risk (30-200m flight)</option>
             </select>
         </div>
 
@@ -168,6 +179,22 @@
         <div class="legend-title">Observation density</div>
         <div class="legend-gradient"></div>
         <div class="legend-labels"><span>Low</span><span>Medium</span><span>High</span></div>
+        <div style="margin-top:10px;border-top:1px solid rgba(255,255,255,0.08);padding-top:8px;">
+            <div class="legend-title">Red list (Artsdatabanken 2021)</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;">
+                <span class="rl-badge" style="background:#8b0000">CR</span>
+                <span class="rl-badge" style="background:#d32f2f">EN</span>
+                <span class="rl-badge" style="background:#f57c00">VU</span>
+                <span class="rl-badge" style="background:#fbc02d;color:#333">NT</span>
+            </div>
+        </div>
+        <div style="margin-top:8px;border-top:1px solid rgba(255,255,255,0.08);padding-top:8px;">
+            <div class="legend-title">Rotor zone overlap (30-200m)</div>
+            <div style="display:flex;gap:8px;margin-top:4px;font-size:10px;">
+                <span style="color:#ff6b6b">&#9888; high</span>
+                <span style="color:#fbc02d">&#9679; partial</span>
+            </div>
+        </div>
     </div>
 
     <div class="info-badge">
@@ -179,6 +206,123 @@
     <script>
         const MONTH_NAMES = ['All months', 'January', 'February', 'March', 'April', 'May', 'June',
                              'July', 'August', 'September', 'October', 'November', 'December'];
+
+        // Norwegian Red List 2021 (Artsdatabanken) for birds
+        // CR = Critically Endangered, EN = Endangered, VU = Vulnerable, NT = Near Threatened
+        const RED_LIST = {
+            // CR
+            'Crex crex': 'CR', 'Clangula hyemalis': 'CR', 'Polysticta stelleri': 'CR',
+            'Melanitta fusca': 'CR',
+            // EN
+            'Fratercula arctica': 'EN', 'Sterna hirundo': 'EN', 'Sterna paradisaea': 'EN',
+            'Morus bassanus': 'EN', 'Rissa tridactyla': 'EN', 'Uria aalge': 'EN',
+            'Alca torda': 'EN', 'Limosa limosa': 'EN', 'Numenius arquata': 'EN',
+            'Vanellus vanellus': 'EN', 'Gallinago media': 'EN', 'Larus fuscus': 'EN',
+            'Saxicola rubetra': 'EN', 'Circus aeruginosus': 'EN',
+            // VU
+            'Larus argentatus': 'VU', 'Larus canus': 'VU', 'Chloris chloris': 'VU',
+            'Stercorarius parasiticus': 'VU', 'Anas acuta': 'VU', 'Anas crecca': 'VU',
+            'Perdix perdix': 'VU', 'Aythya fuligula': 'VU', 'Aythya marila': 'VU',
+            'Strix nebulosa': 'VU', 'Mergellus albellus': 'VU',
+            'Charadrius hiaticula': 'VU', 'Calidris alpina': 'VU',
+            'Calidris pugnax': 'VU', 'Pluvialis apricaria': 'VU',
+            'Motacilla flava': 'VU', 'Emberiza hortulana': 'VU',
+            'Passer montanus': 'VU', 'Linaria cannabina': 'VU',
+            // NT
+            'Anas penelope': 'NT', 'Somateria mollissima': 'NT',
+            'Mergus serrator': 'NT', 'Podiceps cristatus': 'NT',
+            'Haematopus ostralegus': 'NT', 'Tringa totanus': 'NT',
+            'Actitis hypoleucos': 'NT', 'Gallinago gallinago': 'NT',
+            'Cepphus grylle': 'NT', 'Phalacrocorax carbo': 'NT',
+            'Asio flammeus': 'NT', 'Ficedula hypoleuca': 'NT',
+            'Hirundo rustica': 'NT', 'Delichon urbicum': 'NT',
+            'Sturnus vulgaris': 'NT', 'Turdus pilaris': 'NT',
+            'Passer domesticus': 'NT', 'Carduelis carduelis': 'NT',
+            'Acanthis flammea': 'NT',
+        };
+
+        const RED_LIST_COLORS = {
+            'CR': '#8b0000', 'EN': '#d32f2f', 'VU': '#f57c00', 'NT': '#fbc02d'
+        };
+        const RED_LIST_LABELS = {
+            'CR': 'Critically endangered', 'EN': 'Endangered', 'VU': 'Vulnerable', 'NT': 'Near threatened'
+        };
+
+        // Typical flight altitude ranges [min_m, max_m] from ornithology literature.
+        // "rotor zone" for Norwegian wind turbines is roughly 30-200m AGL.
+        const FLIGHT_ALT = {
+            // Seabirds
+            'Fratercula arctica': [5, 50], 'Alca torda': [5, 60], 'Uria aalge': [5, 60],
+            'Uria lomvia': [5, 50], 'Alle alle': [5, 40], 'Cepphus grylle': [3, 30],
+            'Morus bassanus': [10, 100], 'Rissa tridactyla': [10, 80],
+            'Fulmarus glacialis': [10, 50], 'Phalacrocorax carbo': [5, 80],
+            // Gulls and terns
+            'Larus argentatus': [10, 150], 'Larus canus': [10, 120], 'Larus fuscus': [10, 200],
+            'Larus marinus': [10, 150], 'Larus ridibundus': [10, 100],
+            'Sterna hirundo': [5, 80], 'Sterna paradisaea': [5, 60],
+            'Stercorarius parasiticus': [10, 100],
+            // Raptors (high risk, fly at rotor height)
+            'Haliaeetus albicilla': [50, 300], 'Aquila chrysaetos': [100, 400],
+            'Buteo buteo': [30, 200], 'Buteo lagopus': [30, 200],
+            'Accipiter gentilis': [20, 150], 'Accipiter nisus': [10, 100],
+            'Milvus milvus': [30, 200], 'Circus aeruginosus': [5, 100],
+            'Circus cyaneus': [5, 80], 'Falco peregrinus': [50, 500],
+            'Falco tinnunculus': [20, 150], 'Pandion haliaetus': [30, 200],
+            // Ducks and geese (migrants fly high, local flights low)
+            'Anas platyrhynchos': [10, 100], 'Anas crecca': [10, 150],
+            'Anas acuta': [10, 200], 'Anas penelope': [10, 150],
+            'Aythya fuligula': [10, 100], 'Aythya marila': [10, 100],
+            'Bucephala clangula': [10, 100], 'Clangula hyemalis': [5, 60],
+            'Somateria mollissima': [5, 50], 'Melanitta fusca': [5, 60],
+            'Mergus merganser': [10, 100], 'Mergus serrator': [5, 80],
+            'Branta leucopsis': [50, 500], 'Anser anser': [50, 500],
+            'Anser brachyrhynchus': [50, 800],
+            // Waders
+            'Haematopus ostralegus': [10, 80], 'Vanellus vanellus': [10, 100],
+            'Pluvialis apricaria': [20, 200], 'Charadrius hiaticula': [10, 60],
+            'Numenius arquata': [20, 150], 'Numenius phaeopus': [20, 200],
+            'Limosa limosa': [20, 200], 'Tringa totanus': [10, 80],
+            'Actitis hypoleucos': [5, 30], 'Gallinago gallinago': [10, 100],
+            'Gallinago media': [10, 200], 'Calidris alpina': [10, 100],
+            'Calidris pugnax': [10, 150], 'Crex crex': [5, 50],
+            // Owls
+            'Strix nebulosa': [5, 50], 'Strix aluco': [5, 50],
+            'Asio flammeus': [5, 80], 'Asio otus': [5, 60],
+            'Bubo bubo': [10, 100], 'Aegolius funereus': [5, 40],
+            // Passerines (generally low, some exceptions)
+            'Parus major': [2, 30], 'Cyanistes caeruleus': [2, 25],
+            'Corvus cornix': [5, 80], 'Corvus corax': [10, 200],
+            'Corvus monedula': [10, 100], 'Pica pica': [3, 40],
+            'Turdus merula': [3, 40], 'Turdus pilaris': [5, 80],
+            'Turdus iliacus': [5, 100], 'Turdus philomelos': [5, 80],
+            'Sturnus vulgaris': [5, 100], 'Alauda arvensis': [10, 200],
+            'Hirundo rustica': [5, 100], 'Delichon urbicum': [10, 150],
+            'Chloris chloris': [3, 30], 'Carduelis carduelis': [5, 40],
+            'Linaria cannabina': [3, 30], 'Acanthis flammea': [3, 40],
+            'Fringilla coelebs': [5, 50], 'Passer domesticus': [2, 20],
+            'Passer montanus': [2, 20], 'Motacilla alba': [3, 30],
+            'Motacilla flava': [3, 30], 'Emberiza citrinella': [3, 30],
+            'Emberiza hortulana': [3, 30], 'Erithacus rubecula': [2, 20],
+            'Ficedula hypoleuca': [3, 30], 'Saxicola rubetra': [3, 30],
+            'Phylloscopus trochilus': [3, 40], 'Sylvia atricapilla': [3, 30],
+            'Regulus regulus': [3, 20], 'Bombycilla garrulus': [10, 60],
+            'Poecile montanus': [2, 25],
+        };
+
+        // Typical rotor swept zone in Norway (derived from NVE data)
+        const ROTOR_ZONE = { min: 30, max: 200 };
+
+        function getAltRisk(species) {
+            const alt = FLIGHT_ALT[species];
+            if (!alt) return null;
+            // Check overlap with rotor zone
+            const overlap = Math.max(0,
+                Math.min(alt[1], ROTOR_ZONE.max) - Math.max(alt[0], ROTOR_ZONE.min));
+            const range = alt[1] - alt[0];
+            if (overlap === 0) return 'low';
+            if (overlap / range > 0.5) return 'high';
+            return 'medium';
+        }
 
         let map, heatLayer, pointsLayer, allData = [], currentView = 'heatmap';
         let kommuneLayer = null;
@@ -264,10 +408,17 @@
                         weight: 1.5,
                         opacity: 0.8
                     });
+                    const hubHtml = park.hub_height
+                        ? `<br>Hub height: ${park.hub_height}m | Rotor: ${park.rotor_diameter}m`
+                        : '';
+                    const sweptHtml = park.rotor_min != null
+                        ? `<br><span style="color:#ff6b6b">Swept zone: ${park.rotor_min}-${park.rotor_max}m</span>`
+                        : '';
                     marker.bindPopup(
                         `<b>${park.name}</b><br>` +
-                        `${park.turbine_count} turbines | ${park.capacity_mw} MW<br>` +
-                        `${park.municipality}, ${park.county}`
+                        `${park.turbine_count} turbines | ${park.capacity_mw} MW` +
+                        hubHtml + sweptHtml +
+                        `<br>${park.municipality}, ${park.county}`
                     );
                     turbineLayer.addLayer(marker);
                 });
@@ -295,7 +446,16 @@
             document.getElementById('month-label').textContent = MONTH_NAMES[monthVal];
 
             let filtered = allData;
-            if (speciesFilter !== 'all') {
+            if (speciesFilter === '__redlist__') {
+                filtered = filtered.filter(d => RED_LIST[d.species]);
+            } else if (speciesFilter === '__threatened__') {
+                filtered = filtered.filter(d => ['CR','EN','VU'].includes(RED_LIST[d.species]));
+            } else if (speciesFilter === '__rotorrisk__') {
+                filtered = filtered.filter(d => {
+                    const r = getAltRisk(d.species);
+                    return r === 'high' || r === 'medium';
+                });
+            } else if (speciesFilter !== 'all') {
                 filtered = filtered.filter(d => d.species === speciesFilter);
             }
             if (monthVal > 0) {
@@ -322,7 +482,14 @@
                         fillColor: getSpeciesColor(d.species), fillOpacity: 0.8,
                         weight: 1, opacity: 0.3
                     });
-                    marker.bindPopup(`<b style="font-style:italic">${d.species}</b><br>Month: ${d.month || '?'}<br>County: ${d.county || '?'}`);
+                    const rl = RED_LIST[d.species];
+                    const rlHtml = rl ? `<br><span style="color:${RED_LIST_COLORS[rl]};font-weight:700">${rl}</span> ${RED_LIST_LABELS[rl]}` : '';
+                    const alt = FLIGHT_ALT[d.species];
+                    const risk = getAltRisk(d.species);
+                    const altHtml = alt ? `<br>Flight altitude: ${alt[0]}-${alt[1]}m` : '';
+                    const riskHtml = risk === 'high' ? '<br><span style="color:#ff6b6b;font-weight:700">&#9888; High rotor zone overlap</span>'
+                        : risk === 'medium' ? '<br><span style="color:#fbc02d">&#9679; Partial rotor zone overlap</span>' : '';
+                    marker.bindPopup(`<b style="font-style:italic">${d.species}</b>${rlHtml}${altHtml}${riskHtml}<br>Month: ${MONTH_NAMES[d.month] || '?'}<br>County: ${d.county || '?'}`);
                     pointsLayer.addLayer(marker);
                 }
             }
@@ -334,15 +501,39 @@
         function updateSpeciesList(data) {
             const counts = {};
             data.forEach(d => { counts[d.species] = (counts[d.species] || 0) + 1; });
-            const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 15);
+            // Sort: red-listed first (by severity), then by count
+            const rlOrder = {'CR': 0, 'EN': 1, 'VU': 2, 'NT': 3};
+            const sorted = Object.entries(counts).sort((a, b) => {
+                const rlA = RED_LIST[a[0]]; const rlB = RED_LIST[b[0]];
+                if (rlA && !rlB) return -1;
+                if (!rlA && rlB) return 1;
+                if (rlA && rlB) return (rlOrder[rlA] ?? 9) - (rlOrder[rlB] ?? 9);
+                return b[1] - a[1];
+            }).slice(0, 20);
 
             const container = document.getElementById('species-list');
-            container.innerHTML = sorted.map(([name, count]) => `
+            container.innerHTML = sorted.map(([name, count]) => {
+                const rl = RED_LIST[name];
+                const badge = rl
+                    ? `<span class="rl-badge" style="background:${RED_LIST_COLORS[rl]};" title="${RED_LIST_LABELS[rl]}">${rl}</span>`
+                    : '';
+                const alt = FLIGHT_ALT[name];
+                const risk = getAltRisk(name);
+                const riskIcon = risk === 'high' ? '&#9888;' : risk === 'medium' ? '&#9679;' : '';
+                const riskColor = risk === 'high' ? '#ff6b6b' : risk === 'medium' ? '#fbc02d' : '';
+                const altText = alt ? `${alt[0]}-${alt[1]}m` : '';
+                const riskHtml = riskIcon
+                    ? `<span style="color:${riskColor};font-size:10px;margin-left:2px" title="Rotor zone overlap: ${risk}">${riskIcon}</span>`
+                    : '';
+                const altHtml = altText
+                    ? `<span class="alt-tag">${altText}${riskHtml}</span>`
+                    : '';
+                return `
                 <div class="species-item" onclick="filterSpecies('${name}')">
-                    <span class="species-name">${name}</span>
+                    <span class="species-name">${badge}${name}${altHtml}</span>
                     <span class="species-count">${count}</span>
-                </div>
-            `).join('');
+                </div>`;
+            }).join('');
         }
 
         function filterSpecies(name) {

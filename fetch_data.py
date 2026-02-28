@@ -26,50 +26,57 @@ import time
 BASE_URL = "https://api.gbif.org/v1/occurrence/search"
 
 def fetch_observations(limit_total=10000, page_size=300):
-    """Fetch bird observations from GBIF for Norway."""
+    """Fetch bird observations from GBIF for Norway, spread evenly across months."""
     all_records = []
-    offset = 0
+    per_month = limit_total // 12
 
-    while len(all_records) < limit_total:
-        params = {
-            "country": "NO",
-            "classKey": 212,  # Aves (birds)
-            "hasCoordinate": "true",
-            "hasGeospatialIssue": "false",
-            "limit": page_size,
-            "offset": offset,
-        }
-        url = f"{BASE_URL}?{urllib.parse.urlencode(params)}"
-        print(f"Fetching offset={offset}, have {len(all_records)} records...")
+    for month in range(1, 13):
+        offset = 0
+        month_records = []
+        print(f"Fetching month {month}...")
 
-        req = urllib.request.Request(url)
-        with urllib.request.urlopen(req) as resp:
-            data = json.loads(resp.read().decode())
+        while len(month_records) < per_month:
+            params = {
+                "country": "NO",
+                "classKey": 212,  # Aves (birds)
+                "hasCoordinate": "true",
+                "hasGeospatialIssue": "false",
+                "month": month,
+                "limit": page_size,
+                "offset": offset,
+            }
+            url = f"{BASE_URL}?{urllib.parse.urlencode(params)}"
 
-        results = data.get("results", [])
-        if not results:
-            break
+            req = urllib.request.Request(url)
+            with urllib.request.urlopen(req) as resp:
+                data = json.loads(resp.read().decode())
 
-        for r in results:
-            lat = r.get("decimalLatitude")
-            lon = r.get("decimalLongitude")
-            species = r.get("species")
-            month = r.get("month")
-            if lat and lon and species:
-                all_records.append({
-                    "lat": round(lat, 4),
-                    "lon": round(lon, 4),
-                    "species": species,
-                    "month": month,
-                    "county": r.get("stateProvince", ""),
-                })
+            results = data.get("results", [])
+            if not results:
+                break
 
-        offset += page_size
-        if data.get("endOfRecords"):
-            break
-        time.sleep(0.2)  # be polite to the API
+            for r in results:
+                lat = r.get("decimalLatitude")
+                lon = r.get("decimalLongitude")
+                species = r.get("species")
+                if lat and lon and species:
+                    month_records.append({
+                        "lat": round(lat, 4),
+                        "lon": round(lon, 4),
+                        "species": species,
+                        "month": month,
+                        "county": r.get("stateProvince", ""),
+                    })
 
-    return all_records[:limit_total]
+            offset += page_size
+            if data.get("endOfRecords"):
+                break
+            time.sleep(0.15)
+
+        all_records.extend(month_records[:per_month])
+        print(f"  Month {month}: {len(month_records[:per_month])} records")
+
+    return all_records
 
 
 def fetch_species_summary():
