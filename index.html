@@ -127,7 +127,7 @@
             height: 28px; border-radius: 6px; padding: 0 10px;
             background: rgba(78,205,196,0.1); border: 1px solid rgba(78,205,196,0.2);
             color: #4ecdc4; font-size: 11px; font-weight: 600;
-            cursor: pointer; transition: all 0.2s; margin-left: auto;
+            cursor: pointer; transition: all 0.2s;
         }
         .info-btn:hover { background: rgba(78,205,196,0.2); border-color: rgba(78,205,196,0.4); }
 
@@ -414,22 +414,35 @@ Risk classification:
             <p>
                 This is a screening tool, not a regulatory environmental impact assessment.
                 Observation density reflects citizen-science reporting patterns, not true abundance.
-                Flight altitudes are literature estimates, not site-specific measurements.
+                Flight altitudes are approximate estimates, not site-specific measurements.
                 For actual wind farm planning, site-specific radar surveys and environmental assessments are required.
             </p>
 
-            <p style="color:#666;font-size:11px;margin-top:20px;text-align:center">
-                Built at a hackathon, February 2026. All data from open sources.
+            <h3>Team</h3>
+            <p style="font-size:11px;color:#aaa;">
+                Built at <a href="https://www.tekna.no/en/events/hackathon-code-your-way-to-a-greener-world-51380/" target="_blank" style="color:#4ecdc4">Tekna Hackathon: Code your way to a greener world</a> (Feb 27-28, 2026, Oslo).
+            </p>
+            <table class="legend-table" style="font-size:11px;">
+                <tr><td><a href="https://www.linkedin.com/in/almazermilov/" target="_blank" style="color:#4ecdc4">Almaz Ermilov</a></td></tr>
+                <tr><td><a href="https://www.linkedin.com/in/michael-bitney/" target="_blank" style="color:#4ecdc4">Michael Bitney</a></td></tr>
+                <tr><td><a href="https://www.linkedin.com/in/kuzkindmitriy/" target="_blank" style="color:#4ecdc4">Dmitri Kuzkin</a></td></tr>
+                <tr><td><a href="https://www.linkedin.com/in/marianhelcloverli/" target="_blank" style="color:#4ecdc4">Marian Øverli</a></td></tr>
+            </table>
+            <p style="font-size:11px;margin-top:8px;">
+                <a href="https://github.com/AlmazErmilov/coexisting-with-birds" target="_blank" style="color:#4ecdc4">GitHub repository</a>
+                &nbsp;·&nbsp;
+                <a href="https://coexisting-with-birds.vercel.app/" target="_blank" style="color:#4ecdc4">Live demo</a>
+            </p>
+            <p style="color:#555;font-size:10px;margin-top:12px;text-align:center">
+                All data from open sources. Code is open for hackathon purposes.
             </p>
         </div>
     </div>
 
     <div class="panel" id="panel">
-        <div style="display:flex;align-items:center;justify-content:space-between;">
-            <h1>Coexisting with Birds</h1>
-            <button class="info-btn" onclick="document.getElementById('info-modal').classList.add('open')">? About</button>
-        </div>
+        <h1>Coexisting with Birds</h1>
         <p class="subtitle">Bird observation density across Norway (GBIF)</p>
+        <button class="info-btn" onclick="document.getElementById('info-modal').classList.add('open')" style="margin:6px 0 4px 0">How it works</button>
 
         <div class="stat-row">
             <div class="stat-box">
