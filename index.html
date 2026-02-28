@@ -118,15 +118,13 @@
         }
 
         .info-btn {
-            position: fixed; top: 16px; right: 56px; z-index: 1000;
-            width: 36px; height: 36px; border-radius: 8px;
-            background: rgba(10,10,10,0.92); backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,255,255,0.08);
-            color: #4ecdc4; font-size: 16px; font-weight: 700;
-            cursor: pointer; display: flex; align-items: center; justify-content: center;
-            transition: border-color 0.2s;
+            display: inline-flex; align-items: center; gap: 5px;
+            height: 28px; border-radius: 6px; padding: 0 10px;
+            background: rgba(78,205,196,0.1); border: 1px solid rgba(78,205,196,0.2);
+            color: #4ecdc4; font-size: 11px; font-weight: 600;
+            cursor: pointer; transition: all 0.2s; margin-left: auto;
         }
-        .info-btn:hover { border-color: rgba(78,205,196,0.5); }
+        .info-btn:hover { background: rgba(78,205,196,0.2); border-color: rgba(78,205,196,0.4); }
 
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -172,8 +170,6 @@
 <body>
     <div id="loading" class="loading">Loading bird data...</div>
     <div id="map"></div>
-
-    <button class="info-btn" onclick="document.getElementById('info-modal').classList.add('open')" title="About this project">?</button>
 
     <div class="modal-overlay" id="info-modal" onclick="if(event.target===this)this.classList.remove('open')">
         <div class="modal">
@@ -307,7 +303,10 @@
     </div>
 
     <div class="panel" id="panel">
-        <h1>Coexisting with Birds</h1>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+            <h1>Coexisting with Birds</h1>
+            <button class="info-btn" onclick="document.getElementById('info-modal').classList.add('open')">? About</button>
+        </div>
         <p class="subtitle">Bird observation density across Norway (GBIF)</p>
 
         <div class="stat-row">
