@@ -17,6 +17,7 @@ No build step, no dependencies for the frontend. Just a static HTML file.
 - **Points view**: individual observations colored by species
 - **Species filter**: filter by any of the top 30 most observed species
 - **Month slider**: see seasonal variation (January through December)
+- **Wind turbines**: 62 wind parks (393 turbines) from NVE, togglable layer with popups
 - **Kommune boundaries**: Norwegian municipality borders visible on zoom, with name tooltips
 - **Top species panel**: live ranking of species in current filter
 
@@ -32,6 +33,14 @@ No build step, no dependencies for the frontend. Just a static HTML file.
 - **License**: CC BY 4.0 / CC0 (varies per contributing dataset)
 - **Authentication**: none required for the search API
 - **Citation**: GBIF.org (28 February 2026) GBIF Occurrence Download
+
+### Wind turbines
+
+- **Source**: [NVE](https://www.nve.no/) via [HuggingFace](https://huggingface.co/datasets/rebase-energy/nve-windpower-data)
+- **Scope**: 393 active turbines across 62 wind parks in Norway
+- **Fields used**: latitude, longitude, park name, capacity (MW), municipality, county, turbine count
+- **License**: NVE open data
+- **Authentication**: none required
 
 ### Municipality boundaries
 
@@ -52,11 +61,12 @@ Adjust `limit_total` in `fetch_data.py` to change sample size (default: 10,000).
 ## File structure
 
 ```
-index.html          Main app (single file, no build)
-fetch_data.py       Data fetching script (GBIF API)
+index.html              Main app (single file, no build)
+fetch_data.py           Data fetching script (GBIF API)
 data/
-  birds_norway.json   Bird observations + species summary (964 KB)
-  kommuner.geojson    Norwegian municipality boundaries (1.2 MB)
+  birds_norway.json     Bird observations + species summary (964 KB)
+  wind_turbines.json    Wind parks and turbines (99 KB)
+  kommuner.geojson      Norwegian municipality boundaries (1.2 MB)
 ```
 
 ## Tech stack
@@ -69,7 +79,7 @@ data/
 ## Scaling ideas
 
 - Increase sample size or use GBIF bulk download (async, needs free account)
-- Add wind turbine locations from [NVE](https://www.nve.no/energi/energisystem/vindkraft-paa-land/data-for-utbygde-vindkraftverk-i-norge/)
+- ~~Add wind turbine locations from NVE~~ (done)
 - Add bird tracking data from [Movebank](https://datarepository.movebank.org/) for flight altitude
 - Use [Artsdatabanken Artskart](https://artskart.artsdatabanken.no/) API for red list species status
 - Aggregate by kommune for choropleth "risk score" per municipality

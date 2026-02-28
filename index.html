@@ -3,8 +3,9 @@
   Interactive heatmap of bird observations from GBIF.
 
   Data:
-    data/birds_norway.json  - 10K bird observations (GBIF API, CC BY 4.0 / CC0)
-    data/kommuner.geojson   - 357 Norwegian municipalities (Kartverket, CC BY 4.0)
+    data/birds_norway.json   - 10K bird observations (GBIF API, CC BY 4.0 / CC0)
+    data/wind_turbines.json  - 393 turbines / 62 wind parks (NVE open data)
+    data/kommuner.geojson    - 357 Norwegian municipalities (Kartverket, CC BY 4.0)
 
   Dependencies (loaded from CDN):
     Leaflet 1.9.4           - map rendering
@@ -147,6 +148,17 @@
         </div>
 
         <div class="filter-section">
+            <label>Wind turbines</label>
+            <div style="display:flex;align-items:center;gap:8px;">
+                <label class="toggle-label" style="font-size:12px;color:#ccc;display:flex;align-items:center;gap:6px;cursor:pointer;">
+                    <input type="checkbox" id="turbine-toggle" checked onchange="toggleTurbines()" style="accent-color:#ff6b6b;">
+                    Show turbines (<span id="turbine-count">0</span>)
+                </label>
+            </div>
+            <div id="turbine-info" style="font-size:11px;color:#888;margin-top:4px;"></div>
+        </div>
+
+        <div class="filter-section">
             <label>Top species in view</label>
             <div class="species-list" id="species-list"></div>
         </div>
@@ -159,7 +171,7 @@
     </div>
 
     <div class="info-badge">
-        Data: <a href="https://www.gbif.org/" target="_blank">GBIF</a> | 33.7M total bird records in Norway
+        Birds: <a href="https://www.gbif.org/" target="_blank">GBIF</a> | Turbines: <a href="https://www.nve.no/" target="_blank">NVE</a>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -170,6 +182,8 @@
 
         let map, heatLayer, pointsLayer, allData = [], currentView = 'heatmap';
         let kommuneLayer = null;
+        let turbineLayer = null;
+        let windData = null;
 
         // Init map centered on Norway
         map = L.map('map', {
@@ -190,8 +204,9 @@
         // Load data
         Promise.all([
             fetch('data/birds_norway.json').then(r => r.json()),
-            fetch('data/kommuner.geojson').then(r => r.json()).catch(() => null)
-        ]).then(([birdData, kommuneGeoJSON]) => {
+            fetch('data/kommuner.geojson').then(r => r.json()).catch(() => null),
+            fetch('data/wind_turbines.json').then(r => r.json()).catch(() => null)
+        ]).then(([birdData, kommuneGeoJSON, turbineData]) => {
             document.getElementById('loading').style.display = 'none';
             allData = birdData.observations;
 
@@ -228,6 +243,35 @@
                         });
                     }
                 }).addTo(map);
+            }
+
+            // Wind turbine layer
+            if (turbineData) {
+                windData = turbineData;
+                turbineLayer = L.layerGroup();
+                const parks = turbineData.parks;
+                document.getElementById('turbine-count').textContent = parks.length + ' parks';
+                document.getElementById('turbine-info').textContent =
+                    turbineData.metadata.total_turbines + ' turbines total (NVE open data)';
+
+                parks.forEach(park => {
+                    const size = Math.max(5, Math.min(14, Math.sqrt(park.capacity_mw) * 2));
+                    const marker = L.circleMarker([park.lat, park.lon], {
+                        radius: size,
+                        color: '#ff6b6b',
+                        fillColor: '#ff6b6b',
+                        fillOpacity: 0.5,
+                        weight: 1.5,
+                        opacity: 0.8
+                    });
+                    marker.bindPopup(
+                        `<b>${park.name}</b><br>` +
+                        `${park.turbine_count} turbines | ${park.capacity_mw} MW<br>` +
+                        `${park.municipality}, ${park.county}`
+                    );
+                    turbineLayer.addLayer(marker);
+                });
+                turbineLayer.addTo(map);
             }
 
             // Init layers
@@ -320,6 +364,14 @@
                 map.addLayer(pointsLayer);
             }
             applyFilters();
+        }
+
+        function toggleTurbines() {
+            const show = document.getElementById('turbine-toggle').checked;
+            if (turbineLayer) {
+                if (show) { map.addLayer(turbineLayer); }
+                else { map.removeLayer(turbineLayer); }
+            }
         }
 
         // Simple color hash for species
