@@ -1,8 +1,14 @@
 # Coexisting with Birds
 
+<a href="https://www.tekna.no/en/events/hackathon-code-your-way-to-a-greener-world-51380/">
+  <img src="https://www.tekna.no/Static/Web2020/img/icons/tekna-logo-2020.svg" alt="Tekna" height="40">
+</a>
+
+Built at [Tekna Hackathon: Code your way to a greener world](https://www.tekna.no/en/events/hackathon-code-your-way-to-a-greener-world-51380/) (Feb 27-28, 2026, Oslo)
+
 **Live demo**: https://coexisting-with-birds.vercel.app/
 
-Interactive heatmap of bird observations across Norway. Built as a pre-stage screening tool for understanding bird distribution before infrastructure projects (wind farms, construction, etc.).
+Interactive heatmap of bird observations across Norway. A pre-stage screening tool for understanding bird distribution before infrastructure projects (wind farms, construction, etc.).
 
 ## Quick start
 
@@ -110,6 +116,15 @@ Scottish Natural Heritage. (n.d.). *Guidance on assessing collision risk between
 Agafonkin, V. (2023). *Leaflet: an open source JavaScript library for interactive maps* (Version 1.9.4) [Software]. https://leafletjs.com/
 
 Agafonkin, V. (n.d.). *Leaflet.heat: a tiny, simple and fast heatmap plugin for Leaflet* (Version 0.2.0) [Software]. https://github.com/Leaflet/Leaflet.heat
+
+## Team
+
+| Name | Email | LinkedIn |
+|------|-------|----------|
+| Almaz Ermilov | Almaz.Ermilov@gmail.com | [linkedin.com/in/almazermilov](https://www.linkedin.com/in/almazermilov/) |
+| Michael Bitney | michaelsb7@gmail.com | [linkedin.com/in/michael-bitney](https://www.linkedin.com/in/michael-bitney/) |
+| Dmitri Kuzkin | himynameisroo@gmail.com | [linkedin.com/in/kuzkindmitriy](https://www.linkedin.com/in/kuzkindmitriy/) |
+| Marian Øverli | marian.overli@gmail.com | [linkedin.com/in/marianhelcloverli](https://www.linkedin.com/in/marianhelcloverli/) |
 
 ## License
 
