@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #0a0a0a; color: #e0e0e0; }
+        body { font-family: 'Arial Narrow', 'Helvetica Neue', Arial, sans-serif; background: #0a0a0a; color: #e0e0e0; }
 
         #map { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
 
@@ -215,7 +215,7 @@
             </p>
             <table class="legend-table">
                 <tr>
-                    <td style="color:#ff6b6b;font-size:16px">&#9888;</td>
+                    <td style="color:#ff6b6b;font-size:16px">&#9650;</td>
                     <td><b style="color:#e0e0e0">High overlap</b><br>More than 50% of the species' typical flight altitude band falls within the rotor zone. Examples: white-tailed eagle (50-300m), buzzards (30-200m), gulls (10-150m).</td>
                 </tr>
                 <tr>
@@ -353,6 +353,17 @@
         </div>
 
         <div class="filter-section">
+            <label>Data confidence</label>
+            <div style="display:flex;align-items:center;gap:8px;">
+                <label style="font-size:12px;color:#ccc;display:flex;align-items:center;gap:6px;cursor:pointer;">
+                    <input type="checkbox" id="confidence-toggle" onchange="toggleConfidence()" style="accent-color:#4ecdc4;">
+                    Show uncertainty by kommune
+                </label>
+            </div>
+            <div id="confidence-info" style="font-size:10px;color:#666;margin-top:3px;">Grey = no data, red = few observations (low confidence)</div>
+        </div>
+
+        <div class="filter-section">
             <label>Top species in view</label>
             <div class="species-list" id="species-list"></div>
         </div>
@@ -372,10 +383,27 @@
             </div>
         </div>
         <div style="margin-top:8px;border-top:1px solid rgba(255,255,255,0.08);padding-top:8px;">
-            <div class="legend-title">Rotor zone overlap (30-200m)</div>
-            <div style="display:flex;gap:8px;margin-top:4px;font-size:10px;">
-                <span style="color:#ff6b6b">&#9888; high</span>
-                <span style="color:#fbc02d">&#9679; partial</span>
+            <div class="legend-title">Wind park bird conflict</div>
+            <div style="display:flex;align-items:center;gap:4px;margin-top:4px;">
+                <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:rgb(0,180,40)"></span>
+                <span style="font-size:10px;color:#888">Low</span>
+                <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:rgb(200,150,40);margin-left:4px"></span>
+                <span style="font-size:10px;color:#888">Moderate</span>
+                <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:rgb(255,0,40);margin-left:4px"></span>
+                <span style="font-size:10px;color:#888">High</span>
+            </div>
+        </div>
+        <div style="margin-top:8px;border-top:1px solid rgba(255,255,255,0.08);padding-top:8px;">
+            <div class="legend-title">Flight altitude vs rotor zone (30-200m)</div>
+            <div style="display:flex;flex-direction:column;gap:3px;margin-top:4px;font-size:11px;">
+                <div style="display:flex;align-items:center;gap:6px;">
+                    <span style="color:#ff6b6b;font-size:14px;line-height:1;">&#9650;</span>
+                    <span style="color:#ccc;">High overlap (>50% of flight in rotor zone)</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                    <span style="color:#fbc02d;font-size:14px;line-height:1;">&#9679;</span>
+                    <span style="color:#ccc;">Partial overlap</span>
+                </div>
             </div>
         </div>
     </div>
@@ -511,6 +539,8 @@
         let kommuneLayer = null;
         let turbineLayer = null;
         let windData = null;
+        let confidenceMode = false;
+        let kommuneCountsComputed = false;
 
         // Init map centered on Norway
         map = L.map('map', {
@@ -572,7 +602,7 @@
                 }).addTo(map);
             }
 
-            // Wind turbine layer
+            // Wind turbine layer with bird conflict scoring
             if (turbineData) {
                 windData = turbineData;
                 turbineLayer = L.layerGroup();
@@ -581,27 +611,90 @@
                 document.getElementById('turbine-info').textContent =
                     turbineData.metadata.total_turbines + ' turbines total (NVE open data)';
 
+                // Score each park by bird conflict
+                const SEARCH_RADIUS_KM = 30;
+                const RL_WEIGHT = {'CR': 8, 'EN': 5, 'VU': 3, 'NT': 1.5};
+
                 parks.forEach(park => {
-                    const size = Math.max(5, Math.min(14, Math.sqrt(park.capacity_mw) * 2));
+                    // Find nearby bird observations
+                    const nearby = allData.filter(o => {
+                        const dlat = (o.lat - park.lat) * 111;
+                        const dlon = (o.lon - park.lon) * 111 * Math.cos(park.lat * Math.PI / 180);
+                        return Math.sqrt(dlat*dlat + dlon*dlon) < SEARCH_RADIUS_KM;
+                    });
+
+                    // Calculate conflict score
+                    let score = 0;
+                    let riskSpecies = {};
+                    nearby.forEach(o => {
+                        let w = 1; // base weight
+                        const rl = RED_LIST[o.species];
+                        if (rl) w *= (RL_WEIGHT[rl] || 1);
+                        const risk = getAltRisk(o.species);
+                        if (risk === 'high') w *= 3;
+                        else if (risk === 'medium') w *= 1.5;
+                        score += w;
+                        if (rl || risk === 'high' || risk === 'medium') {
+                            if (!riskSpecies[o.species]) riskSpecies[o.species] = {count: 0, rl, risk};
+                            riskSpecies[o.species].count++;
+                        }
+                    });
+
+                    // Normalize score (0-1) based on observed range
+                    const normScore = Math.min(1, score / 300);
+                    park._score = normScore;
+                    park._nearby = nearby.length;
+                    park._riskSpecies = riskSpecies;
+
+                    // Color: green (low) -> yellow -> red (high)
+                    const r = Math.round(normScore > 0.5 ? 255 : normScore * 2 * 255);
+                    const g = Math.round(normScore < 0.5 ? 180 : (1 - normScore) * 2 * 180);
+                    const parkColor = `rgb(${r},${g},40)`;
+
+                    const size = Math.max(6, Math.min(14, Math.sqrt(park.capacity_mw) * 2));
                     const marker = L.circleMarker([park.lat, park.lon], {
                         radius: size,
-                        color: '#ff6b6b',
-                        fillColor: '#ff6b6b',
-                        fillOpacity: 0.5,
+                        color: '#fff',
+                        fillColor: parkColor,
+                        fillOpacity: 0.75,
                         weight: 1.5,
-                        opacity: 0.8
+                        opacity: 0.4
                     });
+
+                    // Risk label
+                    const riskLabel = normScore < 0.2 ? 'Low bird conflict'
+                        : normScore < 0.5 ? 'Moderate bird conflict'
+                        : normScore < 0.75 ? 'High bird conflict'
+                        : 'Very high bird conflict';
+                    const riskColor = normScore < 0.2 ? '#4ecdc4'
+                        : normScore < 0.5 ? '#fbc02d'
+                        : '#ff6b6b';
+
+                    // Top risk species for popup
+                    const topRisk = Object.entries(riskSpecies)
+                        .sort((a,b) => b[1].count - a[1].count)
+                        .slice(0, 4)
+                        .map(([sp, d]) => {
+                            const badge = d.rl ? `<span style="color:${RED_LIST_COLORS[d.rl]};font-weight:700">${d.rl}</span> ` : '';
+                            const riskMark = d.risk === 'high' ? ' &#9650;' : d.risk === 'medium' ? ' &#9679;' : '';
+                            return `${badge}<i>${sp}</i>${riskMark} (${d.count})`;
+                        }).join('<br>');
+
                     const hubHtml = park.hub_height
-                        ? `<br>Hub height: ${park.hub_height}m | Rotor: ${park.rotor_diameter}m`
+                        ? `<br>Hub: ${park.hub_height}m | Rotor: ${park.rotor_diameter}m`
                         : '';
                     const sweptHtml = park.rotor_min != null
-                        ? `<br><span style="color:#ff6b6b">Swept zone: ${park.rotor_min}-${park.rotor_max}m</span>`
+                        ? ` | Swept: ${park.rotor_min}-${park.rotor_max}m`
                         : '';
+
                     marker.bindPopup(
                         `<b>${park.name}</b><br>` +
                         `${park.turbine_count} turbines | ${park.capacity_mw} MW` +
                         hubHtml + sweptHtml +
-                        `<br>${park.municipality}, ${park.county}`
+                        `<br><span style="color:${riskColor};font-weight:700">${riskLabel}</span>` +
+                        ` <span style="color:#888">(${nearby.length} obs within ${SEARCH_RADIUS_KM}km)</span>` +
+                        (topRisk ? `<br><span style="font-size:11px">${topRisk}</span>` : '') +
+                        `<br><span style="color:#888;font-size:10px">${park.municipality}, ${park.county}</span>`
                     );
                     turbineLayer.addLayer(marker);
                 });
@@ -670,7 +763,7 @@
                     const alt = FLIGHT_ALT[d.species];
                     const risk = getAltRisk(d.species);
                     const altHtml = alt ? `<br>Flight altitude: ${alt[0]}-${alt[1]}m` : '';
-                    const riskHtml = risk === 'high' ? '<br><span style="color:#ff6b6b;font-weight:700">&#9888; High rotor zone overlap</span>'
+                    const riskHtml = risk === 'high' ? '<br><span style="color:#ff6b6b;font-weight:700">&#9650; High rotor zone overlap</span>'
                         : risk === 'medium' ? '<br><span style="color:#fbc02d">&#9679; Partial rotor zone overlap</span>' : '';
                     marker.bindPopup(`<b style="font-style:italic">${d.species}</b>${rlHtml}${altHtml}${riskHtml}<br>Month: ${MONTH_NAMES[d.month] || '?'}<br>County: ${d.county || '?'}`);
                     pointsLayer.addLayer(marker);
@@ -702,7 +795,7 @@
                     : '';
                 const alt = FLIGHT_ALT[name];
                 const risk = getAltRisk(name);
-                const riskIcon = risk === 'high' ? '&#9888;' : risk === 'medium' ? '&#9679;' : '';
+                const riskIcon = risk === 'high' ? '&#9650;' : risk === 'medium' ? '&#9679;' : '';
                 const riskColor = risk === 'high' ? '#ff6b6b' : risk === 'medium' ? '#fbc02d' : '';
                 const altText = alt ? `${alt[0]}-${alt[1]}m` : '';
                 const riskHtml = riskIcon
@@ -745,6 +838,98 @@
             if (turbineLayer) {
                 if (show) { map.addLayer(turbineLayer); }
                 else { map.removeLayer(turbineLayer); }
+            }
+        }
+
+        // Point-in-polygon (ray-casting) for GeoJSON geometries
+        function pointInRing(lat, lon, ring) {
+            let inside = false;
+            for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+                const yi = ring[i][1], xi = ring[i][0]; // GeoJSON: [lon, lat]
+                const yj = ring[j][1], xj = ring[j][0];
+                if (((yi > lat) !== (yj > lat)) && (lon < (xj - xi) * (lat - yi) / (yj - yi) + xi)) {
+                    inside = !inside;
+                }
+            }
+            return inside;
+        }
+
+        function pointInFeature(lat, lon, geometry) {
+            if (geometry.type === 'Polygon') {
+                if (!pointInRing(lat, lon, geometry.coordinates[0])) return false;
+                for (let i = 1; i < geometry.coordinates.length; i++) {
+                    if (pointInRing(lat, lon, geometry.coordinates[i])) return false;
+                }
+                return true;
+            } else if (geometry.type === 'MultiPolygon') {
+                for (const poly of geometry.coordinates) {
+                    if (pointInRing(lat, lon, poly[0])) {
+                        let inHole = false;
+                        for (let i = 1; i < poly.length; i++) {
+                            if (pointInRing(lat, lon, poly[i])) { inHole = true; break; }
+                        }
+                        if (!inHole) return true;
+                    }
+                }
+                return false;
+            }
+            return false;
+        }
+
+        function computeKommuneCounts() {
+            if (kommuneCountsComputed || !kommuneLayer) return;
+            kommuneLayer.eachLayer(layer => {
+                const bounds = layer.getBounds();
+                let count = 0;
+                allData.forEach(o => {
+                    if (o.lat >= bounds.getSouth() && o.lat <= bounds.getNorth() &&
+                        o.lon >= bounds.getWest() && o.lon <= bounds.getEast()) {
+                        if (pointInFeature(o.lat, o.lon, layer.feature.geometry)) {
+                            count++;
+                        }
+                    }
+                });
+                layer._obsCount = count;
+            });
+            kommuneCountsComputed = true;
+        }
+
+        function toggleConfidence() {
+            confidenceMode = document.getElementById('confidence-toggle').checked;
+            if (!kommuneLayer) return;
+
+            if (confidenceMode) {
+                computeKommuneCounts();
+                kommuneLayer.eachLayer(layer => {
+                    const count = layer._obsCount || 0;
+                    const name = layer.feature.properties.kommunenavn || layer.feature.properties.name || '';
+                    let fillColor, fillOpacity;
+                    if (count === 0) {
+                        fillColor = '#555'; fillOpacity = 0.5;
+                    } else if (count < 5) {
+                        fillColor = '#d32f2f'; fillOpacity = 0.4;
+                    } else if (count < 15) {
+                        fillColor = '#f57c00'; fillOpacity = 0.3;
+                    } else if (count < 30) {
+                        fillColor = '#fbc02d'; fillOpacity = 0.2;
+                    } else {
+                        fillColor = 'transparent'; fillOpacity = 0;
+                    }
+                    layer.setStyle({ fillColor, fillOpacity });
+                    layer.unbindTooltip();
+                    layer.bindTooltip(`${name} — ${count} observations`, {
+                        className: 'kommune-tooltip', sticky: true
+                    });
+                });
+            } else {
+                kommuneLayer.eachLayer(layer => {
+                    const name = layer.feature.properties.kommunenavn || layer.feature.properties.name || '';
+                    layer.setStyle({ fillColor: 'transparent', fillOpacity: 0 });
+                    layer.unbindTooltip();
+                    layer.bindTooltip(name, {
+                        className: 'kommune-tooltip', sticky: true
+                    });
+                });
             }
         }
 
