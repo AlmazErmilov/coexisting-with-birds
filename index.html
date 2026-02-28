@@ -680,7 +680,6 @@ Risk classification:
         let turbineLayer = null;
         let windData = null;
         let confidenceMode = false;
-        let kommuneCountsComputed = false;
 
         // Init map centered on Norway
         map = L.map('map', {
@@ -740,6 +739,22 @@ Risk classification:
                         });
                     }
                 }).addTo(map);
+
+                // Pre-assign each observation to its kommune (one-time point-in-polygon)
+                const kLayers = [];
+                kommuneLayer.eachLayer(l => kLayers.push(l));
+                allData.forEach(o => {
+                    for (const kl of kLayers) {
+                        const b = kl.getBounds();
+                        if (o.lat >= b.getSouth() && o.lat <= b.getNorth() &&
+                            o.lon >= b.getWest() && o.lon <= b.getEast()) {
+                            if (pointInFeature(o.lat, o.lon, kl.feature.geometry)) {
+                                o._kl = kl;
+                                break;
+                            }
+                        }
+                    }
+                });
             }
 
             // Wind turbine layer with bird conflict scoring
@@ -894,9 +909,11 @@ Risk classification:
             document.getElementById('stat-obs').textContent = filtered.length.toLocaleString();
             document.getElementById('stat-species').textContent = new Set(filtered.map(d => d.species)).size;
 
-            // Update heatmap
-            const heatPoints = filtered.map(d => [d.lat, d.lon, 1.0]);
-            heatLayer.setLatLngs(heatPoints);
+            // Update heatmap (only when visible; setLatLngs crashes if layer not on map)
+            if (currentView === 'heatmap') {
+                const heatPoints = filtered.map(d => [d.lat, d.lon, 1.0]);
+                heatLayer.setLatLngs(heatPoints);
+            }
 
             // Update points
             pointsLayer.clearLayers();
@@ -920,6 +937,11 @@ Risk classification:
                     marker.bindPopup(`<b style="font-style:italic">${d.species}</b>${rlHtml}${altHtml}${riskHtml}<br>Month: ${MONTH_NAMES[d.month] || '?'}<br>County: ${d.county || '?'}`);
                     pointsLayer.addLayer(marker);
                 }
+            }
+
+            // Update kommune confidence overlay if active
+            if (confidenceMode) {
+                updateKommuneDisplay(filtered);
             }
 
             // Update species list
@@ -1028,60 +1050,54 @@ Risk classification:
             return false;
         }
 
-        function computeKommuneCounts() {
-            if (kommuneCountsComputed || !kommuneLayer) return;
-            kommuneLayer.eachLayer(layer => {
-                const bounds = layer.getBounds();
-                let count = 0;
-                allData.forEach(o => {
-                    if (o.lat >= bounds.getSouth() && o.lat <= bounds.getNorth() &&
-                        o.lon >= bounds.getWest() && o.lon <= bounds.getEast()) {
-                        if (pointInFeature(o.lat, o.lon, layer.feature.geometry)) {
-                            count++;
-                        }
-                    }
-                });
-                layer._obsCount = count;
+        function updateKommuneDisplay(filtered) {
+            if (!kommuneLayer) return;
+            // Count filtered observations per kommune
+            const counts = new Map();
+            filtered.forEach(o => {
+                if (o._kl) counts.set(o._kl, (counts.get(o._kl) || 0) + 1);
             });
-            kommuneCountsComputed = true;
+            kommuneLayer.eachLayer(layer => {
+                const count = counts.get(layer) || 0;
+                const name = layer.feature.properties.kommunenavn || layer.feature.properties.name || '';
+                let fillColor, fillOpacity;
+                if (count === 0) {
+                    fillColor = '#555'; fillOpacity = 0.5;
+                } else if (count < 5) {
+                    fillColor = '#d32f2f'; fillOpacity = 0.4;
+                } else if (count < 15) {
+                    fillColor = '#f57c00'; fillOpacity = 0.3;
+                } else if (count < 30) {
+                    fillColor = '#fbc02d'; fillOpacity = 0.2;
+                } else {
+                    fillColor = 'transparent'; fillOpacity = 0;
+                }
+                layer.setStyle({ fillColor, fillOpacity });
+                layer.unbindTooltip();
+                layer.bindTooltip(`${name} — ${count} observations`, {
+                    className: 'kommune-tooltip', sticky: true
+                });
+            });
+        }
+
+        function resetKommuneDisplay() {
+            if (!kommuneLayer) return;
+            kommuneLayer.eachLayer(layer => {
+                const name = layer.feature.properties.kommunenavn || layer.feature.properties.name || '';
+                layer.setStyle({ fillColor: 'transparent', fillOpacity: 0 });
+                layer.unbindTooltip();
+                layer.bindTooltip(name, {
+                    className: 'kommune-tooltip', sticky: true
+                });
+            });
         }
 
         function toggleConfidence() {
             confidenceMode = document.getElementById('confidence-toggle').checked;
-            if (!kommuneLayer) return;
-
             if (confidenceMode) {
-                computeKommuneCounts();
-                kommuneLayer.eachLayer(layer => {
-                    const count = layer._obsCount || 0;
-                    const name = layer.feature.properties.kommunenavn || layer.feature.properties.name || '';
-                    let fillColor, fillOpacity;
-                    if (count === 0) {
-                        fillColor = '#555'; fillOpacity = 0.5;
-                    } else if (count < 5) {
-                        fillColor = '#d32f2f'; fillOpacity = 0.4;
-                    } else if (count < 15) {
-                        fillColor = '#f57c00'; fillOpacity = 0.3;
-                    } else if (count < 30) {
-                        fillColor = '#fbc02d'; fillOpacity = 0.2;
-                    } else {
-                        fillColor = 'transparent'; fillOpacity = 0;
-                    }
-                    layer.setStyle({ fillColor, fillOpacity });
-                    layer.unbindTooltip();
-                    layer.bindTooltip(`${name} — ${count} observations`, {
-                        className: 'kommune-tooltip', sticky: true
-                    });
-                });
+                applyFilters(); // will call updateKommuneDisplay with current filtered data
             } else {
-                kommuneLayer.eachLayer(layer => {
-                    const name = layer.feature.properties.kommunenavn || layer.feature.properties.name || '';
-                    layer.setStyle({ fillColor: 'transparent', fillOpacity: 0 });
-                    layer.unbindTooltip();
-                    layer.bindTooltip(name, {
-                        className: 'kommune-tooltip', sticky: true
-                    });
-                });
+                resetKommuneDisplay();
             }
         }
 
