@@ -130,4 +130,4 @@ Agafonkin, V. (n.d.). *Leaflet.heat: a tiny, simple and fast heatmap plugin for 
 
 ## License
 
-Data licenses as noted above. Code is open for hackathon purposes.
+Data licenses as noted above. Code is MIT licensed.
