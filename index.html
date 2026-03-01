@@ -19,7 +19,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coexisting with Birds - Norway</title>
+    <title>Coexisting with Birds | Norway</title>
+
+    <meta name="description" content="Interactive heatmap of bird observations across Norway. Screening tool for wind farms and infrastructure projects showing species distribution and Red List species.">
+
+    <!-- open graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Coexisting with Birds | Norway">
+    <meta property="og:description" content="Interactive heatmap of 10K bird observations and 393 wind turbines across Norway. Screening tool for infrastructure projects.">
+    <meta property="og:url" content="https://coexisting-with-birds.vercel.app/">
+    <meta property="og:site_name" content="Coexisting with Birds">
+    <meta property="og:locale" content="en_US">
+
+    <!-- twitter card (title/description fall back to og: tags automatically) -->
+    <meta name="twitter:card" content="summary">
+
+    <link rel="canonical" href="https://coexisting-with-birds.vercel.app/">
+
+    <!-- icons (🪶 feather emoji, rendered from Apple Color Emoji) -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+    <link rel="manifest" href="/assets/site.webmanifest">
+    <meta name="theme-color" content="#0a0a0a">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Coexisting with Birds",
+        "description": "Interactive heatmap of bird observations across Norway. Screening tool for wind farms and infrastructure projects.",
+        "url": "https://coexisting-with-birds.vercel.app/",
+        "applicationCategory": "EnvironmentalApplication",
+        "operatingSystem": "Web browser",
+        "isAccessibleForFree": true,
+        "spatialCoverage": {
+            "@type": "Place",
+            "name": "Norway"
+        }
+    }
+    </script>
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         @font-face { font-family: 'Roboto Mono'; font-weight: 300; src: url('fonts/RobotoMono-Light.ttf') format('truetype'); }
@@ -1194,5 +1234,17 @@ Risk classification:
         .leaflet-popup-tip { background: rgba(10,10,10,0.95) !important; }
         .leaflet-popup-close-button { color: #888 !important; }
     </style>
+
+    <!-- vercel web analytics -->
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+
+    <!-- vercel speed insights -->
+    <script>
+        window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/speed-insights/script.js"></script>
 </body>
 </html>
