@@ -25,11 +25,17 @@ No build step, no dependencies for the frontend. Just a static HTML file.
 
 - **Heatmap view**: observation density across Norway (inferno color scale)
 - **Points view**: individual observations colored by species
-- **Species filter**: filter by any of the top 30 most observed species
+- **Species filter**: filter by species, red list status or rotor zone risk
 - **Month slider**: see seasonal variation (January through December)
 - **Wind turbines**: 62 wind parks (393 turbines) from NVE, togglable layer with popups
 - **Kommune boundaries**: Norwegian municipality borders visible on zoom, with name tooltips
 - **Top species panel**: live ranking of species in current filter
+- **Red list species**: 56 Norwegian Red List species (CR, EN, VU, NT) from Artsdatabanken 2021, highlighted in species panel and popups
+- **Collision risk scoring**: wind parks color coded green (low) to red (high) based on threatened species, rotor zone overlap and observation density
+- **Flight altitude data**: approximate flight ranges for 98 species, with rotor zone overlap indicators
+- **Data confidence layer**: observation count per kommune, togglable overlay showing data coverage
+- **Methodology modal**: "How it works" panel explaining scoring methods, data sources and limitations
+- **Hide UI**: toggle all overlays with a button or [H] key for a clean map view
 
 ## Dataset
 
@@ -58,6 +64,13 @@ No build step, no dependencies for the frontend. Just a static HTML file.
 - **Format**: GeoJSON, simplified (1.2 MB, 357 kommuner)
 - **License**: CC BY 4.0 (based on Kartverket open data)
 
+### Red list and flight altitude
+
+- **Red list source**: [Artsdatabanken](https://artsdatabanken.no/) Norwegian Red List for Species 2021
+- **Species**: 56 species across 4 IUCN categories (4 CR, 14 EN, 19 VU, 19 NT)
+- **Flight altitudes**: approximate ranges for 98 species in meters AGL, based on ornithological literature
+- **Rotor zone**: 30-200m AGL (Norwegian turbine standard), per park values from NVE hub height and rotor diameter
+
 ## Refreshing data
 
 To re-fetch bird observations from GBIF (requires Python 3, no pip packages):
@@ -74,9 +87,14 @@ Adjust `limit_total` in `fetch_data.py` to change sample size (default: 10,000).
 index.html              Main app (single file, no build)
 fetch_data.py           Data fetching script (GBIF API)
 data/
-  birds_norway.json     Bird observations + species summary (964 KB)
-  wind_turbines.json    Wind parks and turbines (99 KB)
+  birds_norway.json     Bird observations + species summary (971 KB)
+  wind_turbines.json    Wind parks and turbines (104 KB)
   kommuner.geojson      Norwegian municipality boundaries (1.2 MB)
+docs/
+  DATASETS.md           Dataset documentation
+  species-list.md       Species list reference
+fonts/                  Roboto Mono (bundled for offline use)
+qr-code.png             QR code linking to live demo
 ```
 
 ## Tech stack
