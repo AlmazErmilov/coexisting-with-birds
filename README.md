@@ -8,6 +8,8 @@ Built at [Tekna Hackathon: Code your way to a greener world](https://www.tekna.n
 
 **Live demo**: https://coexisting-with-birds.vercel.app/
 
+**Demo presentation**: [Google Slides](https://docs.google.com/presentation/d/1pbhZNtN1zdDCPGJ1UySyacmfEBx5ucUs1B6r2pYHjcE/edit?usp=sharing)
+
 Interactive heatmap of bird observations across Norway. A pre-stage screening tool for understanding bird distribution before infrastructure projects (wind farms, construction, etc.).
 
 ## Quick start
