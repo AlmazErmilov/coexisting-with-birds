@@ -19,7 +19,17 @@ python3 -m http.server 8080
 # open http://localhost:8080
 ```
 
-No build step, no dependencies for the frontend. Just a static HTML file.
+No build step, no dependencies for the frontend. Static files served from any HTTP server.
+
+### Running tests
+
+```bash
+npm install
+npx playwright install chromium
+npm test                # unit + E2E
+npm run test:unit       # vitest only
+npm run test:e2e        # playwright only
+```
 
 ## Features
 
@@ -84,7 +94,22 @@ Adjust `limit_total` in `fetch_data.py` to change sample size (default: 10,000).
 ## File structure
 
 ```
-index.html              Main app (single file, no build)
+index.html              HTML shell (meta/SEO, modal, panel, controls, legend)
+css/
+  style.css             Styles with CSS custom properties
+js/
+  data.js               Constants and reference data (red list, flight altitudes)
+  scoring.js            Pure functions: risk calc, geo, park scoring
+  ui.js                 DOM updates: filters, species list, toggles
+  app.js                Entry point: map init, data loading, events
+tests/
+  unit/
+    scoring.test.js     Unit tests for scoring and geo functions (vitest)
+    filters.test.js     Unit tests for filter predicates (vitest)
+  e2e/
+    app.spec.js         E2E tests for all features (playwright)
+  playwright.config.js  Playwright configuration
+vitest.config.js        Vitest configuration
 fetch_data.py           Data fetching script (GBIF API)
 data/
   birds_norway.json     Bird observations + species summary (971 KB)
@@ -94,7 +119,6 @@ docs/
   DATASETS.md           Dataset documentation
   species-list.md       Species list reference
 fonts/                  Roboto Mono (bundled for offline use)
-qr-code.png             QR code linking to live demo
 ```
 
 ## Tech stack
@@ -102,7 +126,9 @@ qr-code.png             QR code linking to live demo
 - [Leaflet](https://leafletjs.com/) for the map
 - [Leaflet.heat](https://github.com/Leaflet/Leaflet.heat) for the heatmap layer
 - [CARTO dark basemap](https://carto.com/basemaps/) tiles
-- Vanilla JS, no framework, no build step
+- Vanilla JS (ES modules), no framework, no build step
+- [Vitest](https://vitest.dev/) for unit tests
+- [Playwright](https://playwright.dev/) for E2E tests
 
 ## Scaling ideas
 
