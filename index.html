@@ -70,7 +70,14 @@
         "spatialCoverage": {
             "@type": "Place",
             "name": "Norway"
-        }
+        },
+        "datePublished": "2026-02-28",
+        "creator": [
+            {"@type": "Person", "name": "Almaz Ermilov", "url": "https://www.linkedin.com/in/almazermilov/"},
+            {"@type": "Person", "name": "Michael Bitney", "url": "https://www.linkedin.com/in/michael-bitney/"},
+            {"@type": "Person", "name": "Dmitri Kuzkin", "url": "https://www.linkedin.com/in/kuzkindmitriy/"},
+            {"@type": "Person", "name": "Marian Øverli", "url": "https://www.linkedin.com/in/marianhelcloverli/"}
+        ]
     }
     </script>
 
@@ -79,7 +86,7 @@
 </head>
 <body>
     <div id="loading" class="loading">Loading bird data...</div>
-    <div id="map"></div>
+    <main id="map"></main>
 
     <div class="modal-overlay" id="info-modal">
         <div class="modal">
@@ -358,7 +365,7 @@ Risk classification:
         </div>
     </div>
 
-    <div class="panel" id="panel">
+    <aside class="panel" id="panel">
         <h1>Coexisting with Birds</h1>
         <p class="subtitle">Bird observation density across Norway (GBIF)</p>
         <button class="info-btn" style="margin:6px 0 4px 0">How it works</button>
@@ -421,7 +428,7 @@ Risk classification:
             <label>Top species in view</label>
             <div class="species-list" id="species-list"></div>
         </div>
-    </div>
+    </aside>
 
     <div class="legend">
         <div class="legend-title">Observation density</div>
