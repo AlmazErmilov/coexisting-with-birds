@@ -7,10 +7,17 @@
     data/wind_turbines.json  - 393 turbines / 62 wind parks (NVE open data)
     data/kommuner.geojson    - 357 Norwegian municipalities (Kartverket, CC BY 4.0)
 
+  Code:
+    css/style.css            - styles with CSS custom properties
+    js/data.js               - constants and reference data
+    js/scoring.js            - pure functions: risk calc, geo, park scoring
+    js/ui.js                 - DOM updates: filters, species list, toggles
+    js/app.js                - entry point: map init, data loading, events
+
   Dependencies (loaded from CDN):
-    Leaflet 1.9.4           - map rendering
-    Leaflet.heat 0.2.0      - heatmap layer
-    CARTO dark basemap      - tile layer
+    Leaflet 1.9.4            - map rendering
+    Leaflet.heat 0.2.0       - heatmap layer
+    CARTO dark basemap       - tile layer
 
   No build step. Serve with any static HTTP server.
 -->
@@ -63,179 +70,15 @@
     </script>
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <style>
-        @font-face { font-family: 'Roboto Mono'; font-weight: 300; src: url('fonts/RobotoMono-Light.ttf') format('truetype'); }
-        @font-face { font-family: 'Roboto Mono'; font-weight: 400; src: url('fonts/RobotoMono-Regular.ttf') format('truetype'); }
-        @font-face { font-family: 'Roboto Mono'; font-weight: 500; src: url('fonts/RobotoMono-Medium.ttf') format('truetype'); }
-        @font-face { font-family: 'Roboto Mono'; font-weight: 700; src: url('fonts/RobotoMono-Bold.ttf') format('truetype'); }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Roboto Mono', monospace; font-weight: 400; background: #0a0a0a; color: #e0e0e0; }
-
-        #map { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
-
-        .panel {
-            position: fixed; top: 16px; left: 16px; z-index: 1000;
-            background: rgba(10, 10, 10, 0.92); backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;
-            padding: 20px; width: 320px; max-height: calc(100vh - 330px);
-            overflow-y: auto;
-        }
-        .panel h1 { font-size: 18px; font-weight: 600; margin-bottom: 4px; color: #fff; }
-        .panel .subtitle { font-size: 12px; color: #888; margin-bottom: 16px; }
-
-        .stat-row { display: flex; gap: 12px; margin-bottom: 16px; }
-        .stat-box {
-            flex: 1; background: rgba(255,255,255,0.04); border-radius: 8px;
-            padding: 10px; text-align: center;
-        }
-        .stat-box .num { font-size: 20px; font-weight: 700; color: #4ecdc4; }
-        .stat-box .label { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
-
-        .filter-section { margin-bottom: 16px; }
-        .filter-section label { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px; }
-
-        select, input[type="range"] {
-            width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 6px; padding: 8px 10px; color: #e0e0e0; font-size: 13px;
-            outline: none; cursor: pointer;
-        }
-        select:hover, input[type="range"]:hover { border-color: rgba(78, 205, 196, 0.4); }
-        select option { background: #1a1a1a; color: #e0e0e0; }
-
-        .month-label { font-size: 12px; color: #4ecdc4; text-align: center; margin-top: 4px; }
-
-        .species-list { margin-top: 12px; }
-        .species-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
-            font-size: 12px; cursor: pointer; transition: background 0.15s;
-        }
-        .species-item:hover { background: rgba(255,255,255,0.03); }
-        .species-name { font-style: italic; color: #ccc; display: flex; align-items: center; gap: 5px; }
-        .rl-badge {
-            font-style: normal; font-size: 9px; font-weight: 700; color: #fff;
-            padding: 1px 4px; border-radius: 3px; letter-spacing: 0.3px; flex-shrink: 0;
-        }
-        .alt-tag {
-            font-style: normal; font-size: 9px; color: #888;
-            margin-left: 4px; flex-shrink: 0;
-        }
-        .species-count {
-            background: rgba(78, 205, 196, 0.15); color: #4ecdc4;
-            padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600;
-        }
-
-        .legend {
-            position: fixed; bottom: 24px; left: 16px; z-index: 1000;
-            background: rgba(10, 10, 10, 0.92); backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,255,255,0.08); border-radius: 8px;
-            padding: 12px 16px;
-        }
-        .legend-title { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
-        .legend-gradient {
-            width: 100%; height: 12px; border-radius: 4px;
-            background: linear-gradient(to right, #1a0533, #3b0f70, #8c2981, #de4968, #fe9f6d, #fecf92, #fcfdbf);
-        }
-        .legend-labels { display: flex; justify-content: space-between; font-size: 10px; color: #888; margin-top: 4px; }
-
-        .info-badge {
-            position: fixed; bottom: 24px; right: 16px; z-index: 1000;
-            background: rgba(10, 10, 10, 0.92); backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,255,255,0.08); border-radius: 8px;
-            padding: 10px 14px; font-size: 11px; color: #888;
-        }
-        .info-badge a { color: #4ecdc4; text-decoration: none; }
-
-        .view-toggle {
-            display: flex; gap: 4px; margin-bottom: 16px; background: rgba(255,255,255,0.04);
-            border-radius: 8px; padding: 3px;
-        }
-        .view-btn {
-            flex: 1; padding: 6px; text-align: center; font-size: 12px;
-            border-radius: 6px; cursor: pointer; transition: all 0.2s;
-            color: #888; border: none; background: none;
-        }
-        .view-btn.active { background: rgba(78, 205, 196, 0.2); color: #4ecdc4; }
-
-        .loading {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            z-index: 2000; background: rgba(10,10,10,0.95); padding: 24px 32px;
-            border-radius: 12px; font-size: 14px; color: #4ecdc4;
-        }
-
-        .info-btn {
-            display: inline-flex; align-items: center; gap: 5px;
-            height: 28px; border-radius: 6px; padding: 0 10px;
-            background: rgba(78,205,196,0.1); border: 1px solid rgba(78,205,196,0.2);
-            color: #4ecdc4; font-size: 11px; font-weight: 600;
-            cursor: pointer; transition: all 0.2s;
-        }
-        .info-btn:hover { background: rgba(78,205,196,0.2); border-color: rgba(78,205,196,0.4); }
-
-        .hide-ui-btn {
-            position: fixed; top: 16px; right: 16px; z-index: 1000;
-            background: rgba(10, 10, 10, 0.92); backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,255,255,0.08); border-radius: 8px;
-            padding: 6px 10px; color: #888; font-size: 11px;
-            cursor: pointer; transition: all 0.2s;
-            font-family: 'Roboto Mono', monospace;
-        }
-        .hide-ui-btn:hover { background: rgba(10, 10, 10, 1); color: #fff; border-color: rgba(255,255,255,0.2); }
-        .hide-ui-btn .shortcut { color: #555; margin-left: 4px; }
-
-        .ui-hidden .panel,
-        .ui-hidden .legend,
-        .ui-hidden .info-badge { display: none; }
-
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
-            z-index: 3000; display: none; align-items: center; justify-content: center;
-        }
-        .modal-overlay.open { display: flex; }
-
-        .modal {
-            background: #111; border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 16px; width: 640px; max-width: 90vw;
-            max-height: 85vh; overflow-y: auto; padding: 32px;
-            color: #ddd; position: relative;
-        }
-        .modal-close {
-            position: absolute; top: 16px; right: 16px;
-            background: none; border: none; color: #888; font-size: 20px;
-            cursor: pointer; width: 28px; height: 28px;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 6px;
-        }
-        .modal-close:hover { background: rgba(255,255,255,0.05); color: #fff; }
-
-        .modal h2 { font-size: 20px; color: #fff; margin-bottom: 6px; }
-        .modal h3 { font-size: 14px; color: #4ecdc4; margin: 20px 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px; }
-        .modal p { font-size: 13px; line-height: 1.6; color: #bbb; margin-bottom: 10px; }
-        .modal .concept-text { font-size: 14px; color: #ddd; line-height: 1.7; }
-
-        .legend-table { width: 100%; border-collapse: collapse; margin: 8px 0 12px 0; }
-        .legend-table td { padding: 6px 10px; font-size: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .legend-table td:first-child { width: 60px; text-align: center; }
-
-        .source-card {
-            background: rgba(255,255,255,0.03); border-radius: 8px;
-            padding: 12px 14px; margin-bottom: 8px;
-        }
-        .source-card .src-name { font-size: 13px; color: #fff; font-weight: 600; }
-        .source-card .src-detail { font-size: 11px; color: #888; margin-top: 3px; }
-        .source-card a { color: #4ecdc4; text-decoration: none; }
-        .source-card a:hover { text-decoration: underline; }
-    </style>
+    <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
     <div id="loading" class="loading">Loading bird data...</div>
     <div id="map"></div>
 
-    <div class="modal-overlay" id="info-modal" onclick="if(event.target===this)this.classList.remove('open')">
+    <div class="modal-overlay" id="info-modal">
         <div class="modal">
-            <button class="modal-close" onclick="document.getElementById('info-modal').classList.remove('open')">&times;</button>
+            <button class="modal-close">&times;</button>
 
             <h2>Coexisting with Birds</h2>
             <p class="concept-text">
@@ -253,19 +96,19 @@
             <p>Norwegian Red List for Species 2021, published by Artsdatabanken. Categories follow the IUCN framework.</p>
             <table class="legend-table">
                 <tr>
-                    <td><span class="rl-badge" style="background:#8b0000;font-size:11px;padding:2px 6px">CR</span></td>
+                    <td><span class="rl-badge" style="background:var(--rl-cr);font-size:11px;padding:2px 6px">CR</span></td>
                     <td><b style="color:#e0e0e0">Critically endangered</b><br>Extremely high risk of extinction. Fewer than 50 mature individuals or 80%+ population decline over 3 generations.</td>
                 </tr>
                 <tr>
-                    <td><span class="rl-badge" style="background:#d32f2f;font-size:11px;padding:2px 6px">EN</span></td>
+                    <td><span class="rl-badge" style="background:var(--rl-en);font-size:11px;padding:2px 6px">EN</span></td>
                     <td><b style="color:#e0e0e0">Endangered</b><br>Very high risk of extinction. 50 to 250 mature individuals or 50-80% population decline over 3 generations.</td>
                 </tr>
                 <tr>
-                    <td><span class="rl-badge" style="background:#f57c00;font-size:11px;padding:2px 6px">VU</span></td>
+                    <td><span class="rl-badge" style="background:var(--rl-vu);font-size:11px;padding:2px 6px">VU</span></td>
                     <td><b style="color:#e0e0e0">Vulnerable</b><br>High risk of extinction. 30-50% population decline or fewer than 10,000 mature individuals.</td>
                 </tr>
                 <tr>
-                    <td><span class="rl-badge" style="background:#fbc02d;color:#333;font-size:11px;padding:2px 6px">NT</span></td>
+                    <td><span class="rl-badge" style="background:var(--rl-nt);color:#333;font-size:11px;padding:2px 6px">NT</span></td>
                     <td><b style="color:#e0e0e0">Near threatened</b><br>Close to qualifying for a threatened category. Declining trends that may worsen.</td>
                 </tr>
             </table>
@@ -330,10 +173,10 @@ distance = sqrt(dx² + dy²)     // in km</pre>
             </p>
             <table class="legend-table" style="font-size:11px;">
                 <tr><td colspan="2" style="color:#aaa;font-weight:600;border-bottom:1px solid rgba(255,255,255,0.1)">Red list multiplier</td></tr>
-                <tr><td><span class="rl-badge" style="background:#8b0000;font-size:10px;padding:1px 5px">CR</span></td><td>× 8</td></tr>
-                <tr><td><span class="rl-badge" style="background:#d32f2f;font-size:10px;padding:1px 5px">EN</span></td><td>× 5</td></tr>
-                <tr><td><span class="rl-badge" style="background:#f57c00;font-size:10px;padding:1px 5px">VU</span></td><td>× 3</td></tr>
-                <tr><td><span class="rl-badge" style="background:#fbc02d;color:#333;font-size:10px;padding:1px 5px">NT</span></td><td>× 1.5</td></tr>
+                <tr><td><span class="rl-badge" style="background:var(--rl-cr);font-size:10px;padding:1px 5px">CR</span></td><td>× 8</td></tr>
+                <tr><td><span class="rl-badge" style="background:var(--rl-en);font-size:10px;padding:1px 5px">EN</span></td><td>× 5</td></tr>
+                <tr><td><span class="rl-badge" style="background:var(--rl-vu);font-size:10px;padding:1px 5px">VU</span></td><td>× 3</td></tr>
+                <tr><td><span class="rl-badge" style="background:var(--rl-nt);color:#333;font-size:10px;padding:1px 5px">NT</span></td><td>× 1.5</td></tr>
                 <tr><td style="color:#888">Not listed</td><td>× 1 (no change)</td></tr>
                 <tr><td colspan="2" style="color:#aaa;font-weight:600;border-bottom:1px solid rgba(255,255,255,0.1);padding-top:6px">Rotor zone overlap multiplier</td></tr>
                 <tr><td style="color:#ff6b6b">High overlap</td><td>× 3</td></tr>
@@ -504,7 +347,7 @@ Risk classification:
     <div class="panel" id="panel">
         <h1>Coexisting with Birds</h1>
         <p class="subtitle">Bird observation density across Norway (GBIF)</p>
-        <button class="info-btn" onclick="document.getElementById('info-modal').classList.add('open')" style="margin:6px 0 4px 0">How it works</button>
+        <button class="info-btn" style="margin:6px 0 4px 0">How it works</button>
 
         <div class="stat-row">
             <div class="stat-box">
@@ -518,23 +361,23 @@ Risk classification:
         </div>
 
         <div class="view-toggle">
-            <button class="view-btn active" data-view="heatmap" onclick="setView('heatmap')">Heatmap</button>
-            <button class="view-btn" data-view="points" onclick="setView('points')">Points</button>
+            <button class="view-btn active" data-view="heatmap">Heatmap</button>
+            <button class="view-btn" data-view="points">Points</button>
         </div>
 
         <div class="filter-section">
             <label>Species filter</label>
-            <select id="species-filter" onchange="applyFilters()">
+            <select id="species-filter">
                 <option value="all">All species</option>
-                <option value="__redlist__" style="color:#ff6b6b">Red list only (CR/EN/VU/NT)</option>
-                <option value="__threatened__" style="color:#d32f2f">Threatened only (CR/EN/VU)</option>
-                <option value="__rotorrisk__" style="color:#ff6b6b">Rotor zone risk (30-200m flight)</option>
+                <option value="red-list" style="color:#ff6b6b">Red list only (CR/EN/VU/NT)</option>
+                <option value="threatened" style="color:#d32f2f">Threatened only (CR/EN/VU)</option>
+                <option value="rotor-risk" style="color:#ff6b6b">Rotor zone risk (30-200m flight)</option>
             </select>
         </div>
 
         <div class="filter-section">
             <label>Month</label>
-            <input type="range" id="month-slider" min="0" max="12" value="0" oninput="applyFilters()">
+            <input type="range" id="month-slider" min="0" max="12" value="0">
             <div class="month-label" id="month-label">All months</div>
         </div>
 
@@ -542,7 +385,7 @@ Risk classification:
             <label>Wind turbines</label>
             <div style="display:flex;align-items:center;gap:8px;">
                 <label class="toggle-label" style="font-size:12px;color:#ccc;display:flex;align-items:center;gap:6px;cursor:pointer;">
-                    <input type="checkbox" id="turbine-toggle" checked onchange="toggleTurbines()" style="accent-color:#ff6b6b;">
+                    <input type="checkbox" id="turbine-toggle" checked style="accent-color:#ff6b6b;">
                     Show turbines (<span id="turbine-count">0</span>)
                 </label>
             </div>
@@ -553,7 +396,7 @@ Risk classification:
             <label>Data confidence</label>
             <div style="display:flex;align-items:center;gap:8px;">
                 <label style="font-size:12px;color:#ccc;display:flex;align-items:center;gap:6px;cursor:pointer;">
-                    <input type="checkbox" id="confidence-toggle" onchange="toggleConfidence()" style="accent-color:#4ecdc4;">
+                    <input type="checkbox" id="confidence-toggle" style="accent-color:#4ecdc4;">
                     Show uncertainty by kommune
                 </label>
             </div>
@@ -573,10 +416,10 @@ Risk classification:
         <div style="margin-top:10px;border-top:1px solid rgba(255,255,255,0.08);padding-top:8px;">
             <div class="legend-title">Red list (Artsdatabanken 2021)</div>
             <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;">
-                <span class="rl-badge" style="background:#8b0000">CR</span>
-                <span class="rl-badge" style="background:#d32f2f">EN</span>
-                <span class="rl-badge" style="background:#f57c00">VU</span>
-                <span class="rl-badge" style="background:#fbc02d;color:#333">NT</span>
+                <span class="rl-badge" style="background:var(--rl-cr)">CR</span>
+                <span class="rl-badge" style="background:var(--rl-en)">EN</span>
+                <span class="rl-badge" style="background:var(--rl-vu)">VU</span>
+                <span class="rl-badge" style="background:var(--rl-nt);color:#333">NT</span>
             </div>
         </div>
         <div style="margin-top:8px;border-top:1px solid rgba(255,255,255,0.08);padding-top:8px;">
@@ -609,633 +452,13 @@ Risk classification:
         Birds: <a href="https://www.gbif.org/" target="_blank">GBIF</a> | Turbines: <a href="https://www.nve.no/" target="_blank">NVE</a>
     </div>
 
-    <button class="hide-ui-btn" id="hide-ui-btn" onclick="toggleUI()">
+    <button class="hide-ui-btn" id="hide-ui-btn">
         Hide UI <span class="shortcut">[H]</span>
     </button>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
-    <script>
-        function toggleUI() {
-            const btn = document.getElementById('hide-ui-btn');
-            document.body.classList.toggle('ui-hidden');
-            const hidden = document.body.classList.contains('ui-hidden');
-            btn.innerHTML = hidden ? 'Show UI <span class="shortcut">[H]</span>' : 'Hide UI <span class="shortcut">[H]</span>';
-        }
-        document.addEventListener('keydown', function(e) {
-            if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') return;
-            if (e.key === 'h' || e.key === 'H') toggleUI();
-            if (e.key === 'Escape') document.getElementById('info-modal').classList.remove('open');
-        });
-
-        const MONTH_NAMES = ['All months', 'January', 'February', 'March', 'April', 'May', 'June',
-                             'July', 'August', 'September', 'October', 'November', 'December'];
-
-        // Norwegian Red List 2021 (Artsdatabanken) for birds
-        // CR = Critically Endangered, EN = Endangered, VU = Vulnerable, NT = Near Threatened
-        const RED_LIST = {
-            // CR
-            'Crex crex': 'CR', 'Clangula hyemalis': 'CR', 'Polysticta stelleri': 'CR',
-            'Melanitta fusca': 'CR',
-            // EN
-            'Fratercula arctica': 'EN', 'Sterna hirundo': 'EN', 'Sterna paradisaea': 'EN',
-            'Morus bassanus': 'EN', 'Rissa tridactyla': 'EN', 'Uria aalge': 'EN',
-            'Alca torda': 'EN', 'Limosa limosa': 'EN', 'Numenius arquata': 'EN',
-            'Vanellus vanellus': 'EN', 'Gallinago media': 'EN', 'Larus fuscus': 'EN',
-            'Saxicola rubetra': 'EN', 'Circus aeruginosus': 'EN',
-            // VU
-            'Larus argentatus': 'VU', 'Larus canus': 'VU', 'Chloris chloris': 'VU',
-            'Stercorarius parasiticus': 'VU', 'Anas acuta': 'VU', 'Anas crecca': 'VU',
-            'Perdix perdix': 'VU', 'Aythya fuligula': 'VU', 'Aythya marila': 'VU',
-            'Strix nebulosa': 'VU', 'Mergellus albellus': 'VU',
-            'Charadrius hiaticula': 'VU', 'Calidris alpina': 'VU',
-            'Calidris pugnax': 'VU', 'Pluvialis apricaria': 'VU',
-            'Motacilla flava': 'VU', 'Emberiza hortulana': 'VU',
-            'Passer montanus': 'VU', 'Linaria cannabina': 'VU',
-            // NT
-            'Anas penelope': 'NT', 'Somateria mollissima': 'NT',
-            'Mergus serrator': 'NT', 'Podiceps cristatus': 'NT',
-            'Haematopus ostralegus': 'NT', 'Tringa totanus': 'NT',
-            'Actitis hypoleucos': 'NT', 'Gallinago gallinago': 'NT',
-            'Cepphus grylle': 'NT', 'Phalacrocorax carbo': 'NT',
-            'Asio flammeus': 'NT', 'Ficedula hypoleuca': 'NT',
-            'Hirundo rustica': 'NT', 'Delichon urbicum': 'NT',
-            'Sturnus vulgaris': 'NT', 'Turdus pilaris': 'NT',
-            'Passer domesticus': 'NT', 'Carduelis carduelis': 'NT',
-            'Acanthis flammea': 'NT',
-        };
-
-        const RED_LIST_COLORS = {
-            'CR': '#8b0000', 'EN': '#d32f2f', 'VU': '#f57c00', 'NT': '#fbc02d'
-        };
-        const RED_LIST_LABELS = {
-            'CR': 'Critically endangered', 'EN': 'Endangered', 'VU': 'Vulnerable', 'NT': 'Near threatened'
-        };
-
-        // Typical flight altitude ranges [min_m, max_m] in meters AGL.
-        // Values are approximate estimates based on general ornithological knowledge.
-        // Informed by (not directly extracted from): Johnston et al. 2014, Band et al. 2007,
-        // SNH guidance, Dahl et al. 2012, BirdLife Norge. For precise assessments use site-specific data.
-        // "rotor zone" for Norwegian wind turbines is roughly 30-200m AGL.
-        const FLIGHT_ALT = {
-            // Seabirds
-            'Fratercula arctica': [5, 50], 'Alca torda': [5, 60], 'Uria aalge': [5, 60],
-            'Uria lomvia': [5, 50], 'Alle alle': [5, 40], 'Cepphus grylle': [3, 30],
-            'Morus bassanus': [10, 100], 'Rissa tridactyla': [10, 80],
-            'Fulmarus glacialis': [10, 50], 'Phalacrocorax carbo': [5, 80],
-            // Gulls and terns
-            'Larus argentatus': [10, 150], 'Larus canus': [10, 120], 'Larus fuscus': [10, 200],
-            'Larus marinus': [10, 150], 'Larus ridibundus': [10, 100],
-            'Sterna hirundo': [5, 80], 'Sterna paradisaea': [5, 60],
-            'Stercorarius parasiticus': [10, 100],
-            // Raptors (high risk, fly at rotor height)
-            'Haliaeetus albicilla': [50, 300], 'Aquila chrysaetos': [100, 400],
-            'Buteo buteo': [30, 200], 'Buteo lagopus': [30, 200],
-            'Accipiter gentilis': [20, 150], 'Accipiter nisus': [10, 100],
-            'Milvus milvus': [30, 200], 'Circus aeruginosus': [5, 100],
-            'Circus cyaneus': [5, 80], 'Falco peregrinus': [50, 500],
-            'Falco tinnunculus': [20, 150], 'Pandion haliaetus': [30, 200],
-            // Ducks and geese (migrants fly high, local flights low)
-            'Anas platyrhynchos': [10, 100], 'Anas crecca': [10, 150],
-            'Anas acuta': [10, 200], 'Anas penelope': [10, 150],
-            'Aythya fuligula': [10, 100], 'Aythya marila': [10, 100],
-            'Bucephala clangula': [10, 100], 'Clangula hyemalis': [5, 60],
-            'Somateria mollissima': [5, 50], 'Melanitta fusca': [5, 60],
-            'Mergus merganser': [10, 100], 'Mergus serrator': [5, 80],
-            'Branta leucopsis': [50, 500], 'Anser anser': [50, 500],
-            'Anser brachyrhynchus': [50, 800],
-            // Waders
-            'Haematopus ostralegus': [10, 80], 'Vanellus vanellus': [10, 100],
-            'Pluvialis apricaria': [20, 200], 'Charadrius hiaticula': [10, 60],
-            'Numenius arquata': [20, 150], 'Numenius phaeopus': [20, 200],
-            'Limosa limosa': [20, 200], 'Tringa totanus': [10, 80],
-            'Actitis hypoleucos': [5, 30], 'Gallinago gallinago': [10, 100],
-            'Gallinago media': [10, 200], 'Calidris alpina': [10, 100],
-            'Calidris pugnax': [10, 150], 'Crex crex': [5, 50],
-            // Owls
-            'Strix nebulosa': [5, 50], 'Strix aluco': [5, 50],
-            'Asio flammeus': [5, 80], 'Asio otus': [5, 60],
-            'Bubo bubo': [10, 100], 'Aegolius funereus': [5, 40],
-            // Passerines (generally low, some exceptions)
-            'Parus major': [2, 30], 'Cyanistes caeruleus': [2, 25],
-            'Corvus cornix': [5, 80], 'Corvus corax': [10, 200],
-            'Corvus monedula': [10, 100], 'Pica pica': [3, 40],
-            'Turdus merula': [3, 40], 'Turdus pilaris': [5, 80],
-            'Turdus iliacus': [5, 100], 'Turdus philomelos': [5, 80],
-            'Sturnus vulgaris': [5, 100], 'Alauda arvensis': [10, 200],
-            'Hirundo rustica': [5, 100], 'Delichon urbicum': [10, 150],
-            'Chloris chloris': [3, 30], 'Carduelis carduelis': [5, 40],
-            'Linaria cannabina': [3, 30], 'Acanthis flammea': [3, 40],
-            'Fringilla coelebs': [5, 50], 'Passer domesticus': [2, 20],
-            'Passer montanus': [2, 20], 'Motacilla alba': [3, 30],
-            'Motacilla flava': [3, 30], 'Emberiza citrinella': [3, 30],
-            'Emberiza hortulana': [3, 30], 'Erithacus rubecula': [2, 20],
-            'Ficedula hypoleuca': [3, 30], 'Saxicola rubetra': [3, 30],
-            'Phylloscopus trochilus': [3, 40], 'Sylvia atricapilla': [3, 30],
-            'Regulus regulus': [3, 20], 'Bombycilla garrulus': [10, 60],
-            'Poecile montanus': [2, 25],
-        };
-
-        // Typical rotor swept zone in Norway (derived from NVE data).
-        // Used as default for species-level views. Park scoring uses per-park rotor_min/rotor_max.
-        const ROTOR_ZONE = { min: 30, max: 200 };
-
-        function getAltRisk(species, rotorMin, rotorMax) {
-            const alt = FLIGHT_ALT[species];
-            if (!alt) return null;
-            const rMin = rotorMin != null ? rotorMin : ROTOR_ZONE.min;
-            const rMax = rotorMax != null ? rotorMax : ROTOR_ZONE.max;
-            const overlap = Math.max(0,
-                Math.min(alt[1], rMax) - Math.max(alt[0], rMin));
-            const range = alt[1] - alt[0];
-            if (overlap === 0) return 'low';
-            if (overlap / range > 0.5) return 'high';
-            return 'medium';
-        }
-
-        let map, heatLayer, pointsLayer, allData = [], currentView = 'heatmap';
-        let kommuneLayer = null;
-        let turbineLayer = null;
-        let windData = null;
-        let confidenceMode = false;
-
-        // Init map centered on Norway
-        map = L.map('map', {
-            center: [64.5, 14],
-            zoom: 5,
-            zoomControl: false,
-            attributionControl: false
-        });
-
-        L.control.zoom({ position: 'topright' }).addTo(map);
-
-        // Dark tile layer
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; OpenStreetMap &copy; CARTO',
-            maxZoom: 18
-        }).addTo(map);
-
-        // Load data
-        Promise.all([
-            fetch('data/birds_norway.json').then(r => r.json()),
-            fetch('data/kommuner.geojson').then(r => r.json()).catch(() => null),
-            fetch('data/wind_turbines.json').then(r => r.json()).catch(() => null)
-        ]).then(([birdData, kommuneGeoJSON, turbineData]) => {
-            document.getElementById('loading').style.display = 'none';
-            allData = birdData.observations;
-
-            // Stats
-            document.getElementById('stat-obs').textContent = allData.length.toLocaleString();
-            const uniqueSpecies = new Set(allData.map(d => d.species));
-            document.getElementById('stat-species').textContent = uniqueSpecies.size;
-
-            // Populate species filter from all unique species in data
-            const select = document.getElementById('species-filter');
-            const speciesCounts = new Map();
-            allData.forEach(d => speciesCounts.set(d.species, (speciesCounts.get(d.species) || 0) + 1));
-            const sortedSpecies = [...speciesCounts.entries()].sort((a, b) => b[1] - a[1]);
-            sortedSpecies.forEach(([species, count]) => {
-                const opt = document.createElement('option');
-                opt.value = species;
-                opt.textContent = count >= 1000
-                    ? `${species} (${(count / 1000).toFixed(0)}K)`
-                    : `${species} (${count})`;
-                select.appendChild(opt);
-            });
-
-            // Add kommune boundaries (subtle)
-            if (kommuneGeoJSON) {
-                kommuneLayer = L.geoJSON(kommuneGeoJSON, {
-                    style: {
-                        color: 'rgba(255,255,255,0.12)',
-                        weight: 0.5,
-                        fillColor: 'transparent',
-                        fillOpacity: 0
-                    },
-                    onEachFeature: (feature, layer) => {
-                        const name = feature.properties.kommunenavn || feature.properties.name || '';
-                        layer.bindTooltip(name, {
-                            className: 'kommune-tooltip',
-                            sticky: true
-                        });
-                    }
-                }).addTo(map);
-
-                // Pre-assign each observation to its kommune (one-time point-in-polygon)
-                const kLayers = [];
-                kommuneLayer.eachLayer(l => kLayers.push(l));
-                allData.forEach(o => {
-                    for (const kl of kLayers) {
-                        const b = kl.getBounds();
-                        if (o.lat >= b.getSouth() && o.lat <= b.getNorth() &&
-                            o.lon >= b.getWest() && o.lon <= b.getEast()) {
-                            if (pointInFeature(o.lat, o.lon, kl.feature.geometry)) {
-                                o._kl = kl;
-                                break;
-                            }
-                        }
-                    }
-                });
-            }
-
-            // Wind turbine layer with bird conflict scoring
-            if (turbineData) {
-                windData = turbineData;
-                turbineLayer = L.layerGroup();
-                const parks = turbineData.parks;
-                document.getElementById('turbine-count').textContent = parks.length + ' parks';
-                document.getElementById('turbine-info').textContent =
-                    turbineData.metadata.total_turbines + ' turbines total (NVE open data)';
-
-                // Score each park by bird conflict
-                const SEARCH_RADIUS_KM = 30;
-                const RL_WEIGHT = {'CR': 8, 'EN': 5, 'VU': 3, 'NT': 1.5};
-
-                parks.forEach(park => {
-                    // Find nearby bird observations
-                    const nearby = allData.filter(o => {
-                        const dlat = (o.lat - park.lat) * 111;
-                        const dlon = (o.lon - park.lon) * 111 * Math.cos(park.lat * Math.PI / 180);
-                        return Math.sqrt(dlat*dlat + dlon*dlon) < SEARCH_RADIUS_KM;
-                    });
-
-                    // Calculate conflict score
-                    let score = 0;
-                    let riskSpecies = {};
-                    nearby.forEach(o => {
-                        let w = 1; // base weight
-                        const rl = RED_LIST[o.species];
-                        if (rl) w *= (RL_WEIGHT[rl] || 1);
-                        const risk = getAltRisk(o.species, park.rotor_min, park.rotor_max);
-                        if (risk === 'high') w *= 3;
-                        else if (risk === 'medium') w *= 1.5;
-                        score += w;
-                        if (rl || risk === 'high' || risk === 'medium') {
-                            if (!riskSpecies[o.species]) riskSpecies[o.species] = {count: 0, rl, risk};
-                            riskSpecies[o.species].count++;
-                        }
-                    });
-
-                    // Normalize score (0-1) based on observed range
-                    const normScore = Math.min(1, score / 300);
-                    park._score = normScore;
-                    park._nearby = nearby.length;
-                    park._riskSpecies = riskSpecies;
-
-                    // Color: green (low) -> yellow -> red (high)
-                    const r = Math.round(normScore > 0.5 ? 255 : normScore * 2 * 255);
-                    const g = Math.round(normScore < 0.5 ? 180 : (1 - normScore) * 2 * 180);
-                    const parkColor = `rgb(${r},${g},40)`;
-
-                    const sz = Math.max(20, Math.min(36, Math.sqrt(park.capacity_mw) * 4));
-                    const szH = Math.round(sz * 1.5);
-                    const icon = L.divIcon({
-                        html: `<svg viewBox="0 0 60 90" width="${sz}" height="${szH}" style="filter:drop-shadow(0 2px 6px rgba(0,0,0,0.8))">
-                            <path d="M28 35 L26.5 87 L33.5 87 L32 35 Z" fill="${parkColor}" opacity="0.85"/>
-                            <path d="M28 35 L26.5 87 L29 87 L29.5 35 Z" fill="rgba(255,255,255,0.14)"/>
-                            <path d="M24 30 L38 31 L37 36 L25 35 Z" fill="${parkColor}" opacity="0.9"/>
-                            <path d="M24 30 L38 31 L38 33 L24 32 Z" fill="rgba(255,255,255,0.08)"/>
-                            <circle cx="30" cy="32" r="4" fill="${parkColor}"/>
-                            <circle cx="29" cy="31" r="1.8" fill="rgba(255,255,255,0.4)"/>
-                            <path d="M26 28 C 16 16, 6 4, 2 0 C 14 10, 26 24, 34 35 Z" fill="${parkColor}"/>
-                            <path d="M26 28 C 16 16, 6 4, 2 0 C 10 6, 20 17, 26 28 Z" fill="rgba(255,255,255,0.12)"/>
-                            <path d="M34 28 C 46 18, 54 9, 60 3 C 53 15, 40 28, 28 36 Z" fill="${parkColor}"/>
-                            <path d="M34 28 C 46 18, 54 9, 60 3 C 56 8, 47 17, 34 28 Z" fill="rgba(255,255,255,0.1)"/>
-                            <path d="M33 36 C 40 43, 48 51, 54 58 C 47 52, 37 41, 28 32 Z" fill="${parkColor}" opacity="0.45"/>
-                        </svg>`,
-                        className: 'turbine-marker',
-                        iconSize: [sz, szH],
-                        iconAnchor: [sz / 2, szH]
-                    });
-                    const marker = L.marker([park.lat, park.lon], { icon });
-
-                    // Risk label
-                    const riskLabel = normScore < 0.2 ? 'Low bird conflict'
-                        : normScore < 0.5 ? 'Moderate bird conflict'
-                        : normScore < 0.75 ? 'High bird conflict'
-                        : 'Very high bird conflict';
-                    const riskColor = normScore < 0.2 ? '#4ecdc4'
-                        : normScore < 0.5 ? '#fbc02d'
-                        : '#ff6b6b';
-
-                    // Top risk species for popup
-                    const topRisk = Object.entries(riskSpecies)
-                        .sort((a,b) => b[1].count - a[1].count)
-                        .slice(0, 4)
-                        .map(([sp, d]) => {
-                            const badge = d.rl ? `<span style="color:${RED_LIST_COLORS[d.rl]};font-weight:700">${d.rl}</span> ` : '';
-                            const riskMark = d.risk === 'high' ? ' &#9650;' : d.risk === 'medium' ? ' &#9679;' : '';
-                            return `${badge}<i>${sp}</i>${riskMark} (${d.count})`;
-                        }).join('<br>');
-
-                    const hubHtml = park.hub_height
-                        ? `<br>Hub: ${park.hub_height}m | Rotor: ${park.rotor_diameter}m`
-                        : '';
-                    const sweptHtml = park.rotor_min != null
-                        ? ` | Swept: ${park.rotor_min}-${park.rotor_max}m`
-                        : '';
-
-                    marker.bindPopup(
-                        `<b>${park.name}</b><br>` +
-                        `${park.turbine_count} turbines | ${park.capacity_mw} MW` +
-                        hubHtml + sweptHtml +
-                        `<br><span style="color:${riskColor};font-weight:700">${riskLabel}</span>` +
-                        ` <span style="color:#888">(${nearby.length} obs within ${SEARCH_RADIUS_KM}km)</span>` +
-                        (topRisk ? `<br><span style="font-size:11px">${topRisk}</span>` : '') +
-                        `<br><span style="color:#888;font-size:10px">${park.municipality}, ${park.county}</span>`
-                    );
-                    turbineLayer.addLayer(marker);
-                });
-                turbineLayer.addTo(map);
-            }
-
-            // Init layers
-            heatLayer = L.heatLayer([], {
-                radius: 25,
-                blur: 15,
-                maxZoom: 12,
-                max: 0.6,
-                minOpacity: 0.3,
-                gradient: {0.1: '#1a0533', 0.2: '#3b0f70', 0.35: '#8c2981', 0.5: '#de4968', 0.65: '#fe9f6d', 0.8: '#fecf92', 1.0: '#fcfdbf'}
-            }).addTo(map);
-
-            pointsLayer = L.layerGroup();
-
-            applyFilters();
-        });
-
-        function applyFilters() {
-            const speciesFilter = document.getElementById('species-filter').value;
-            const monthVal = parseInt(document.getElementById('month-slider').value);
-            document.getElementById('month-label').textContent = MONTH_NAMES[monthVal];
-
-            let filtered = allData;
-            if (speciesFilter === '__redlist__') {
-                filtered = filtered.filter(d => RED_LIST[d.species]);
-            } else if (speciesFilter === '__threatened__') {
-                filtered = filtered.filter(d => ['CR','EN','VU'].includes(RED_LIST[d.species]));
-            } else if (speciesFilter === '__rotorrisk__') {
-                filtered = filtered.filter(d => {
-                    const r = getAltRisk(d.species);
-                    return r === 'high' || r === 'medium';
-                });
-            } else if (speciesFilter !== 'all') {
-                filtered = filtered.filter(d => d.species === speciesFilter);
-            }
-            if (monthVal > 0) {
-                filtered = filtered.filter(d => d.month === monthVal);
-            }
-
-            // Update stats
-            document.getElementById('stat-obs').textContent = filtered.length.toLocaleString();
-            document.getElementById('stat-species').textContent = new Set(filtered.map(d => d.species)).size;
-
-            // Update heatmap (only when visible; setLatLngs crashes if layer not on map)
-            if (currentView === 'heatmap') {
-                // Dynamic normalization: fewer points → higher max → less visual saturation
-                const ratio = allData.length / Math.max(1, filtered.length);
-                heatLayer.options.max = Math.min(4.0, 0.6 * Math.pow(ratio, 0.25));
-                const heatPoints = filtered.map(d => [d.lat, d.lon, 1.0]);
-                heatLayer.setLatLngs(heatPoints);
-            }
-
-            // Update points
-            pointsLayer.clearLayers();
-            if (currentView === 'points') {
-                // Pre-compute species counts for stats in popups
-                const speciesCounts = new Map();
-                filtered.forEach(o => speciesCounts.set(o.species, (speciesCounts.get(o.species) || 0) + 1));
-
-                const maxPoints = 5000;
-                const step = Math.max(1, Math.floor(filtered.length / maxPoints));
-                for (let i = 0; i < filtered.length; i += step) {
-                    const d = filtered[i];
-                    const marker = L.circleMarker([d.lat, d.lon], {
-                        radius: 4, color: '#fff',
-                        fillColor: getSpeciesColor(d.species), fillOpacity: 0.8,
-                        weight: 1, opacity: 0.3
-                    });
-                    const rl = RED_LIST[d.species];
-                    const rlHtml = rl ? `<br><span style="color:${RED_LIST_COLORS[rl]};font-weight:700">${rl}</span> ${RED_LIST_LABELS[rl]}` : '';
-                    const alt = FLIGHT_ALT[d.species];
-                    const risk = getAltRisk(d.species);
-                    const altHtml = alt ? `<br>Flight altitude: ${alt[0]}-${alt[1]}m` : '';
-                    const riskHtml = risk === 'high' ? '<br><span style="color:#ff6b6b;font-weight:700">&#9650; High rotor zone overlap</span>'
-                        : risk === 'medium' ? '<br><span style="color:#fbc02d">&#9679; Partial rotor zone overlap</span>' : '';
-
-                    // Stats line: species count in current view + kommune
-                    const sCount = speciesCounts.get(d.species) || 0;
-                    const pct = (sCount / filtered.length * 100).toFixed(1);
-                    const kommune = d._kl ? (d._kl.feature.properties.kommunenavn || d._kl.feature.properties.name || '') : '';
-                    const statsHtml = `<br><span style="color:#888;font-size:11px;border-top:1px solid rgba(255,255,255,0.15);display:block;margin-top:4px;padding-top:4px">${kommune ? kommune + ' · ' : ''}${sCount} obs of this species in view (${pct}%)</span>`;
-
-                    marker.bindPopup(`<b style="font-style:italic">${d.species}</b>${rlHtml}${altHtml}${riskHtml}<br>Month: ${MONTH_NAMES[d.month] || '?'}<br>County: ${d.county || '?'}${statsHtml}`);
-                    pointsLayer.addLayer(marker);
-                }
-            }
-
-            // Update kommune confidence overlay if active
-            if (confidenceMode) {
-                updateKommuneDisplay(filtered);
-            }
-
-            // Update species list
-            updateSpeciesList(filtered);
-        }
-
-        function updateSpeciesList(data) {
-            const counts = {};
-            data.forEach(d => { counts[d.species] = (counts[d.species] || 0) + 1; });
-            // Sort: red-listed first (by severity), then by count
-            const rlOrder = {'CR': 0, 'EN': 1, 'VU': 2, 'NT': 3};
-            const sorted = Object.entries(counts).sort((a, b) => {
-                const rlA = RED_LIST[a[0]]; const rlB = RED_LIST[b[0]];
-                if (rlA && !rlB) return -1;
-                if (!rlA && rlB) return 1;
-                if (rlA && rlB) return (rlOrder[rlA] ?? 9) - (rlOrder[rlB] ?? 9);
-                return b[1] - a[1];
-            }).slice(0, 20);
-
-            const container = document.getElementById('species-list');
-            container.innerHTML = sorted.map(([name, count]) => {
-                const rl = RED_LIST[name];
-                const badge = rl
-                    ? `<span class="rl-badge" style="background:${RED_LIST_COLORS[rl]};" title="${RED_LIST_LABELS[rl]}">${rl}</span>`
-                    : '';
-                const alt = FLIGHT_ALT[name];
-                const risk = getAltRisk(name);
-                const riskIcon = risk === 'high' ? '&#9650;' : risk === 'medium' ? '&#9679;' : '';
-                const riskColor = risk === 'high' ? '#ff6b6b' : risk === 'medium' ? '#fbc02d' : '';
-                const altText = alt ? `${alt[0]}-${alt[1]}m` : '';
-                const riskHtml = riskIcon
-                    ? `<span style="color:${riskColor};font-size:10px;margin-left:2px" title="Rotor zone overlap: ${risk}">${riskIcon}</span>`
-                    : '';
-                const altHtml = altText
-                    ? `<span class="alt-tag">${altText}${riskHtml}</span>`
-                    : '';
-                return `
-                <div class="species-item" onclick="filterSpecies('${name}')">
-                    <span class="species-name">${badge}${name}${altHtml}</span>
-                    <span class="species-count">${count}</span>
-                </div>`;
-            }).join('');
-        }
-
-        function filterSpecies(name) {
-            const sel = document.getElementById('species-filter');
-            // Ensure the option exists (for species not in top list)
-            if (!sel.querySelector(`option[value="${CSS.escape(name)}"]`)) {
-                const opt = document.createElement('option');
-                opt.value = name;
-                opt.textContent = name;
-                sel.appendChild(opt);
-            }
-            sel.value = name;
-            applyFilters();
-        }
-
-        function setView(view) {
-            currentView = view;
-            document.querySelectorAll('.view-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.view === view);
-            });
-
-            if (view === 'heatmap') {
-                map.removeLayer(pointsLayer);
-                map.addLayer(heatLayer);
-            } else {
-                map.removeLayer(heatLayer);
-                map.addLayer(pointsLayer);
-            }
-            applyFilters();
-        }
-
-        function toggleTurbines() {
-            const show = document.getElementById('turbine-toggle').checked;
-            if (turbineLayer) {
-                if (show) { map.addLayer(turbineLayer); }
-                else { map.removeLayer(turbineLayer); }
-            }
-        }
-
-        // Point-in-polygon (ray-casting) for GeoJSON geometries
-        function pointInRing(lat, lon, ring) {
-            let inside = false;
-            for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
-                const yi = ring[i][1], xi = ring[i][0]; // GeoJSON: [lon, lat]
-                const yj = ring[j][1], xj = ring[j][0];
-                if (((yi > lat) !== (yj > lat)) && (lon < (xj - xi) * (lat - yi) / (yj - yi) + xi)) {
-                    inside = !inside;
-                }
-            }
-            return inside;
-        }
-
-        function pointInFeature(lat, lon, geometry) {
-            if (geometry.type === 'Polygon') {
-                if (!pointInRing(lat, lon, geometry.coordinates[0])) return false;
-                for (let i = 1; i < geometry.coordinates.length; i++) {
-                    if (pointInRing(lat, lon, geometry.coordinates[i])) return false;
-                }
-                return true;
-            } else if (geometry.type === 'MultiPolygon') {
-                for (const poly of geometry.coordinates) {
-                    if (pointInRing(lat, lon, poly[0])) {
-                        let inHole = false;
-                        for (let i = 1; i < poly.length; i++) {
-                            if (pointInRing(lat, lon, poly[i])) { inHole = true; break; }
-                        }
-                        if (!inHole) return true;
-                    }
-                }
-                return false;
-            }
-            return false;
-        }
-
-        function updateKommuneDisplay(filtered) {
-            if (!kommuneLayer) return;
-            // Count filtered observations per kommune
-            const counts = new Map();
-            filtered.forEach(o => {
-                if (o._kl) counts.set(o._kl, (counts.get(o._kl) || 0) + 1);
-            });
-            kommuneLayer.eachLayer(layer => {
-                const count = counts.get(layer) || 0;
-                const name = layer.feature.properties.kommunenavn || layer.feature.properties.name || '';
-                let fillColor, fillOpacity;
-                if (count === 0) {
-                    fillColor = '#555'; fillOpacity = 0.5;
-                } else if (count < 5) {
-                    fillColor = '#d32f2f'; fillOpacity = 0.4;
-                } else if (count < 15) {
-                    fillColor = '#f57c00'; fillOpacity = 0.3;
-                } else if (count < 30) {
-                    fillColor = '#fbc02d'; fillOpacity = 0.2;
-                } else {
-                    fillColor = 'transparent'; fillOpacity = 0;
-                }
-                layer.setStyle({ fillColor, fillOpacity });
-                layer.unbindTooltip();
-                layer.bindTooltip(`${name} — ${count} observations`, {
-                    className: 'kommune-tooltip', sticky: true
-                });
-            });
-        }
-
-        function resetKommuneDisplay() {
-            if (!kommuneLayer) return;
-            kommuneLayer.eachLayer(layer => {
-                const name = layer.feature.properties.kommunenavn || layer.feature.properties.name || '';
-                layer.setStyle({ fillColor: 'transparent', fillOpacity: 0 });
-                layer.unbindTooltip();
-                layer.bindTooltip(name, {
-                    className: 'kommune-tooltip', sticky: true
-                });
-            });
-        }
-
-        function toggleConfidence() {
-            confidenceMode = document.getElementById('confidence-toggle').checked;
-            if (confidenceMode) {
-                applyFilters(); // will call updateKommuneDisplay with current filtered data
-            } else {
-                resetKommuneDisplay();
-            }
-        }
-
-        // Simple color hash for species
-        function getSpeciesColor(species) {
-            let hash = 0;
-            for (let i = 0; i < species.length; i++) {
-                hash = species.charCodeAt(i) + ((hash << 5) - hash);
-            }
-            const h = Math.abs(hash) % 360;
-            return `hsl(${h}, 70%, 60%)`;
-        }
-    </script>
-
-    <style>
-        .kommune-tooltip {
-            background: rgba(10,10,10,0.9) !important;
-            border: 1px solid rgba(255,255,255,0.1) !important;
-            color: #e0e0e0 !important;
-            font-size: 12px !important;
-            padding: 4px 8px !important;
-            border-radius: 4px !important;
-            box-shadow: none !important;
-        }
-        .kommune-tooltip::before { display: none !important; }
-        .turbine-marker { background: none !important; border: none !important; }
-        .leaflet-popup-content-wrapper {
-            background: rgba(10,10,10,0.95) !important;
-            color: #e0e0e0 !important;
-            border-radius: 8px !important;
-            font-size: 12px !important;
-        }
-        .leaflet-popup-tip { background: rgba(10,10,10,0.95) !important; }
-        .leaflet-popup-close-button { color: #888 !important; }
-    </style>
+    <script type="module" src="js/app.js"></script>
 
     <!-- vercel web analytics -->
     <script>
