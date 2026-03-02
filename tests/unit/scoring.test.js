@@ -11,7 +11,7 @@ describe('getAltRisk', () => {
         expect(getAltRisk('Haliaeetus albicilla')).toBe('high');
     });
 
-    it('returns medium for barn swallow at default rotor zone', () => {
+    it('returns medium for goldfinch at default rotor zone', () => {
         // Hirundo rustica: [5, 100], rotor 30-200
         // overlap = min(100,200) - max(5,30) = 70, range = 95, ratio = 0.74 > 0.5
         // Actually this is high. Let's use a species with partial overlap.
