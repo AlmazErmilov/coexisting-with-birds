@@ -166,6 +166,9 @@
             <pre style="background:rgba(255,255,255,0.04);border-radius:6px;padding:10px;font-size:11px;color:#ccc;overflow-x:auto;margin:8px 0;">dx = (obs.lon - park.lon) × 111 × cos(park.lat)
 dy = (obs.lat - park.lat) × 111
 distance = sqrt(dx² + dy²)     // in km</pre>
+            <p style="font-size:10px;color:#777;margin:4px 0 0 0;">
+                111 km = one degree of latitude (Earth circumference 40 000 km / 360°). The cos(lat) term corrects longitude because meridians converge toward the poles. At 60°N (southern Norway) one degree of longitude is ~55 km, not 111. This flat earth shortcut gives the same result as the Haversine formula at distances under 30 km, while being simpler and faster to compute.
+            </p>
 
             <p style="font-size:12px;margin-top:10px;"><b style="color:#e0e0e0">Step 2. Weight each observation</b></p>
             <p style="font-size:11px;color:#aaa;">
@@ -183,6 +186,9 @@ distance = sqrt(dx² + dy²)     // in km</pre>
                 <tr><td style="color:#fbc02d">Partial overlap</td><td>× 1.5</td></tr>
                 <tr><td style="color:#888">Low / unknown</td><td>× 1 (no change)</td></tr>
             </table>
+            <p style="font-size:10px;color:#777;margin:4px 0 0 0;">
+                Red list weights reflect the relative severity of IUCN categories: CR species face imminent extinction, so each observation is weighted heavily (×8). The specific multipliers (8, 5, 3, 1.5) are author chosen, not from a published standard, but preserve the ordering of conservation priority. The 30 km search radius approximates a typical foraging and commuting range for medium to large birds. All observations within this radius are weighted equally (no distance decay).
+            </p>
             <pre style="background:rgba(255,255,255,0.04);border-radius:6px;padding:10px;font-size:11px;color:#ccc;overflow-x:auto;margin:8px 0;">weight = 1.0
 if species in Red List:    weight × red_list_multiplier
 if species rotor overlap:  weight × rotor_multiplier
@@ -201,6 +207,9 @@ Color mapping:
   0.2 - 0.5  →  yellow  (moderate bird conflict)
   0.5 - 0.75 →  orange  (high bird conflict)
   0.75 - 1.0 →  red     (very high bird conflict)</pre>
+            <p style="font-size:10px;color:#777;margin:4px 0 0 0;">
+                The normalization constant (300) is empirical, calibrated so that the 10K observation sample produces a spread of scores across all four risk levels. If the dataset grows significantly, this threshold should be recalibrated.
+            </p>
 
             <h3>Rotor zone overlap calculation</h3>
             <p style="font-size:11px;color:#aaa;">

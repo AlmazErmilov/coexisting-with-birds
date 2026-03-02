@@ -227,3 +227,25 @@ General ornithological knowledge (approximate estimates)
     |
     +--> FLIGHT_ALT object in index.html (98 species)
 ```
+
+---
+
+## Methodology notes
+
+### Distance calculation
+
+The app uses a flat earth approximation instead of the Haversine formula. One degree of latitude is always ~111 km (Earth circumference 40 000 km / 360°). One degree of longitude varies with latitude: at the equator it is also ~111 km, but at 60°N (southern Norway) it shrinks to 111 × cos(60°) ≈ 55 km because meridians converge toward the poles. The `cos(lat)` term corrects for this. At distances under 30 km the error compared to Haversine is negligible (fractions of a percent), so the simpler formula is sufficient for the screening purpose.
+
+### Scoring weights
+
+The red list multipliers (CR = 8, EN = 5, VU = 3, NT = 1.5) are author chosen values, not derived from a published standard. They are designed to reflect the relative severity of IUCN conservation categories: a critically endangered species facing imminent extinction should contribute more to the conflict score than a near threatened one. The exact numbers are subjective, but they preserve the correct ordering of conservation priority and produce a reasonable spread in the final scores.
+
+The rotor zone overlap multipliers (high = 3, medium = 1.5) follow the same principle: species that spend most of their flight time at rotor height face higher collision risk and should be weighted accordingly.
+
+### Normalization constant (300)
+
+The raw score (sum of weighted observations within 30 km) is divided by 300 and clamped to [0, 1]. This constant was calibrated empirically against the current 10K observation sample so that the resulting scores spread across all four risk levels (low, moderate, high, very high). If the observation dataset grows significantly (e.g. from 10K to 100K records), this threshold should be recalibrated to maintain a meaningful distribution.
+
+### Search radius (30 km)
+
+The 30 km radius approximates a typical foraging and commuting range for medium to large birds. All observations within this radius receive equal weight regardless of distance (no decay function). This is a simplification: in practice, birds observed closer to a turbine are at higher risk. A distance decay function could improve accuracy but was not implemented for this screening tool.
