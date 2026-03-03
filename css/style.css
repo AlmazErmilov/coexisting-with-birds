@@ -159,6 +159,33 @@ select option { background: #1a1a1a; color: var(--text-primary); }
 }
 .modal-close:hover { background: rgba(255,255,255,0.05); color: #fff; }
 
+.kommune-modal { max-width: 520px; }
+.turbine-inputs { display: flex; gap: 12px; margin: 12px 0 6px 0; }
+.turbine-inputs .input-group { flex: 1; }
+.turbine-inputs label { display: block; font-size: 11px; color: #888; margin-bottom: 4px; }
+.turbine-inputs input {
+    width: 100%; box-sizing: border-box; padding: 6px 8px;
+    background: #1a1a1a; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px;
+    color: #ddd; font-family: monospace; font-size: 14px;
+}
+.turbine-inputs input:focus { outline: none; border-color: var(--accent); }
+.rotor-zone-display { font-size: 11px; color: #888; margin-bottom: 8px; }
+.confidence-warning {
+    padding: 8px 10px; border-radius: 6px; font-size: 12px; margin-bottom: 10px;
+    background: rgba(251,192,45,0.12); color: #fbc02d; border: 1px solid rgba(251,192,45,0.25);
+}
+.confidence-warning.severe {
+    background: rgba(211,47,47,0.12); color: #ff6b6b; border-color: rgba(211,47,47,0.25);
+}
+.risk-species-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 4px 0; font-size: 12px; border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.risk-species-item .species-info { flex: 1; }
+.risk-species-item .species-info i { color: #ddd; }
+.risk-species-item .obs-count { color: #888; font-size: 11px; white-space: nowrap; margin-left: 8px; }
+.kommune-empty { color: #888; font-style: italic; padding: 12px 0; }
+
 .modal h2 { font-size: 20px; color: #fff; margin-bottom: 6px; }
 .modal h3 { font-size: 14px; color: var(--accent); margin: 20px 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px; }
 .modal p { font-size: 13px; line-height: 1.6; color: #bbb; margin-bottom: 10px; }

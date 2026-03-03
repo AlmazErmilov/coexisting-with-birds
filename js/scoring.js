@@ -3,7 +3,7 @@
 
 import {
     FLIGHT_ALT, ROTOR_ZONE, RED_LIST, RED_LIST_CATEGORIES,
-    SEARCH_RADIUS_KM, SCORE_NORMALIZATION
+    SEARCH_RADIUS_KM, SCORE_NORMALIZATION, KOMMUNE_SCORE_NORMALIZATION
 } from './data.js';
 
 export function getAltRisk(species, rotorMin, rotorMax) {
@@ -85,6 +85,44 @@ export function scorePark(park, observations) {
 
     const normScore = Math.min(1, score / SCORE_NORMALIZATION);
     return { normScore, riskSpecies, nearbyCount: nearby.length };
+}
+
+// Kommune-level conflict score (per unique species, not per observation)
+export function scoreKommune(kommuneLayerRef, filteredData, rotorMin, rotorMax) {
+    const kommuneObs = filteredData.filter(o => o._kl === kommuneLayerRef);
+
+    const speciesMap = {};
+    kommuneObs.forEach(o => {
+        if (!speciesMap[o.species]) {
+            speciesMap[o.species] = {
+                count: 0,
+                rl: RED_LIST[o.species] || null,
+                risk: getAltRisk(o.species, rotorMin, rotorMax)
+            };
+        }
+        speciesMap[o.species].count++;
+    });
+
+    let score = 0;
+    const riskSpecies = {};
+    for (const [species, d] of Object.entries(speciesMap)) {
+        // Only species with risk factors contribute to score
+        if (!d.rl && d.risk !== 'high' && d.risk !== 'medium') continue;
+
+        let w = 1;
+        if (d.rl) w *= (RED_LIST_CATEGORIES[d.rl]?.weight || 1);
+        if (d.risk === 'high') w *= 3;
+        else if (d.risk === 'medium') w *= 1.5;
+        score += w;
+        riskSpecies[species] = d;
+    }
+
+    return {
+        normScore: Math.min(1, score / KOMMUNE_SCORE_NORMALIZATION),
+        riskSpecies,
+        observationCount: kommuneObs.length,
+        speciesCount: Object.keys(speciesMap).length
+    };
 }
 
 // Green (low) -> yellow -> red (high)

@@ -120,6 +120,12 @@ export const SEARCH_RADIUS_KM = 30;
 export const SCORE_NORMALIZATION = 300;
 export const MAX_RENDERED_POINTS = 5000;
 
+// Kommune conflict modal defaults (NVE fleet averages)
+export const DEFAULT_HUB_HEIGHT = 90;
+export const DEFAULT_ROTOR_DIAMETER = 115;
+// Initial estimate, verify empirically after implementation (see plan verification step 3)
+export const KOMMUNE_SCORE_NORMALIZATION = 60;
+
 export function escapeHtml(str) {
     return str
         .replace(/&/g, '&amp;')

@@ -90,7 +90,7 @@
 
     <div class="modal-overlay" id="info-modal">
         <div class="modal">
-            <button class="modal-close">&times;</button>
+            <button class="modal-close" id="info-modal-close">&times;</button>
 
             <h2>Coexisting with Birds</h2>
             <p class="concept-text">
@@ -362,6 +362,31 @@ Risk classification:
             <p style="color:#555;font-size:10px;margin-top:12px;text-align:center">
                 All data from open sources. Code is open for hackathon purposes.
             </p>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="kommune-modal">
+        <div class="modal kommune-modal">
+            <button class="modal-close" id="kommune-modal-close">&times;</button>
+            <h2 id="kommune-name"></h2>
+            <div id="kommune-stats" style="color:#aaa;font-size:13px;margin-bottom:8px"></div>
+            <div id="kommune-confidence" class="confidence-warning" style="display:none"></div>
+
+            <div class="turbine-inputs">
+                <div class="input-group">
+                    <label for="kommune-hub">Hub height (m)</label>
+                    <input type="number" id="kommune-hub" min="10" max="500" step="1">
+                </div>
+                <div class="input-group">
+                    <label for="kommune-rotor">Rotor diameter (m)</label>
+                    <input type="number" id="kommune-rotor" min="10" max="500" step="1">
+                </div>
+            </div>
+            <div id="kommune-swept" class="rotor-zone-display"></div>
+
+            <div id="kommune-risk" style="margin:10px 0;font-size:16px;font-weight:700"></div>
+            <div id="kommune-species-list"></div>
+            <div id="kommune-footnote" style="color:#666;font-size:10px;margin-top:10px;border-top:1px solid rgba(255,255,255,0.1);padding-top:8px"></div>
         </div>
     </div>
 

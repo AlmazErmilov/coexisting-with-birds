@@ -1,10 +1,13 @@
 // Entry point: map init, data loading, marker creation, events
 
-import { RED_LIST_CATEGORIES, SEARCH_RADIUS_KM, escapeHtml } from './data.js';
-import { scorePark, scoreToColor, riskLabel, getAltRisk, pointInFeature } from './scoring.js';
+import {
+    RED_LIST, RED_LIST_CATEGORIES, FLIGHT_ALT, SEARCH_RADIUS_KM,
+    DEFAULT_HUB_HEIGHT, DEFAULT_ROTOR_DIAMETER, MONTH_NAMES, escapeHtml
+} from './data.js';
+import { scorePark, scoreToColor, riskLabel, getAltRisk, pointInFeature, scoreKommune } from './scoring.js';
 import {
     initUI, updateState, toggleUI, applyFilters, setView,
-    toggleTurbines, toggleConfidence
+    toggleTurbines, toggleConfidence, getFilteredData
 } from './ui.js';
 
 // State
@@ -69,6 +72,7 @@ Promise.all([
                     className: 'kommune-tooltip',
                     sticky: true
                 });
+                layer.on('click', () => openKommuneModal(layer, name));
             }
         }).addTo(map);
 
@@ -209,6 +213,140 @@ Promise.all([
         sel.value = species;
         applyFilters();
     });
+
+    // Kommune modal: input listeners attached once to avoid accumulation
+    const hubInput = document.getElementById('kommune-hub');
+    const rotorInput = document.getElementById('kommune-rotor');
+    let currentKommuneLayer = null;
+    let debounceTimer = null;
+
+    function recalculate() {
+        if (!currentKommuneLayer) return;
+
+        let hub = parseFloat(hubInput.value);
+        let diam = parseFloat(rotorInput.value);
+        if (isNaN(hub) || hub <= 0 || hub > 500) {
+            hub = DEFAULT_HUB_HEIGHT;
+            hubInput.value = hub;
+        }
+        if (isNaN(diam) || diam <= 0 || diam > 500) {
+            diam = DEFAULT_ROTOR_DIAMETER;
+            rotorInput.value = diam;
+        }
+
+        const rotorMin = Math.max(0, hub - diam / 2);
+        const rotorMax = hub + diam / 2;
+
+        document.getElementById('kommune-swept').textContent =
+            `Swept zone: ${Math.round(rotorMin)}\u2013${Math.round(rotorMax)}m AGL`;
+
+        const filtered = getFilteredData();
+        const result = scoreKommune(currentKommuneLayer, filtered, rotorMin, rotorMax);
+        const risk = riskLabel(result.normScore);
+
+        document.getElementById('kommune-stats').textContent =
+            `${result.observationCount.toLocaleString()} observations, ${result.speciesCount} species`;
+
+        // Confidence warning
+        const confEl = document.getElementById('kommune-confidence');
+        if (result.observationCount === 0) {
+            confEl.style.display = 'block';
+            confEl.className = 'confidence-warning severe';
+            confEl.textContent = 'No observation data available for this municipality with current filters.';
+        } else if (result.observationCount < 15) {
+            confEl.style.display = 'block';
+            confEl.className = 'confidence-warning';
+            confEl.textContent = `Low data confidence: only ${result.observationCount} observations. Results may not reflect actual bird activity.`;
+        } else {
+            confEl.style.display = 'none';
+        }
+
+        // Risk label
+        const riskEl = document.getElementById('kommune-risk');
+        if (result.observationCount === 0) {
+            riskEl.innerHTML = '<span class="kommune-empty">No data available</span>';
+        } else {
+            riskEl.innerHTML = `<span style="color:${risk.color}">${risk.text}</span>`;
+        }
+
+        // Species at risk list (top 10)
+        const listEl = document.getElementById('kommune-species-list');
+        const sorted = Object.entries(result.riskSpecies)
+            .sort((a, b) => {
+                const rlOrder = { CR: 0, EN: 1, VU: 2, NT: 3 };
+                const rlA = a[1].rl; const rlB = b[1].rl;
+                if (rlA && !rlB) return -1;
+                if (!rlA && rlB) return 1;
+                if (rlA && rlB) return (rlOrder[rlA] ?? 9) - (rlOrder[rlB] ?? 9);
+                return b[1].count - a[1].count;
+            })
+            .slice(0, 10);
+
+        const headerHtml = '<div style="font-size:11px;color:#888;margin:8px 0 6px 0">' +
+            'Species at risk ' +
+            '<span style="font-size:10px">(' +
+            '<span style="color:#8b0000">CR</span> critically endangered, ' +
+            '<span style="color:#d32f2f">EN</span> endangered, ' +
+            '<span style="color:#f57c00">VU</span> vulnerable, ' +
+            '<span style="color:#fbc02d">NT</span> near threatened)' +
+            '</span></div>';
+
+        if (sorted.length === 0 && result.observationCount > 0) {
+            listEl.innerHTML = '<div class="kommune-empty">No species with risk factors found</div>';
+        } else if (sorted.length === 0) {
+            listEl.innerHTML = '';
+        } else {
+            listEl.innerHTML = headerHtml + sorted.map(([sp, d]) => {
+                const rlCat = d.rl ? RED_LIST_CATEGORIES[d.rl] : null;
+                const badge = d.rl
+                    ? `<span style="color:${rlCat.color};font-weight:700" title="${rlCat.label}">${d.rl}</span> `
+                    : '';
+                const riskMark = d.risk === 'high'
+                    ? ' <span style="color:#ff6b6b" title="High rotor zone overlap">&#9650;</span>'
+                    : d.risk === 'medium'
+                        ? ' <span style="color:#fbc02d" title="Partial rotor zone overlap">&#9679;</span>'
+                        : '';
+                const alt = FLIGHT_ALT[sp];
+                const altText = alt ? ` <span style="color:#888;font-size:10px">${alt[0]}\u2013${alt[1]}m</span>` : '';
+                return `<div class="risk-species-item">
+                    <span class="species-info">${badge}<i>${escapeHtml(sp)}</i>${riskMark}${altText}</span>
+                    <span class="obs-count">${d.count} obs</span>
+                </div>`;
+            }).join('');
+        }
+
+        // Footnote with filter context
+        const speciesFilter = document.getElementById('species-filter').value;
+        const monthVal = parseInt(document.getElementById('month-slider').value);
+        let filterNote = '';
+        if (speciesFilter !== 'all' || monthVal > 0) {
+            const parts = [];
+            if (speciesFilter !== 'all') parts.push(`species: ${speciesFilter}`);
+            if (monthVal > 0) parts.push(`month: ${MONTH_NAMES[monthVal]}`);
+            filterNote = ` Active filters: ${parts.join(', ')}.`;
+        }
+        document.getElementById('kommune-footnote').innerHTML =
+            `<span style="color:#ff6b6b">&#9650;</span> high rotor zone overlap, ` +
+            `<span style="color:#fbc02d">&#9679;</span> partial overlap. ` +
+            `Based on unique species. Flight altitudes are approximate estimates, not GPS tracked.${escapeHtml(filterNote)}`;
+    }
+
+    function debouncedRecalculate() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(recalculate, 200);
+    }
+
+    hubInput.addEventListener('input', debouncedRecalculate);
+    rotorInput.addEventListener('input', debouncedRecalculate);
+
+    function openKommuneModal(layer, name) {
+        currentKommuneLayer = layer;
+        document.getElementById('kommune-name').textContent = name;
+        hubInput.value = DEFAULT_HUB_HEIGHT;
+        rotorInput.value = DEFAULT_ROTOR_DIAMETER;
+        recalculate();
+        document.getElementById('kommune-modal').classList.add('open');
+    }
 });
 
 // Global event listeners (need to work before data loads)
@@ -218,12 +356,24 @@ document.getElementById('info-modal').addEventListener('click', function (e) {
     if (e.target === this) this.classList.remove('open');
 });
 
-document.querySelector('.modal-close').addEventListener('click', () => {
+document.getElementById('info-modal-close').addEventListener('click', () => {
     document.getElementById('info-modal').classList.remove('open');
 });
 
+document.getElementById('kommune-modal').addEventListener('click', function (e) {
+    if (e.target === this) this.classList.remove('open');
+});
+
+document.getElementById('kommune-modal-close').addEventListener('click', () => {
+    document.getElementById('kommune-modal').classList.remove('open');
+});
+
 document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+        document.getElementById('info-modal').classList.remove('open');
+        document.getElementById('kommune-modal').classList.remove('open');
+        return;
+    }
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') return;
     if (e.key === 'h' || e.key === 'H') toggleUI();
-    if (e.key === 'Escape') document.getElementById('info-modal').classList.remove('open');
 });

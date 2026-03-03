@@ -71,7 +71,7 @@ test.describe('Coexisting with Birds', () => {
         // Open again and close with X button
         await page.locator('.info-btn').click();
         await expect(page.locator('#info-modal')).toHaveClass(/open/);
-        await page.locator('.modal-close').click();
+        await page.locator('#info-modal-close').click();
         await expect(page.locator('#info-modal')).not.toHaveClass(/open/);
     });
 
@@ -128,5 +128,70 @@ test.describe('Coexisting with Birds', () => {
         const count = await items.count();
         expect(count).toBeGreaterThan(0);
         expect(count).toBeLessThanOrEqual(20);
+    });
+
+    test('kommune modal opens on polygon click', async ({ page }) => {
+        // Click a kommune polygon programmatically (Leaflet GeoJSON layers)
+        // Click first kommun polygon via Leaflet's SVG interactive path
+        await page.locator('.leaflet-overlay-pane path.leaflet-interactive').first().click({ force: true });
+
+        await expect(page.locator('#kommune-modal')).toHaveClass(/open/, { timeout: 5000 });
+
+        // Modal should show kommune name and stats
+        const name = await page.locator('#kommune-name').textContent();
+        expect(name.length).toBeGreaterThan(0);
+
+        const stats = await page.locator('#kommune-stats').textContent();
+        expect(stats).toMatch(/observations/);
+        expect(stats).toMatch(/species/);
+
+        // Turbine inputs should have default values
+        const hubVal = await page.locator('#kommune-hub').inputValue();
+        expect(hubVal).toBe('90');
+        const rotorVal = await page.locator('#kommune-rotor').inputValue();
+        expect(rotorVal).toBe('115');
+
+        // Swept zone should be displayed
+        const swept = await page.locator('#kommune-swept').textContent();
+        expect(swept).toMatch(/Swept zone/);
+    });
+
+    test('kommune modal closes with Escape', async ({ page }) => {
+        // Click first kommun polygon via Leaflet's SVG interactive path
+        await page.locator('.leaflet-overlay-pane path.leaflet-interactive').first().click({ force: true });
+        await expect(page.locator('#kommune-modal')).toHaveClass(/open/, { timeout: 5000 });
+
+        await page.keyboard.press('Escape');
+        await expect(page.locator('#kommune-modal')).not.toHaveClass(/open/);
+    });
+
+    test('kommune modal Escape works from input fields', async ({ page }) => {
+        // Click first kommun polygon via Leaflet's SVG interactive path
+        await page.locator('.leaflet-overlay-pane path.leaflet-interactive').first().click({ force: true });
+        await expect(page.locator('#kommune-modal')).toHaveClass(/open/, { timeout: 5000 });
+
+        // Focus on hub input and press Escape
+        await page.locator('#kommune-hub').focus();
+        await page.keyboard.press('Escape');
+        await expect(page.locator('#kommune-modal')).not.toHaveClass(/open/);
+    });
+
+    test('kommune modal recalculates on input change', async ({ page }) => {
+        // Click first kommun polygon via Leaflet's SVG interactive path
+        await page.locator('.leaflet-overlay-pane path.leaflet-interactive').first().click({ force: true });
+        await expect(page.locator('#kommune-modal')).toHaveClass(/open/, { timeout: 5000 });
+
+        const initialSwept = await page.locator('#kommune-swept').textContent();
+
+        // Change hub height
+        await page.locator('#kommune-hub').fill('120');
+        await page.locator('#kommune-hub').dispatchEvent('input');
+
+        // Wait for debounce (200ms) + rendering
+        await page.waitForTimeout(400);
+
+        const newSwept = await page.locator('#kommune-swept').textContent();
+        expect(newSwept).not.toBe(initialSwept);
+        expect(newSwept).toMatch(/Swept zone/);
     });
 });

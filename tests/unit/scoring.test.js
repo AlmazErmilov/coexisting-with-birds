@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
     getAltRisk, pointInRing, pointInFeature, distanceKm,
-    scorePark, scoreToColor, riskLabel, speciesColor
+    scorePark, scoreKommune, scoreToColor, riskLabel, speciesColor
 } from '../../js/scoring.js';
 
 describe('getAltRisk', () => {
@@ -166,6 +166,110 @@ describe('scorePark', () => {
         }));
         const result = scorePark(mockPark, obs);
         expect(result.normScore).toBe(1);
+    });
+});
+
+describe('scoreKommune', () => {
+    it('returns score 0 for empty observations', () => {
+        const kRef = {};
+        const result = scoreKommune(kRef, [], 30, 200);
+        expect(result.normScore).toBe(0);
+        expect(result.observationCount).toBe(0);
+        expect(result.speciesCount).toBe(0);
+        expect(Object.keys(result.riskSpecies)).toHaveLength(0);
+    });
+
+    it('scores per unique species, not per observation (50 obs = same as 1)', () => {
+        const kRef = {};
+        // Crex crex: CR (weight 8), flight [5, 50], default rotor 30-200
+        // overlap = min(50,200) - max(5,30) = 20, range = 45, ratio = 0.44 -> medium
+        // score = 1 * 8 * 1.5 = 12, normScore = 12 / 60 = 0.2
+        const single = [{ species: 'Crex crex', _kl: kRef }];
+        const many = Array.from({ length: 50 }, () => ({ species: 'Crex crex', _kl: kRef }));
+
+        const resultSingle = scoreKommune(kRef, single, 30, 200);
+        const resultMany = scoreKommune(kRef, many, 30, 200);
+
+        expect(resultSingle.normScore).toBe(resultMany.normScore);
+        // observation counts differ, but score is the same
+        expect(resultSingle.observationCount).toBe(1);
+        expect(resultMany.observationCount).toBe(50);
+    });
+
+    it('scores red listed species higher than non-listed', () => {
+        const kRef = {};
+        // Crex crex: CR (weight 8), medium rotor risk -> w = 8 * 1.5 = 12
+        const redListed = [{ species: 'Crex crex', _kl: kRef }];
+        // Haliaeetus albicilla: not in red list, high rotor risk -> w = 1 * 3 = 3
+        const notListed = [{ species: 'Haliaeetus albicilla', _kl: kRef }];
+
+        const resultRed = scoreKommune(kRef, redListed, 30, 200);
+        const resultNormal = scoreKommune(kRef, notListed, 30, 200);
+
+        expect(resultRed.normScore).toBeGreaterThan(resultNormal.normScore);
+    });
+
+    it('scores high rotor overlap higher than low overlap', () => {
+        const kRef = {};
+        // Haliaeetus albicilla: [50, 300], default rotor 30-200
+        // overlap = 150, range = 250, ratio = 0.6 -> high, w = 1 * 3 = 3
+        const highOverlap = [{ species: 'Haliaeetus albicilla', _kl: kRef }];
+        // Carduelis carduelis: [5, 40], default rotor 30-200
+        // overlap = 10, range = 35, ratio = 0.29 -> medium, w = 1.5 * 1.5 = 2.25
+        // (NT weight = 1.5) * (medium multiplier = 1.5)
+        // Actually Carduelis carduelis is NT (weight 1.5), so w = 1.5 * 1.5 = 2.25
+        // Haliaeetus albicilla is not red listed, so w = 1 * 3 = 3
+        const lowOverlap = [{ species: 'Carduelis carduelis', _kl: kRef }];
+
+        const resultHigh = scoreKommune(kRef, highOverlap, 30, 200);
+        const resultLow = scoreKommune(kRef, lowOverlap, 30, 200);
+
+        expect(resultHigh.normScore).toBeGreaterThan(resultLow.normScore);
+    });
+
+    it('returns correct speciesCount and observationCount', () => {
+        const kRef = {};
+        const obs = [
+            { species: 'Crex crex', _kl: kRef },
+            { species: 'Crex crex', _kl: kRef },
+            { species: 'Haliaeetus albicilla', _kl: kRef },
+        ];
+        const result = scoreKommune(kRef, obs, 30, 200);
+        expect(result.observationCount).toBe(3);
+        expect(result.speciesCount).toBe(2);
+    });
+
+    it('does not inflate score for non-risk species', () => {
+        const kRef = {};
+        // Parus major: [2, 30], default rotor 30-200
+        // overlap = min(30,200) - max(2,30) = 0 -> low risk, not in red list
+        const obs = [
+            { species: 'Parus major', _kl: kRef },
+            { species: 'Parus major', _kl: kRef },
+            { species: 'Parus major', _kl: kRef },
+        ];
+        const result = scoreKommune(kRef, obs, 30, 200);
+        expect(result.normScore).toBe(0);
+        expect(Object.keys(result.riskSpecies)).toHaveLength(0);
+        // observations and species are still counted
+        expect(result.observationCount).toBe(3);
+        expect(result.speciesCount).toBe(1);
+    });
+
+    it('changes result with custom rotor zone parameters', () => {
+        const kRef = {};
+        // Parus major: [2, 30]
+        // Default rotor 30-200: overlap = 0 -> low -> no score
+        const obsDefault = [{ species: 'Parus major', _kl: kRef }];
+        const resultDefault = scoreKommune(kRef, obsDefault, 30, 200);
+
+        // Custom rotor 5-25: overlap = min(30,25) - max(2,5) = 20, range = 28, ratio = 0.71 -> high
+        // Not in red list, so w = 1 * 3 = 3, normScore = 3 / 60 = 0.05
+        const obsCustom = [{ species: 'Parus major', _kl: kRef }];
+        const resultCustom = scoreKommune(kRef, obsCustom, 5, 25);
+
+        expect(resultDefault.normScore).toBe(0);
+        expect(resultCustom.normScore).toBeGreaterThan(0);
     });
 });
 

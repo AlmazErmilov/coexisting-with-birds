@@ -18,6 +18,7 @@ export const FILTER_PREDICATES = {
 
 // Shared state references (set by app.js via initUI)
 let map, heatLayer, pointsLayer, allData, currentView, kommuneLayer, confidenceMode;
+let lastFiltered = [];
 
 export function initUI(state) {
     map = state.map;
@@ -61,6 +62,7 @@ export function applyFilters() {
     if (monthVal > 0) {
         filtered = filtered.filter(d => d.month === monthVal);
     }
+    lastFiltered = filtered;
 
     document.getElementById('stat-obs').textContent = filtered.length.toLocaleString();
     document.getElementById('stat-species').textContent = new Set(filtered.map(d => d.species)).size;
@@ -222,4 +224,8 @@ export function toggleConfidence(newVal) {
     } else {
         resetKommuneDisplay();
     }
+}
+
+export function getFilteredData() {
+    return lastFiltered;
 }
