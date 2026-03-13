@@ -6,7 +6,7 @@
 
 Built at [Tekna Hackathon: Code your way to a greener world](https://www.tekna.no/en/events/hackathon-code-your-way-to-a-greener-world-51380/) (Feb 27-28, 2026, Oslo)
 
-**Live demo**: https://coexisting-with-birds.vercel.app/
+**Live demo**: https://coexisting-with-birds.no/
 
 **Demo presentation**: [Google Slides](https://docs.google.com/presentation/d/1pbhZNtN1zdDCPGJ1UySyacmfEBx5ucUs1B6r2pYHjcE/edit?usp=sharing)
 
