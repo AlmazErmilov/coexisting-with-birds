@@ -7,7 +7,7 @@ describe('flight study data boundaries', () => {
             species: ['Haliaeetus albicilla', 'Passer domesticus']});
         expect(html).toContain('50–170 m AGL');
         expect(html).toContain('10–20 m AGL');
-        expect(html).toContain('Altitude intersection');
+        expect(html).toContain('flight-band__overlap');
     });
     it('unknown species cannot invent an altitude or inject HTML', () => {
         const html = flightDiagram({species: ['<img src=x onerror=alert(1)>']});

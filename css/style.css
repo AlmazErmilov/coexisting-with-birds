@@ -284,3 +284,65 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 .credits-page .credit-table { overflow-x: auto; }
 
 #confidence-info { color: #a4b7c3 !important; }
+
+.city-label { color: #fff5e0; font-size: 12px; font-weight: 700; white-space: nowrap; background: none; border: 0; text-shadow: -1px -1px 0 #10212b, 1px -1px 0 #10212b, -1px 1px 0 #10212b, 1px 1px 0 #10212b, 0 2px 5px #07151d; }
+.city-label span::before { content: '•'; margin-right: 4px; color: #fff5e0; }
+.kommune-modal { width: 800px; background: #0e202c; }
+.modal { overflow-x: hidden; }
+.compact-help { margin: 12px 0; color: #a4b7c3; font-size: 11px; line-height: 1.6; }
+.compact-help summary { cursor: pointer; }
+.compact-help p { margin: 8px 0; font-size: 11px; }
+.species-row { display: flex; align-items: center; gap: 4px; }
+.species-row .species-item { flex: 1; min-width: 0; }
+.bird-detail-button { flex: 0 0 32px; width: 32px; min-height: 40px; color: #80dace; background: transparent; border: 0; border-radius: 6px; cursor: pointer; }
+.bird-detail-button:hover { background: #17343e; }
+.bird-detail-modal { width: 540px; background: #0e202c; }
+.bird-card-head { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+.bird-card-head .bird-thumbnail { width: 96px !important; height: 96px !important; flex-basis: 96px !important; object-fit: cover; border-radius: 12px; }
+.bird-card-head h2 { margin-bottom: 6px; font-size: 22px; }
+.bird-card-head i { font-size: 12px; color: #a4b7c3; }
+.bird-metrics { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px; margin: 16px 0; }
+.bird-metrics div { padding: 12px 8px; background: #142c37; border-radius: 8px; }
+.bird-metrics strong { display: block; font-size: 18px; color: #dcece9; }
+.bird-metrics small { display: block; margin-top: 4px; color: #a4b7c3; font-size: 10px; }
+.bird-fact { color: #dcece9; font-size: 13px; line-height: 1.7; }
+.bird-months { display: flex; align-items: flex-end; gap: 4px; height: 54px; margin: 14px 0 6px; }
+.bird-months span { flex: 1; background: #73d6ca; min-height: 2px; border-radius: 2px 2px 0 0; }
+.bird-month-labels { display: flex; justify-content: space-between; color: #a4b7c3; font-size: 10px; }
+.bird-card-action { padding: 10px 14px; margin-top: 16px; border: 1px solid #58958e; border-radius: 7px; background: #163a40; color: #d6fff7; cursor: pointer; }
+.park-bird, button.risk-species-item { width: 100%; background: none; color: inherit; border: 0; border-bottom: 1px solid #29404c; text-align: left; cursor: pointer; }
+button.risk-species-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; }
+button.risk-species-item .species-info { flex: 1; }
+.bird-popup-head { display: flex; gap: 10px; align-items: center; }
+.bird-popup-head button { border: 0; background: none; cursor: pointer; padding: 0; }
+.bird-profile-line { min-width: 0; flex: 1; }
+.bird-profile-line strong { display: block; font-size: 12px; font-weight: 400; }
+.bird-profile-line i { display: block; font-size: 10px; color: #a4b7c3; }
+@media(max-width:700px) {
+    .bird-card-head .bird-thumbnail { width: 72px !important; height: 72px !important; flex-basis: 72px !important; }
+    .bird-card-head h2 { font-size: 18px; }
+    .bird-metrics strong { font-size: 15px; }
+}
+.help-steps { list-style: none; margin: 20px 0; }
+.help-steps li { display: grid; grid-template-columns: 70px 1fr; gap: 12px; padding: 12px 0; border-top: 1px solid #29404c; font-size: 12px; }
+.help-steps b { color: #80dace; }
+.help-links { display: flex; flex-wrap: wrap; gap: 20px; }
+.help-links a, .compact-help a, .sample-caption a { color: #80dace; }
+.sample-caption { color: #a4b7c3; font-size: 10px; margin: 8px 0; }
+.about-page { max-width: 840px; margin: 32px auto; padding: 0 24px; font-size: 14px; line-height: 1.8; }
+.about-page h1 { font-size: 28px; margin: 32px 0; }
+.about-page h2 { font-size: 19px; margin: 32px 0 12px; }
+.about-page p { margin: 12px 0; }
+.about-page a { color: #80dace; }
+.about-page nav { display: flex; justify-content: space-between; gap: 20px; font-size: 12px; }
+.about-page table { width: 100%; }
+.about-page pre { overflow-x: auto; padding: 16px; border: 1px solid #29404c; border-radius: 8px; font-size: 12px; }
+.about-page footer { padding: 32px 0; font-size: 12px; color: #a4b7c3; }
+.noscript-note { position: fixed; z-index: 2000; inset: 16px; padding: 24px; background: #0e202c; }
+
+/* Crisp drawing language throughout controls and panels. */
+button, input, select, .panel, .modal, .legend, .stat-box, .info-badge, .view-toggle, .rl-badge, .alt-tag, .legend-gradient, .confidence-warning, .rotor-zone-display, .snapshot-refresh, .bird-thumbnail, .bird-metrics div, .flight-diagram, .flight-intro__card, .leaflet-popup-content-wrapper, .leaflet-bar, .leaflet-bar a { border-radius: 1px !important; }
+.loading, .map-status, .leaflet-tooltip, .bird-months span, .about-page pre { border-radius: 1px !important; }
+input[type=range]::-webkit-slider-thumb { border-radius: 1px; }
+input[type=range]::-moz-range-thumb { border-radius: 1px; }
+.city-label span::before { content: ''; display: inline-block; vertical-align: middle; width: 3px; height: 3px; margin-right: 5px; background: #fff5e0; box-shadow: 0 0 0 1px #10212b; }

@@ -193,3 +193,11 @@ A Service Worker saves a versioned snapshot of the static application, observati
 The status separates the snapshot's save date from the February 2026 observation sample. This is resilience for the existing sample, not a daily GBIF update. A first visit without a connection cannot create a snapshot, and browsers can evict local storage. When a new release is ready the interface offers **Load updated snapshot**. Failed core downloads preserve the previous working version.
 
 Run `npm run snapshot` after changing cached files. It regenerates the content based cache version, asset lists and inline script CSP hashes. Vercel serves the worker with `Cache-Control: no-cache`; third party tiles keep their normal provider caching rules. Automated tests block external tiles and verify offline reload, filters and a park drawing against the local snapshot.
+
+## Flight intro and bird exploration
+
+Flight intro opens across the viewport and can be replayed from the map. Replay stays open until dismissed; Escape and the Explore map button restore focus. Motion respects reduced motion preferences. Municipality and park drawings fit mobile screens and show geometric altitude intersections, not observed flight paths or habitat boundaries.
+
+Bird cards separate filtered records from the historical sample, show month coverage and disclose sources on demand. There are 28 locally licensed photographs, 257 common-name profiles and 12 sourced facts. Other species use a labeled illustration. See [photo and profile provenance](docs/bird-images.md). Local GeoNames populated-place labels appear above the heat layer, with CC BY 4.0 attribution.
+
+The static [methods page](about.html), canonical metadata, sitemap and social image support search discovery and sharing. These changes do not establish Google indexing or rankings.

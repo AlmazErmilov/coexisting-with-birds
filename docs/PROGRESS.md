@@ -1,5 +1,13 @@
 # Progress
 
+## 2026-10-06: full screen flight intro and bird exploration
+
+Replaced the corner intro with a full viewport drawing, staged motion and a mobile composition. Flight intro replay stays open until dismissed. Keyboard focus, inert background and reduced motion are supported. Interface corners are nearly square. Municipality diagrams now fit their containers without horizontal clipping.
+
+Added local GeoNames city labels above the heat layer, 28 licensed bird photographs and common names for 257 reference keys. Bird cards expose filtered and sample counts, estimated heights, month coverage and 12 sourced facts. Detailed methods and limitations are disclosed on demand. The historical sample and estimated geometry remain explicitly identified.
+
+Updated metadata, social preview, sitemap, static methods page and the www canonical redirect. Local snapshots include the new labels, profiles, page and thumbnails without a database. Automated checks cover full screen replay, responsive drawings, label ordering, bird card filtering and SEO resources. Final verification results are recorded in the pull request.
+
 ## 2026-10-06: map recovery, flight studies and local snapshots
 
 Replaced the CARTO basemap after reproducing its API key watermark on the live site. Standard OpenStreetMap tiles use visible attribution and normal browser caching. Leaflet and the heat layer are served locally. Tile failures retain local municipality geometry, and data failures expose a recovery action.

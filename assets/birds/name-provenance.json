@@ -1,0 +1,1395 @@
+{
+  "checked": "2026-10-06",
+  "source": "https://query.wikidata.org/",
+  "method": "English label for exact P225 scientific name and P105 species rank; unresolved names are omitted. RSPB and BTO checks correct missing or inconsistent English labels. Genus synonyms retained by the app use the corresponding accepted species name.",
+  "targetCount": 257,
+  "records": [
+    {
+      "species": "Actitis hypoleucos",
+      "commonName": "Common Sandpiper",
+      "item": "http://www.wikidata.org/entity/Q18850"
+    },
+    {
+      "species": "Charadrius dubius",
+      "commonName": "Little Ringed Plover",
+      "item": "http://www.wikidata.org/entity/Q18851"
+    },
+    {
+      "species": "Ardea cinerea",
+      "commonName": "Grey Heron",
+      "item": "http://www.wikidata.org/entity/Q25273"
+    },
+    {
+      "species": "Anas platyrhynchos",
+      "commonName": "mallard",
+      "item": "http://www.wikidata.org/entity/Q25348"
+    },
+    {
+      "species": "Ciconia ciconia",
+      "commonName": "White stork",
+      "item": "http://www.wikidata.org/entity/Q25352"
+    },
+    {
+      "species": "Accipiter gentilis",
+      "commonName": "Accipiter gentilis",
+      "item": "http://www.wikidata.org/entity/Q25353"
+    },
+    {
+      "species": "Apus apus",
+      "commonName": "Common Swift",
+      "item": "http://www.wikidata.org/entity/Q25377"
+    },
+    {
+      "species": "Accipiter nisus",
+      "commonName": "Eurasian Sparrowhawk",
+      "item": "http://www.wikidata.org/entity/Q25380"
+    },
+    {
+      "species": "Asio otus",
+      "commonName": "Long-eared Owl",
+      "item": "http://www.wikidata.org/entity/Q25384"
+    },
+    {
+      "species": "Buteo buteo",
+      "commonName": "Common Buzzard",
+      "item": "http://www.wikidata.org/entity/Q25385"
+    },
+    {
+      "species": "Carduelis carduelis",
+      "commonName": "European Goldfinch",
+      "item": "http://www.wikidata.org/entity/Q25418"
+    },
+    {
+      "species": "Anas acuta",
+      "commonName": "Northern Pintail",
+      "item": "http://www.wikidata.org/entity/Q25450"
+    },
+    {
+      "species": "Circus cyaneus",
+      "commonName": "Hen Harrier",
+      "item": "http://www.wikidata.org/entity/Q25572"
+    },
+    {
+      "species": "Chroicocephalus ridibundus",
+      "commonName": "Black-headed Gull",
+      "item": "http://www.wikidata.org/entity/Q25634"
+    },
+    {
+      "species": "Anas crecca",
+      "commonName": "Eurasian Teal",
+      "item": "http://www.wikidata.org/entity/Q25700"
+    },
+    {
+      "species": "Asio flammeus",
+      "commonName": "Short-eared Owl",
+      "item": "http://www.wikidata.org/entity/Q25769"
+    },
+    {
+      "species": "Anser anser",
+      "commonName": "Greylag Goose",
+      "item": "http://www.wikidata.org/entity/Q25882"
+    },
+    {
+      "species": "Alauda arvensis",
+      "commonName": "Eurasian Skylark",
+      "item": "http://www.wikidata.org/entity/Q25961"
+    },
+    {
+      "species": "Columba palumbus",
+      "commonName": "Common Wood Pigeon",
+      "item": "http://www.wikidata.org/entity/Q26026"
+    },
+    {
+      "species": "Bombycilla garrulus",
+      "commonName": "Bohemian Waxwing",
+      "item": "http://www.wikidata.org/entity/Q26135"
+    },
+    {
+      "species": "Columba oenas",
+      "commonName": "Stock Dove",
+      "item": "http://www.wikidata.org/entity/Q26140"
+    },
+    {
+      "species": "Buteo lagopus",
+      "commonName": "Rough-legged Buzzard",
+      "item": "http://www.wikidata.org/entity/Q26407"
+    },
+    {
+      "species": "Circus aeruginosus",
+      "commonName": "Western Marsh Harrier",
+      "item": "http://www.wikidata.org/entity/Q26431"
+    },
+    {
+      "species": "Aythya fuligula",
+      "commonName": "Tufted Duck",
+      "item": "http://www.wikidata.org/entity/Q26444"
+    },
+    {
+      "species": "Anser fabalis",
+      "commonName": "taiga bean goose",
+      "item": "http://www.wikidata.org/entity/Q26452"
+    },
+    {
+      "species": "Anas penelope",
+      "commonName": "Anas penelope",
+      "item": "http://www.wikidata.org/entity/Q26459"
+    },
+    {
+      "species": "Alle alle",
+      "commonName": "Little Auk",
+      "item": "http://www.wikidata.org/entity/Q26470"
+    },
+    {
+      "species": "Clangula hyemalis",
+      "commonName": "Long-tailed Duck",
+      "item": "http://www.wikidata.org/entity/Q26597"
+    },
+    {
+      "species": "Aythya marila",
+      "commonName": "Greater Scaup",
+      "item": "http://www.wikidata.org/entity/Q26635"
+    },
+    {
+      "species": "Calidris alpina",
+      "commonName": "Dunlin",
+      "item": "http://www.wikidata.org/entity/Q26650"
+    },
+    {
+      "species": "Branta leucopsis",
+      "commonName": "Barnacle goose",
+      "item": "http://www.wikidata.org/entity/Q26680"
+    },
+    {
+      "species": "Caprimulgus europaeus",
+      "commonName": "European Nightjar",
+      "item": "http://www.wikidata.org/entity/Q26717"
+    },
+    {
+      "species": "Branta canadensis",
+      "commonName": "Canada Goose",
+      "item": "http://www.wikidata.org/entity/Q26733"
+    },
+    {
+      "species": "Aythya ferina",
+      "commonName": "Common Pochard",
+      "item": "http://www.wikidata.org/entity/Q26742"
+    },
+    {
+      "species": "Charadrius hiaticula",
+      "commonName": "Common Ringed Plover",
+      "item": "http://www.wikidata.org/entity/Q26816"
+    },
+    {
+      "species": "Arenaria interpres",
+      "commonName": "Ruddy Turnstone",
+      "item": "http://www.wikidata.org/entity/Q26892"
+    },
+    {
+      "species": "Anthus pratensis",
+      "commonName": "Meadow Pipit",
+      "item": "http://www.wikidata.org/entity/Q26956"
+    },
+    {
+      "species": "Branta bernicla",
+      "commonName": "Brant Goose",
+      "item": "http://www.wikidata.org/entity/Q27050"
+    },
+    {
+      "species": "Alca torda",
+      "commonName": "Razorbill",
+      "item": "http://www.wikidata.org/entity/Q27102"
+    },
+    {
+      "species": "Calidris canutus",
+      "commonName": "Red Knot",
+      "item": "http://www.wikidata.org/entity/Q27124"
+    },
+    {
+      "species": "Calidris minuta",
+      "commonName": "Little Stint",
+      "item": "http://www.wikidata.org/entity/Q27232"
+    },
+    {
+      "species": "Acrocephalus schoenobaenus",
+      "commonName": "Acrocephalus schoenobaenus",
+      "item": "http://www.wikidata.org/entity/Q27236"
+    },
+    {
+      "species": "Bucephala clangula",
+      "commonName": "Common Goldeneye",
+      "item": "http://www.wikidata.org/entity/Q29865"
+    },
+    {
+      "species": "Aquila chrysaetos",
+      "commonName": "Golden Eagle",
+      "item": "http://www.wikidata.org/entity/Q41181"
+    },
+    {
+      "species": "Columba livia",
+      "commonName": "Rock Dove",
+      "item": "http://www.wikidata.org/entity/Q42326"
+    },
+    {
+      "species": "Carpodacus erythrinus",
+      "commonName": "Common Rosefinch",
+      "item": "http://www.wikidata.org/entity/Q46143"
+    },
+    {
+      "species": "Calidris temminckii",
+      "commonName": "Temminck's Stint",
+      "item": "http://www.wikidata.org/entity/Q58921"
+    },
+    {
+      "species": "Calidris alba",
+      "commonName": "Sanderling",
+      "item": "http://www.wikidata.org/entity/Q58958"
+    },
+    {
+      "species": "Calidris ferruginea",
+      "commonName": "Curlew Sandpiper",
+      "item": "http://www.wikidata.org/entity/Q62345"
+    },
+    {
+      "species": "Calidris maritima",
+      "commonName": "Purple Sandpiper",
+      "item": "http://www.wikidata.org/entity/Q62359"
+    },
+    {
+      "species": "Alcedo atthis",
+      "commonName": "Common Kingfisher",
+      "item": "http://www.wikidata.org/entity/Q79915"
+    },
+    {
+      "species": "Ardea alba",
+      "commonName": "Great Egret",
+      "item": "http://www.wikidata.org/entity/Q130730"
+    },
+    {
+      "species": "Bubo bubo",
+      "commonName": "Eurasian Eagle-owl",
+      "item": "http://www.wikidata.org/entity/Q130933"
+    },
+    {
+      "species": "Anthus trivialis",
+      "commonName": "Tree Pipit",
+      "item": "http://www.wikidata.org/entity/Q143313"
+    },
+    {
+      "species": "Acrocephalus scirpaceus",
+      "commonName": "Eurasian Reed Warbler",
+      "item": "http://www.wikidata.org/entity/Q159080"
+    },
+    {
+      "species": "Aegithalos caudatus",
+      "commonName": "Long-tailed Tit",
+      "item": "http://www.wikidata.org/entity/Q170831"
+    },
+    {
+      "species": "Anser albifrons",
+      "commonName": "greater white-fronted goose",
+      "item": "http://www.wikidata.org/entity/Q172093"
+    },
+    {
+      "species": "Coccothraustes coccothraustes",
+      "commonName": "Hawfinch",
+      "item": "http://www.wikidata.org/entity/Q174088"
+    },
+    {
+      "species": "Aegolius funereus",
+      "commonName": "boreal owl",
+      "item": "http://www.wikidata.org/entity/Q174466"
+    },
+    {
+      "species": "Burhinus oedicnemus",
+      "commonName": "Eurasian Stone-curlew",
+      "item": "http://www.wikidata.org/entity/Q184834"
+    },
+    {
+      "species": "Anser indicus",
+      "commonName": "bar-headed goose",
+      "item": "http://www.wikidata.org/entity/Q191125"
+    },
+    {
+      "species": "Certhia familiaris",
+      "commonName": "Eurasian Treecreeper",
+      "item": "http://www.wikidata.org/entity/Q193593"
+    },
+    {
+      "species": "Alectoris chukar",
+      "commonName": "Chukar Partridge",
+      "item": "http://www.wikidata.org/entity/Q194043"
+    },
+    {
+      "species": "Aix galericulata",
+      "commonName": "Mandarin Duck",
+      "item": "http://www.wikidata.org/entity/Q200339"
+    },
+    {
+      "species": "Cinclus cinclus",
+      "commonName": "Cinclus cinclus",
+      "item": "http://www.wikidata.org/entity/Q201831"
+    },
+    {
+      "species": "Charadrius morinellus",
+      "commonName": "Eurasian Dotterel",
+      "item": "http://www.wikidata.org/entity/Q202504"
+    },
+    {
+      "species": "Calcarius lapponicus",
+      "commonName": "Lapland Longspur",
+      "item": "http://www.wikidata.org/entity/Q208703"
+    },
+    {
+      "species": "Anthus spinoletta",
+      "commonName": "Water Pipit",
+      "item": "http://www.wikidata.org/entity/Q208707"
+    },
+    {
+      "species": "Anser brachyrhynchus",
+      "commonName": "pink-footed goose",
+      "item": "http://www.wikidata.org/entity/Q209419"
+    },
+    {
+      "species": "Acrocephalus palustris",
+      "commonName": "Marsh Warbler",
+      "item": "http://www.wikidata.org/entity/Q210422"
+    },
+    {
+      "species": "Cepphus grylle",
+      "commonName": "Black Guillemot",
+      "item": "http://www.wikidata.org/entity/Q212055"
+    },
+    {
+      "species": "Anthus cervinus",
+      "commonName": "Red-throated Pipit",
+      "item": "http://www.wikidata.org/entity/Q241347"
+    },
+    {
+      "species": "Acrocephalus dumetorum",
+      "commonName": "Blyth’s Reed Warbler",
+      "item": "http://www.wikidata.org/entity/Q312779"
+    },
+    {
+      "species": "Calidris fuscicollis",
+      "commonName": "White-rumped Sandpiper",
+      "item": "http://www.wikidata.org/entity/Q599749"
+    },
+    {
+      "species": "Anthus petrosus",
+      "commonName": "European Rock Pipit",
+      "item": "http://www.wikidata.org/entity/Q642685"
+    },
+    {
+      "species": "Anas carolinensis",
+      "commonName": "Green-winged Teal",
+      "item": "http://www.wikidata.org/entity/Q704074"
+    },
+    {
+      "species": "Acanthis flammea",
+      "commonName": "Redpoll",
+      "item": "http://www.wikidata.org/entity/Q20754771"
+    },
+    {
+      "species": "Coloeus monedula",
+      "commonName": "Western Jackdaw",
+      "item": "http://www.wikidata.org/entity/Q25345384"
+    },
+    {
+      "species": "Chloris chloris",
+      "commonName": "European Greenfinch",
+      "item": "http://www.wikidata.org/entity/Q27075785"
+    },
+    {
+      "species": "Calidris pugnax",
+      "commonName": "Ruff",
+      "item": "http://www.wikidata.org/entity/Q28122714"
+    },
+    {
+      "species": "Grus grus",
+      "commonName": "Common Crane",
+      "item": "http://www.wikidata.org/entity/Q4764"
+    },
+    {
+      "species": "Limosa limosa",
+      "commonName": "Black-tailed Godwit",
+      "item": "http://www.wikidata.org/entity/Q18841"
+    },
+    {
+      "species": "Cuculus canorus",
+      "commonName": "Common Cuckoo",
+      "item": "http://www.wikidata.org/entity/Q18845"
+    },
+    {
+      "species": "Gallinula chloropus",
+      "commonName": "Common Moorhen",
+      "item": "http://www.wikidata.org/entity/Q18847"
+    },
+    {
+      "species": "Limosa lapponica",
+      "commonName": "Bar-tailed Godwit",
+      "item": "http://www.wikidata.org/entity/Q18864"
+    },
+    {
+      "species": "Erithacus rubecula",
+      "commonName": "European robin",
+      "item": "http://www.wikidata.org/entity/Q25334"
+    },
+    {
+      "species": "Garrulus glandarius",
+      "commonName": "Eurasian Jay",
+      "item": "http://www.wikidata.org/entity/Q25354"
+    },
+    {
+      "species": "Corvus corax",
+      "commonName": "Northern Raven",
+      "item": "http://www.wikidata.org/entity/Q25357"
+    },
+    {
+      "species": "Fulica atra",
+      "commonName": "Common Coot",
+      "item": "http://www.wikidata.org/entity/Q25376"
+    },
+    {
+      "species": "Fringilla coelebs",
+      "commonName": "Eurasian Chaffinch",
+      "item": "http://www.wikidata.org/entity/Q25383"
+    },
+    {
+      "species": "Corvus frugilegus",
+      "commonName": "Rook",
+      "item": "http://www.wikidata.org/entity/Q25386"
+    },
+    {
+      "species": "Corvus monedula",
+      "commonName": "Eurasian Jackdaw",
+      "item": "http://www.wikidata.org/entity/Q25394"
+    },
+    {
+      "species": "Cygnus olor",
+      "commonName": "Mute Swan",
+      "item": "http://www.wikidata.org/entity/Q25402"
+    },
+    {
+      "species": "Cyanistes caeruleus",
+      "commonName": "Eurasian blue tit",
+      "item": "http://www.wikidata.org/entity/Q25404"
+    },
+    {
+      "species": "Corvus cornix",
+      "commonName": "Hooded Crow",
+      "item": "http://www.wikidata.org/entity/Q25405"
+    },
+    {
+      "species": "Hirundo rustica",
+      "commonName": "Barn Swallow",
+      "item": "http://www.wikidata.org/entity/Q25429"
+    },
+    {
+      "species": "Haliaeetus albicilla",
+      "commonName": "White-tailed Eagle",
+      "item": "http://www.wikidata.org/entity/Q25438"
+    },
+    {
+      "species": "Cygnus cygnus",
+      "commonName": "Whooper Swan",
+      "item": "http://www.wikidata.org/entity/Q25612"
+    },
+    {
+      "species": "Jynx torquilla",
+      "commonName": "Eurasian Wryneck",
+      "item": "http://www.wikidata.org/entity/Q25678"
+    },
+    {
+      "species": "Gallinago gallinago",
+      "commonName": "Gallinago gallinago",
+      "item": "http://www.wikidata.org/entity/Q25692"
+    },
+    {
+      "species": "Falco subbuteo",
+      "commonName": "Eurasian Hobby",
+      "item": "http://www.wikidata.org/entity/Q25876"
+    },
+    {
+      "species": "Haematopus ostralegus",
+      "commonName": "Eurasian Oystercatcher",
+      "item": "http://www.wikidata.org/entity/Q25928"
+    },
+    {
+      "species": "Crex crex",
+      "commonName": "Corn Crake",
+      "item": "http://www.wikidata.org/entity/Q26017"
+    },
+    {
+      "species": "Delichon urbicum",
+      "commonName": "Common House Martin",
+      "item": "http://www.wikidata.org/entity/Q26055"
+    },
+    {
+      "species": "Corvus corone",
+      "commonName": "carrion crow",
+      "item": "http://www.wikidata.org/entity/Q26198"
+    },
+    {
+      "species": "Emberiza citrinella",
+      "commonName": "Yellowhammer",
+      "item": "http://www.wikidata.org/entity/Q26205"
+    },
+    {
+      "species": "Dendrocopos major",
+      "commonName": "Great Spotted Woodpecker",
+      "item": "http://www.wikidata.org/entity/Q26209"
+    },
+    {
+      "species": "Larus canus",
+      "commonName": "Common Gull",
+      "item": "http://www.wikidata.org/entity/Q26427"
+    },
+    {
+      "species": "Falco tinnunculus",
+      "commonName": "Common Kestrel",
+      "item": "http://www.wikidata.org/entity/Q26490"
+    },
+    {
+      "species": "Loxia curvirostra",
+      "commonName": "Red Crossbill",
+      "item": "http://www.wikidata.org/entity/Q26552"
+    },
+    {
+      "species": "Luscinia svecica",
+      "commonName": "Bluethroat",
+      "item": "http://www.wikidata.org/entity/Q26578"
+    },
+    {
+      "species": "Larus marinus",
+      "commonName": "Great Black-backed Gull",
+      "item": "http://www.wikidata.org/entity/Q26629"
+    },
+    {
+      "species": "Lanius collurio",
+      "commonName": "Red-backed Shrike",
+      "item": "http://www.wikidata.org/entity/Q26671"
+    },
+    {
+      "species": "Fratercula arctica",
+      "commonName": "Atlantic Puffin",
+      "item": "http://www.wikidata.org/entity/Q26685"
+    },
+    {
+      "species": "Gavia stellata",
+      "commonName": "Red-throated Diver",
+      "item": "http://www.wikidata.org/entity/Q26691"
+    },
+    {
+      "species": "Lymnocryptes minimus",
+      "commonName": "Jack Snipe",
+      "item": "http://www.wikidata.org/entity/Q26711"
+    },
+    {
+      "species": "Fulmarus glacialis",
+      "commonName": "Northern Fulmar",
+      "item": "http://www.wikidata.org/entity/Q26896"
+    },
+    {
+      "species": "Emberiza schoeniclus",
+      "commonName": "Reed Bunting",
+      "item": "http://www.wikidata.org/entity/Q26961"
+    },
+    {
+      "species": "Lullula arborea",
+      "commonName": "Woodlark",
+      "item": "http://www.wikidata.org/entity/Q26969"
+    },
+    {
+      "species": "Larus fuscus",
+      "commonName": "Larus fuscus",
+      "item": "http://www.wikidata.org/entity/Q27160"
+    },
+    {
+      "species": "Gallinago media",
+      "commonName": "Great Snipe",
+      "item": "http://www.wikidata.org/entity/Q27171"
+    },
+    {
+      "species": "Melanitta nigra",
+      "commonName": "Common Scoter",
+      "item": "http://www.wikidata.org/entity/Q27434"
+    },
+    {
+      "species": "Ficedula hypoleuca",
+      "commonName": "European Pied Flycatcher",
+      "item": "http://www.wikidata.org/entity/Q27442"
+    },
+    {
+      "species": "Hydrobates pelagicus",
+      "commonName": "European Storm Petrel",
+      "item": "http://www.wikidata.org/entity/Q27461"
+    },
+    {
+      "species": "Hippolais icterina",
+      "commonName": "Hippolais icterina",
+      "item": "http://www.wikidata.org/entity/Q27674"
+    },
+    {
+      "species": "Larus argentatus",
+      "commonName": "European Herring Gull",
+      "item": "http://www.wikidata.org/entity/Q28236"
+    },
+    {
+      "species": "Coturnix coturnix",
+      "commonName": "Common Quail",
+      "item": "http://www.wikidata.org/entity/Q28358"
+    },
+    {
+      "species": "Falco peregrinus",
+      "commonName": "Peregrine Falcon",
+      "item": "http://www.wikidata.org/entity/Q30535"
+    },
+    {
+      "species": "Falco columbarius",
+      "commonName": "Merlin",
+      "item": "http://www.wikidata.org/entity/Q131918"
+    },
+    {
+      "species": "Dryocopus martius",
+      "commonName": "Black Woodpecker",
+      "item": "http://www.wikidata.org/entity/Q143284"
+    },
+    {
+      "species": "Lyrurus tetrix",
+      "commonName": "Black Grouse",
+      "item": "http://www.wikidata.org/entity/Q155878"
+    },
+    {
+      "species": "Hydrocoloeus minutus",
+      "commonName": "Little Gull",
+      "item": "http://www.wikidata.org/entity/Q164467"
+    },
+    {
+      "species": "Falco rusticolus",
+      "commonName": "Gyrfalcon",
+      "item": "http://www.wikidata.org/entity/Q177688"
+    },
+    {
+      "species": "Lagopus lagopus",
+      "commonName": "Willow Grouse",
+      "item": "http://www.wikidata.org/entity/Q178702"
+    },
+    {
+      "species": "Falco vespertinus",
+      "commonName": "Red-footed Falcon",
+      "item": "http://www.wikidata.org/entity/Q179625"
+    },
+    {
+      "species": "Gavia arctica",
+      "commonName": "Black-throated loon",
+      "item": "http://www.wikidata.org/entity/Q184432"
+    },
+    {
+      "species": "Lanius excubitor",
+      "commonName": "Great Grey Shrike",
+      "item": "http://www.wikidata.org/entity/Q184508"
+    },
+    {
+      "species": "Dryobates minor",
+      "commonName": "Lesser Spotted Woodpecker",
+      "item": "http://www.wikidata.org/entity/Q184518"
+    },
+    {
+      "species": "Fringilla montifringilla",
+      "commonName": "Brambling",
+      "item": "http://www.wikidata.org/entity/Q188877"
+    },
+    {
+      "species": "Gavia immer",
+      "commonName": "Common loon",
+      "item": "http://www.wikidata.org/entity/Q190342"
+    },
+    {
+      "species": "Glaucidium passerinum",
+      "commonName": "Eurasian Pygmy Owlet",
+      "item": "http://www.wikidata.org/entity/Q191155"
+    },
+    {
+      "species": "Melanitta fusca",
+      "commonName": "Velvet Scoter",
+      "item": "http://www.wikidata.org/entity/Q201300"
+    },
+    {
+      "species": "Lagopus muta",
+      "commonName": "Rock Ptarmigan",
+      "item": "http://www.wikidata.org/entity/Q205930"
+    },
+    {
+      "species": "Luscinia luscinia",
+      "commonName": "Thrush Nightingale",
+      "item": "http://www.wikidata.org/entity/Q206130"
+    },
+    {
+      "species": "Emberiza hortulana",
+      "commonName": "Ortolan Bunting",
+      "item": "http://www.wikidata.org/entity/Q206630"
+    },
+    {
+      "species": "Eremophila alpestris",
+      "commonName": "Horned Lark",
+      "item": "http://www.wikidata.org/entity/Q207249"
+    },
+    {
+      "species": "Dendrocopos leucotos",
+      "commonName": "White-backed Woodpecker",
+      "item": "http://www.wikidata.org/entity/Q207290"
+    },
+    {
+      "species": "Lophophanes cristatus",
+      "commonName": "European Crested Tit",
+      "item": "http://www.wikidata.org/entity/Q207831"
+    },
+    {
+      "species": "Emberiza pusilla",
+      "commonName": "Little Bunting",
+      "item": "http://www.wikidata.org/entity/Q216855"
+    },
+    {
+      "species": "Emberiza rustica",
+      "commonName": "Rustic Bunting",
+      "item": "http://www.wikidata.org/entity/Q286809"
+    },
+    {
+      "species": "Loxia leucoptera",
+      "commonName": "White-winged Crossbill",
+      "item": "http://www.wikidata.org/entity/Q331190"
+    },
+    {
+      "species": "Larus cachinnans",
+      "commonName": "Caspian Gull",
+      "item": "http://www.wikidata.org/entity/Q389505"
+    },
+    {
+      "species": "Loxia pytyopsittacus",
+      "commonName": "Parrot Crossbill",
+      "item": "http://www.wikidata.org/entity/Q645055"
+    },
+    {
+      "species": "Larus delawarensis",
+      "commonName": "Ring-billed Gull",
+      "item": "http://www.wikidata.org/entity/Q754885"
+    },
+    {
+      "species": "Emberiza spodocephala",
+      "commonName": "Black-faced Bunting",
+      "item": "http://www.wikidata.org/entity/Q1190674"
+    },
+    {
+      "species": "Linaria flavirostris",
+      "commonName": "Twite",
+      "item": "http://www.wikidata.org/entity/Q10965357"
+    },
+    {
+      "species": "Larus ridibundus",
+      "commonName": "Larus ridibundus",
+      "item": "http://www.wikidata.org/entity/Q25689558"
+    },
+    {
+      "species": "Linaria cannabina",
+      "commonName": "Common Linnet",
+      "item": "http://www.wikidata.org/entity/Q27075852"
+    },
+    {
+      "species": "Mareca penelope",
+      "commonName": "Eurasian Wigeon",
+      "item": "http://www.wikidata.org/entity/Q28106837"
+    },
+    {
+      "species": "Mareca strepera",
+      "commonName": "Gadwall",
+      "item": "http://www.wikidata.org/entity/Q28106966"
+    },
+    {
+      "species": "Passer domesticus",
+      "commonName": "House Sparrow",
+      "item": "http://www.wikidata.org/entity/Q14683"
+    },
+    {
+      "species": "Pluvialis squatarola",
+      "commonName": "Grey Plover",
+      "item": "http://www.wikidata.org/entity/Q18835"
+    },
+    {
+      "species": "Numenius arquata",
+      "commonName": "Eurasian Curlew",
+      "item": "http://www.wikidata.org/entity/Q18854"
+    },
+    {
+      "species": "Numenius phaeopus",
+      "commonName": "Eurasian Whimbrel",
+      "item": "http://www.wikidata.org/entity/Q18858"
+    },
+    {
+      "species": "Sterna hirundo",
+      "commonName": "Common Tern",
+      "item": "http://www.wikidata.org/entity/Q18875"
+    },
+    {
+      "species": "Pluvialis apricaria",
+      "commonName": "European Golden Plover",
+      "item": "http://www.wikidata.org/entity/Q21148"
+    },
+    {
+      "species": "Pica pica",
+      "commonName": "Eurasian Magpie",
+      "item": "http://www.wikidata.org/entity/Q25307"
+    },
+    {
+      "species": "Pandion haliaetus",
+      "commonName": "osprey",
+      "item": "http://www.wikidata.org/entity/Q25332"
+    },
+    {
+      "species": "Pyrrhula pyrrhula",
+      "commonName": "Eurasian Bullfinch",
+      "item": "http://www.wikidata.org/entity/Q25382"
+    },
+    {
+      "species": "Motacilla alba",
+      "commonName": "Motacilla alba",
+      "item": "http://www.wikidata.org/entity/Q25399"
+    },
+    {
+      "species": "Tachybaptus ruficollis",
+      "commonName": "Little Grebe",
+      "item": "http://www.wikidata.org/entity/Q25421"
+    },
+    {
+      "species": "Podiceps cristatus",
+      "commonName": "Great Crested Grebe",
+      "item": "http://www.wikidata.org/entity/Q25422"
+    },
+    {
+      "species": "Phasianus colchicus",
+      "commonName": "Common Pheasant",
+      "item": "http://www.wikidata.org/entity/Q25432"
+    },
+    {
+      "species": "Phalacrocorax carbo",
+      "commonName": "Great Cormorant",
+      "item": "http://www.wikidata.org/entity/Q25440"
+    },
+    {
+      "species": "Sturnus vulgaris",
+      "commonName": "Common Starling",
+      "item": "http://www.wikidata.org/entity/Q25469"
+    },
+    {
+      "species": "Parus major",
+      "commonName": "great tit",
+      "item": "http://www.wikidata.org/entity/Q25485"
+    },
+    {
+      "species": "Strix aluco",
+      "commonName": "tawny owl",
+      "item": "http://www.wikidata.org/entity/Q25756"
+    },
+    {
+      "species": "Tadorna tadorna",
+      "commonName": "Common Shelduck",
+      "item": "http://www.wikidata.org/entity/Q25761"
+    },
+    {
+      "species": "Riparia riparia",
+      "commonName": "Sand Martin",
+      "item": "http://www.wikidata.org/entity/Q25909"
+    },
+    {
+      "species": "Passer montanus",
+      "commonName": "Eurasian Tree Sparrow",
+      "item": "http://www.wikidata.org/entity/Q25968"
+    },
+    {
+      "species": "Motacilla flava",
+      "commonName": "Motacilla flava",
+      "item": "http://www.wikidata.org/entity/Q25984"
+    },
+    {
+      "species": "Perdix perdix",
+      "commonName": "Grey Partridge",
+      "item": "http://www.wikidata.org/entity/Q26106"
+    },
+    {
+      "species": "Scolopax rusticola",
+      "commonName": "Eurasian Woodcock",
+      "item": "http://www.wikidata.org/entity/Q26114"
+    },
+    {
+      "species": "Plectrophenax nivalis",
+      "commonName": "Snow Bunting",
+      "item": "http://www.wikidata.org/entity/Q26416"
+    },
+    {
+      "species": "Oenanthe oenanthe",
+      "commonName": "Northern Wheatear",
+      "item": "http://www.wikidata.org/entity/Q26420"
+    },
+    {
+      "species": "Muscicapa striata",
+      "commonName": "Spotted Flycatcher",
+      "item": "http://www.wikidata.org/entity/Q26607"
+    },
+    {
+      "species": "Rissa tridactyla",
+      "commonName": "Black-legged Kittiwake",
+      "item": "http://www.wikidata.org/entity/Q26612"
+    },
+    {
+      "species": "Phoenicurus phoenicurus",
+      "commonName": "Common Redstart",
+      "item": "http://www.wikidata.org/entity/Q26620"
+    },
+    {
+      "species": "Regulus regulus",
+      "commonName": "Goldcrest",
+      "item": "http://www.wikidata.org/entity/Q26657"
+    },
+    {
+      "species": "Morus bassanus",
+      "commonName": "Northern Gannet",
+      "item": "http://www.wikidata.org/entity/Q26675"
+    },
+    {
+      "species": "Somateria mollissima",
+      "commonName": "Common Eider",
+      "item": "http://www.wikidata.org/entity/Q26696"
+    },
+    {
+      "species": "Prunella modularis",
+      "commonName": "Dunnock",
+      "item": "http://www.wikidata.org/entity/Q26698"
+    },
+    {
+      "species": "Phoenicurus ochruros",
+      "commonName": "Black Redstart",
+      "item": "http://www.wikidata.org/entity/Q26755"
+    },
+    {
+      "species": "Sterna paradisaea",
+      "commonName": "Arctic Tern",
+      "item": "http://www.wikidata.org/entity/Q26800"
+    },
+    {
+      "species": "Sylvia communis",
+      "commonName": "Sylvia communis",
+      "item": "http://www.wikidata.org/entity/Q26974"
+    },
+    {
+      "species": "Phylloscopus trochilus",
+      "commonName": "Willow Warbler",
+      "item": "http://www.wikidata.org/entity/Q27239"
+    },
+    {
+      "species": "Streptopelia decaocto",
+      "commonName": "Eurasian Collared Dove",
+      "item": "http://www.wikidata.org/entity/Q54696"
+    },
+    {
+      "species": "Phalacrocorax aristotelis",
+      "commonName": "Phalacrocorax aristotelis",
+      "item": "http://www.wikidata.org/entity/Q115452"
+    },
+    {
+      "species": "Tetrao urogallus",
+      "commonName": "Western capercaillie",
+      "item": "http://www.wikidata.org/entity/Q129059"
+    },
+    {
+      "species": "Saxicola rubetra",
+      "commonName": "Whinchat",
+      "item": "http://www.wikidata.org/entity/Q155869"
+    },
+    {
+      "species": "Milvus milvus",
+      "commonName": "Red Kite",
+      "item": "http://www.wikidata.org/entity/Q156250"
+    },
+    {
+      "species": "Sitta europaea",
+      "commonName": "Eurasian Nuthatch",
+      "item": "http://www.wikidata.org/entity/Q156767"
+    },
+    {
+      "species": "Picus viridis",
+      "commonName": "European Green Woodpecker",
+      "item": "http://www.wikidata.org/entity/Q166171"
+    },
+    {
+      "species": "Pernis apivorus",
+      "commonName": "European honey buzzard",
+      "item": "http://www.wikidata.org/entity/Q170466"
+    },
+    {
+      "species": "Podiceps grisegena",
+      "commonName": "Red-necked Grebe",
+      "item": "http://www.wikidata.org/entity/Q179919"
+    },
+    {
+      "species": "Mergus merganser",
+      "commonName": "Common Merganser",
+      "item": "http://www.wikidata.org/entity/Q180991"
+    },
+    {
+      "species": "Tetrastes bonasia",
+      "commonName": "Hazel Grouse",
+      "item": "http://www.wikidata.org/entity/Q182761"
+    },
+    {
+      "species": "Nucifraga caryocatactes",
+      "commonName": "Northern Nutcracker",
+      "item": "http://www.wikidata.org/entity/Q184820"
+    },
+    {
+      "species": "Rallus aquaticus",
+      "commonName": "Brown-cheeked rail",
+      "item": "http://www.wikidata.org/entity/Q185099"
+    },
+    {
+      "species": "Phylloscopus collybita",
+      "commonName": "Common Chiffchaff",
+      "item": "http://www.wikidata.org/entity/Q185784"
+    },
+    {
+      "species": "Sylvia atricapilla",
+      "commonName": "Sylvia atricapilla",
+      "item": "http://www.wikidata.org/entity/Q188446"
+    },
+    {
+      "species": "Mergus serrator",
+      "commonName": "Red-breasted Merganser",
+      "item": "http://www.wikidata.org/entity/Q189609"
+    },
+    {
+      "species": "Periparus ater",
+      "commonName": "coal tit",
+      "item": "http://www.wikidata.org/entity/Q191096"
+    },
+    {
+      "species": "Podiceps auritus",
+      "commonName": "Horned Grebe",
+      "item": "http://www.wikidata.org/entity/Q192058"
+    },
+    {
+      "species": "Panurus biarmicus",
+      "commonName": "Bearded Reeding",
+      "item": "http://www.wikidata.org/entity/Q192817"
+    },
+    {
+      "species": "Surnia ulula",
+      "commonName": "Hawk Owl",
+      "item": "http://www.wikidata.org/entity/Q193192"
+    },
+    {
+      "species": "Mergellus albellus",
+      "commonName": "Smew",
+      "item": "http://www.wikidata.org/entity/Q200646"
+    },
+    {
+      "species": "Strix nebulosa",
+      "commonName": "Great Grey Owl",
+      "item": "http://www.wikidata.org/entity/Q200724"
+    },
+    {
+      "species": "Picus canus",
+      "commonName": "Grey-headed Woodpecker",
+      "item": "http://www.wikidata.org/entity/Q201106"
+    },
+    {
+      "species": "Motacilla cinerea",
+      "commonName": "Motacilla cinerea",
+      "item": "http://www.wikidata.org/entity/Q201316"
+    },
+    {
+      "species": "Sylvia borin",
+      "commonName": "Sylvia borin",
+      "item": "http://www.wikidata.org/entity/Q202478"
+    },
+    {
+      "species": "Stercorarius parasiticus",
+      "commonName": "Parasitic Jaeger",
+      "item": "http://www.wikidata.org/entity/Q203053"
+    },
+    {
+      "species": "Sylvia curruca",
+      "commonName": "Sylvia curruca",
+      "item": "http://www.wikidata.org/entity/Q206089"
+    },
+    {
+      "species": "Phalaropus lobatus",
+      "commonName": "Red-necked Phalarope",
+      "item": "http://www.wikidata.org/entity/Q206840"
+    },
+    {
+      "species": "Stercorarius skua",
+      "commonName": "Great Skua",
+      "item": "http://www.wikidata.org/entity/Q207760"
+    },
+    {
+      "species": "Poecile palustris",
+      "commonName": "Marsh Tit",
+      "item": "http://www.wikidata.org/entity/Q207838"
+    },
+    {
+      "species": "Somateria spectabilis",
+      "commonName": "King Eider",
+      "item": "http://www.wikidata.org/entity/Q207846"
+    },
+    {
+      "species": "Picoides tridactylus",
+      "commonName": "Three-toed Woodpecker",
+      "item": "http://www.wikidata.org/entity/Q210418"
+    },
+    {
+      "species": "Polysticta stelleri",
+      "commonName": "Steller’s Eider",
+      "item": "http://www.wikidata.org/entity/Q210954"
+    },
+    {
+      "species": "Perisoreus infaustus",
+      "commonName": "Siberian Jay",
+      "item": "http://www.wikidata.org/entity/Q214281"
+    },
+    {
+      "species": "Pinicola enucleator",
+      "commonName": "Pine Grosbeak",
+      "item": "http://www.wikidata.org/entity/Q214571"
+    },
+    {
+      "species": "Poecile montanus",
+      "commonName": "Willow Tit",
+      "item": "http://www.wikidata.org/entity/Q215211"
+    },
+    {
+      "species": "Stercorarius longicaudus",
+      "commonName": "Long-tailed Jaeger",
+      "item": "http://www.wikidata.org/entity/Q216921"
+    },
+    {
+      "species": "Poecile cinctus",
+      "commonName": "Siberian Tit",
+      "item": "http://www.wikidata.org/entity/Q574447"
+    },
+    {
+      "species": "Saxicola rubicola",
+      "commonName": "European Stonechat",
+      "item": "http://www.wikidata.org/entity/Q838665"
+    },
+    {
+      "species": "Saxicola torquatus",
+      "commonName": "African Stonechat",
+      "item": "http://www.wikidata.org/entity/Q1315689"
+    },
+    {
+      "species": "Spinus spinus",
+      "commonName": "Spinus spinus",
+      "item": "http://www.wikidata.org/entity/Q27075864"
+    },
+    {
+      "species": "Spatula clypeata",
+      "commonName": "Northern Shoveler",
+      "item": "http://www.wikidata.org/entity/Q28106731"
+    },
+    {
+      "species": "Spatula querquedula",
+      "commonName": "Garganey",
+      "item": "http://www.wikidata.org/entity/Q28106902"
+    },
+    {
+      "species": "Phylloscopus sibillatrix",
+      "commonName": "Phylloscopus sibillatrix",
+      "item": "http://www.wikidata.org/entity/Q124752968"
+    },
+    {
+      "species": "Tringa glareola",
+      "commonName": "Wood Sandpiper",
+      "item": "http://www.wikidata.org/entity/Q18837"
+    },
+    {
+      "species": "Tringa nebularia",
+      "commonName": "Common Greenshank",
+      "item": "http://www.wikidata.org/entity/Q18840"
+    },
+    {
+      "species": "Tringa totanus",
+      "commonName": "Common Redshank",
+      "item": "http://www.wikidata.org/entity/Q18859"
+    },
+    {
+      "species": "Uria aalge",
+      "commonName": "Common Murre",
+      "item": "http://www.wikidata.org/entity/Q21062"
+    },
+    {
+      "species": "Turdus merula",
+      "commonName": "Common Blackbird",
+      "item": "http://www.wikidata.org/entity/Q25234"
+    },
+    {
+      "species": "Vanellus vanellus",
+      "commonName": "Northern Lapwing",
+      "item": "http://www.wikidata.org/entity/Q25392"
+    },
+    {
+      "species": "Troglodytes troglodytes",
+      "commonName": "Troglodytes troglodytes",
+      "item": "http://www.wikidata.org/entity/Q25740"
+    },
+    {
+      "species": "Turdus pilaris",
+      "commonName": "Fieldfare",
+      "item": "http://www.wikidata.org/entity/Q25777"
+    },
+    {
+      "species": "Turdus philomelos",
+      "commonName": "Song Thrush",
+      "item": "http://www.wikidata.org/entity/Q26349"
+    },
+    {
+      "species": "Turdus torquatus",
+      "commonName": "Ring Ouzel",
+      "item": "http://www.wikidata.org/entity/Q26641"
+    },
+    {
+      "species": "Thalasseus sandvicensis",
+      "commonName": "Sandwich Tern",
+      "item": "http://www.wikidata.org/entity/Q27547"
+    },
+    {
+      "species": "Tringa erythropus",
+      "commonName": "Spotted Redshank",
+      "item": "http://www.wikidata.org/entity/Q28103"
+    },
+    {
+      "species": "Tringa ochropus",
+      "commonName": "Green Sandpiper",
+      "item": "http://www.wikidata.org/entity/Q28450"
+    },
+    {
+      "species": "Turdus viscivorus",
+      "commonName": "Mistle Thrush",
+      "item": "http://www.wikidata.org/entity/Q178942"
+    },
+    {
+      "species": "Turdus iliacus",
+      "commonName": "Redwing",
+      "item": "http://www.wikidata.org/entity/Q184825"
+    },
+    {
+      "species": "Xema sabini",
+      "commonName": "Sabine's Gull",
+      "item": "http://www.wikidata.org/entity/Q212047"
+    },
+    {
+      "species": "Uria lomvia",
+      "commonName": "Thick-billed Murre",
+      "item": "http://www.wikidata.org/entity/Q728682"
+    }
+  ],
+  "overrides": [
+    {
+      "species": "Accipiter gentilis",
+      "commonName": "Goshawk",
+      "source": "https://www.rspb.org.uk/birds-and-wildlife/goshawk"
+    },
+    {
+      "species": "Anas penelope",
+      "commonName": "Wigeon",
+      "source": "https://www.rspb.org.uk/birds-and-wildlife/wigeon"
+    },
+    {
+      "species": "Acrocephalus schoenobaenus",
+      "commonName": "Sedge Warbler",
+      "source": "https://www.rspb.org.uk/birds-and-wildlife/sedge-warbler"
+    },
+    {
+      "species": "Cinclus cinclus",
+      "commonName": "Dipper",
+      "source": "https://www.rspb.org.uk/birds-and-wildlife/dipper"
+    },
+    {
+      "species": "Gallinago gallinago",
+      "commonName": "Snipe",
+      "source": "https://www.rspb.org.uk/birds-and-wildlife/snipe"
+    },
+    {
+      "species": "Hippolais icterina",
+      "commonName": "Icterine Warbler",
+      "source": "https://www.bto.org/learn/about-birds/british-list"
+    },
+    {
+      "species": "Larus ridibundus",
+      "commonName": "Black-headed Gull",
+      "source": "https://www.rspb.org.uk/birds-and-wildlife/black-headed-gull"
+    },
+    {
+      "species": "Motacilla alba",
+      "commonName": "White Wagtail",
+      "source": "https://en.wikipedia.org/wiki/White_wagtail"
+    },
+    {
+      "species": "Motacilla flava",
+      "commonName": "Yellow Wagtail",
+      "source": "https://www.rspb.org.uk/birds-and-wildlife/yellow-wagtail"
+    },
+    {
+      "species": "Sylvia communis",
+      "commonName": "Whitethroat",
+      "source": "https://www.rspb.org.uk/birds-and-wildlife/whitethroat"
+    },
+    {
+      "species": "Phalacrocorax aristotelis",
+      "commonName": "Shag",
+      "source": "https://www.bto.org/learn/about-birds/british-list"
+    },
+    {
+      "species": "Sylvia atricapilla",
+      "commonName": "Blackcap",
+      "source": "https://www.rspb.org.uk/birds-and-wildlife/blackcap"
+    },
+    {
+      "species": "Motacilla cinerea",
+      "commonName": "Grey Wagtail",
+      "source": "https://www.rspb.org.uk/birds-and-wildlife/grey-wagtail"
+    },
+    {
+      "species": "Sylvia borin",
+      "commonName": "Garden Warbler",
+      "source": "https://www.rspb.org.uk/birds-and-wildlife/garden-warbler"
+    },
+    {
+      "species": "Sylvia curruca",
+      "commonName": "Lesser Whitethroat",
+      "source": "https://www.rspb.org.uk/birds-and-wildlife/lesser-whitethroat"
+    },
+    {
+      "species": "Spinus spinus",
+      "commonName": "Siskin",
+      "source": "https://www.bto.org/learn/about-birds/british-list"
+    },
+    {
+      "species": "Phylloscopus sibillatrix",
+      "commonName": "Wood Warbler",
+      "source": "https://www.rspb.org.uk/birds-and-wildlife/wood-warbler"
+    },
+    {
+      "species": "Troglodytes troglodytes",
+      "commonName": "Wren",
+      "source": "https://www.rspb.org.uk/birds-and-wildlife/wren"
+    },
+    {
+      "species": "Rallus aquaticus",
+      "commonName": "Water Rail",
+      "source": "https://www.rspb.org.uk/birds-and-wildlife/water-rail"
+    },
+    {
+      "species": "Panurus biarmicus",
+      "commonName": "Bearded Tit",
+      "source": "https://www.rspb.org.uk/birds-and-wildlife/bearded-tit"
+    }
+  ]
+}

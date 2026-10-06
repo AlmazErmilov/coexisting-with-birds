@@ -1,0 +1,78 @@
+{
+  "checked": "2026-10-06",
+  "method": "Original one-sentence paraphrases checked against retrieved primary source content. RSPB Magpie content reused from the supplied retrieval cache; other pages retrieved during this update.",
+  "records": [
+    {
+      "species": "Clangula hyemalis",
+      "fact": "The male’s long tail feathers give this sea duck its English name.",
+      "source": "https://www.rspb.org.uk/birds-and-wildlife/long-tailed-duck",
+      "support": "How to identify, male elongated tail feathers"
+    },
+    {
+      "species": "Melanitta fusca",
+      "fact": "A white patch at the back of each wing makes this dark sea duck distinctive in flight.",
+      "source": "https://www.rspb.org.uk/birds-and-wildlife/velvet-scoter",
+      "support": "How to identify, white patch on rear of wing"
+    },
+    {
+      "species": "Crex crex",
+      "fact": "This secretive bird is often heard rasping from tall vegetation before it is seen.",
+      "source": "https://www.rspb.org.uk/birds-and-wildlife/corncrake",
+      "support": "How to identify, hidden in tall grass or reedbeds and rasping call"
+    },
+    {
+      "species": "Polysticta stelleri",
+      "fact": "Winter flocks can dive and surface together while feeding.",
+      "source": "https://www.allaboutbirds.org/guide/Stellers_Eider/overview",
+      "support": "Cool Facts, flock members dive and surface synchronously"
+    },
+    {
+      "species": "Numenius arquata",
+      "fact": "Some Curlews that breed in Scandinavia spend the winter in the UK.",
+      "source": "https://www.rspb.org.uk/birds-and-wildlife/curlew",
+      "support": "How to identify, influx of Scandinavian breeding Curlews during UK winter"
+    },
+    {
+      "species": "Vanellus vanellus",
+      "fact": "Males perform tumbling aerial displays to attract females during the breeding season.",
+      "source": "https://www.rspb.org.uk/birds-and-wildlife/lapwing",
+      "support": "Did you know, tumbling and zooming male breeding flight"
+    },
+    {
+      "species": "Parus major",
+      "fact": "Great Tits join Blue Tits and other birds in winter flocks that search for food.",
+      "source": "https://www.rspb.org.uk/birds-and-wildlife/great-tit",
+      "support": "How to identify, roaming winter flocks with Blue Tits and others"
+    },
+    {
+      "species": "Cyanistes caeruleus",
+      "fact": "Blue Tits time their single yearly clutch to coincide with the arrival of caterpillars.",
+      "source": "https://www.rspb.org.uk/birds-and-wildlife/blue-tit",
+      "support": "Nesting, one clutch yearly synchronised with caterpillar emergence"
+    },
+    {
+      "species": "Erithacus rubecula",
+      "fact": "Young Robins have speckled brown plumage before developing the familiar red breast.",
+      "source": "https://www.rspb.org.uk/birds-and-wildlife/robin",
+      "support": "Juvenile Robin, young birds lack red feathers and are speckly brown"
+    },
+    {
+      "species": "Turdus merula",
+      "fact": "Blackbirds bind the twigs of their nests together with mud.",
+      "source": "https://www.rspb.org.uk/birds-and-wildlife/blackbird",
+      "support": "Nesting, twisted twigs glued together with mud"
+    },
+    {
+      "species": "Pica pica",
+      "fact": "A Magpie’s dark feathers reveal blue and purple wing colours and a green tail sheen up close.",
+      "source": "https://www.rspb.org.uk/birds-and-wildlife/magpie",
+      "support": "How to identify, purplish blue wing iridescence and green tail gloss, cached retrieved RSPB page"
+    },
+    {
+      "species": "Sitta europaea",
+      "fact": "Nuthatches can climb down tree trunks head first.",
+      "source": "https://www.rspb.org.uk/birds-and-wildlife/nuthatch",
+      "support": "Behaviour, climbing down trunks headfirst"
+    }
+  ]
+}

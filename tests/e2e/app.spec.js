@@ -11,6 +11,7 @@ test.describe('Coexisting with Birds', () => {
         await page.goto('/');
         // Wait for data to load (loading indicator disappears)
         await expect(page.locator('#loading')).toBeHidden({ timeout: 15000 });
+        await page.getByRole('button',{name:'Dismiss introduction',exact:true}).click();
     });
 
     test('page loads with data', async ({ page }) => {
@@ -207,13 +208,14 @@ test('wind park drawing and keyboard dismissal', async ({page}) => {
     await page.route('https://tile.openstreetmap.org/**', route => route.abort());
     await page.goto('/');
     await expect(page.locator('#loading')).toBeHidden();
+    await page.getByRole('button',{name:'Dismiss introduction',exact:true}).click();
     await page.getByRole('button', {name: 'Smøla', exact: true}).click();
     await page.getByRole('button', {name: 'Explore flight overlap'}).click();
     await expect(page.locator('#park-modal')).toHaveClass(/open/);
     await expect(page.locator('#park-diagram svg')).toBeVisible();
     await expect(page.locator('#park-summary')).toContainText('current filters');
     await expect(page.locator('#park-modal')).toContainText('not mapped habitat');
-    await page.locator('#park-diagram summary').last().focus();
+    await page.locator('#park-modal summary').last().focus();
     await page.keyboard.press('Tab');
     await expect(page.getByRole('button', {name: 'Close wind park details'})).toBeFocused();
     await page.screenshot({path: 'test-results/flight-overlap-desktop.png'});
@@ -225,6 +227,7 @@ test('empty filtered park is unknown rather than low conflict', async ({page}) =
     await page.route('https://tile.openstreetmap.org/**', route => route.abort());
     await page.goto('/');
     await expect(page.locator('#loading')).toBeHidden();
+    await page.getByRole('button',{name:'Dismiss introduction',exact:true}).click();
     await page.selectOption('#species-filter', 'Alcedo atthis');
     await page.locator('#month-slider').fill('1');
     await page.evaluate(() => document.querySelector('.turbine-marker').click());
@@ -238,6 +241,7 @@ test('mobile panel can reveal the map and species support keyboard', async ({pag
     await page.route('https://tile.openstreetmap.org/**', route => route.abort());
     await page.goto('/');
     await expect(page.locator('#loading')).toBeHidden();
+    await page.getByRole('button',{name:'Dismiss introduction',exact:true}).click();
     await page.locator('#panel-toggle').click();
     await expect(page.locator('.panel')).toBeHidden();
     await expect(page.locator('.leaflet-control-attribution')).toBeVisible();
@@ -253,6 +257,7 @@ test('bird data failure provides a recovery action', async ({page}) => {
     await page.route('**/data/birds_norway.json', route => route.fulfill({status: 503, body: 'unavailable'}));
     await page.route('https://tile.openstreetmap.org/**', route => route.abort());
     await page.goto('/');
+    await page.getByRole('button',{name:'Dismiss introduction',exact:true}).click();
     await expect(page.locator('#loading')).toContainText('could not load');
     await expect(page.getByRole('button', {name: 'Reload', exact: true})).toBeVisible();
 });
@@ -262,10 +267,11 @@ test('bird data failure provides a recovery action', async ({page}) => {
     await page.route('https://tile.openstreetmap.org/**', route => route.abort());
     await page.goto('/');
     await expect(page.locator('#loading')).toBeHidden();
+    await page.getByRole('button',{name:'Dismiss introduction',exact:true}).click();
     await page.getByRole('button', {name: 'Replay flight introduction'}).click();
     await expect(page.locator('.flight-intro__card')).toBeVisible();
-    const animation = await page.locator('.flight-intro .flight-rotor').evaluate(el => getComputedStyle(el).animationName);
-    expect(animation).toBe('none');
+    const animations = await page.locator('.flight-intro .flight-rotor').evaluateAll(elements => elements.map(el => getComputedStyle(el).animationName));
+    expect(animations).toEqual(['none', 'none']);
     await page.getByRole('button', {name: 'Dismiss introduction'}).click();
     await expect(page.locator('.flight-intro__card')).toBeHidden();
 });

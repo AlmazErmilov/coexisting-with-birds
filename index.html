@@ -26,27 +26,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coexisting with Birds | Norway</title>
+    <title>Norway bird map &amp; wind farms | Coexisting with Birds</title>
 
     <meta name="google-site-verification" content="T7rJvwLnbW6YUKxJzEk9tsMxH7ySj1Y2K7HX-RxLOH4">
 
-    <meta name="description" content="Interactive heatmap of bird observations across Norway. Screening tool for wind farms and infrastructure projects showing species distribution and Red List species.">
+    <meta name="description" content="Explore bird observations, threatened species and wind farms across Norway. Compare estimated flight heights with turbine rotors on an interactive map.">
 
     <!-- open graph -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Coexisting with Birds | Norway">
-    <meta property="og:description" content="Interactive heatmap of 10K bird observations and 393 wind turbines across Norway. Screening tool for infrastructure projects.">
+    <meta property="og:title" content="Norway bird map &amp; wind farms | Coexisting with Birds">
+    <meta property="og:description" content="Explore 250 bird species, historical observations and wind farms. See estimated flight heights and rotor overlap.">
     <meta property="og:url" content="https://coexisting-with-birds.no/">
     <meta property="og:site_name" content="Coexisting with Birds">
     <meta property="og:locale" content="en_US">
-    <meta property="og:image" content="https://coexisting-with-birds.no/assets/og-image.png">
+    <meta property="og:image" content="https://coexisting-with-birds.no/assets/og-image.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Map of Norway showing bird observations and wind turbine locations with risk scoring">
+    <meta property="og:image:alt" content="Schematic bird flight bands and a wind turbine rotor, with photographs of Norwegian bird species">
 
     <!-- twitter card (title/description fall back to og: tags automatically) -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://coexisting-with-birds.no/assets/og-image.png">
+    <meta name="twitter:image" content="https://coexisting-with-birds.no/assets/og-image.jpg">
 
     <link rel="canonical" href="https://coexisting-with-birds.no/">
 
@@ -55,7 +55,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
     <link rel="manifest" href="/assets/site.webmanifest">
-    <meta name="theme-color" content="#0a0a0a">
+    <meta name="theme-color" content="#0b1721">
 
     <script type="application/ld+json">
     {
@@ -72,6 +72,8 @@
             "name": "Norway"
         },
         "datePublished": "2026-02-28",
+        "dateModified": "2026-10-06",
+        "image": "https://coexisting-with-birds.no/assets/og-image.jpg",
         "creator": [
             {"@type": "Person", "name": "Almaz Ermilov", "url": "https://www.linkedin.com/in/almazermilov/"},
             {"@type": "Person", "name": "Michael Bitney", "url": "https://www.linkedin.com/in/michael-bitney/"},
@@ -86,287 +88,12 @@
     <link rel="stylesheet" href="css/flight-visual.css" />
 </head>
 <body>
+    <noscript><section class="noscript-note"><h1>Norway bird map</h1><p>Explore historical bird observations and wind farms. JavaScript enables the map and filters.</p><a href="about.html">Read methods and data sources</a></section></noscript>
     <div id="loading" class="loading" role="status">Loading bird data...</div>
     <div id="map-status" class="map-status" role="status" hidden></div>
     <main id="map" aria-label="Bird observations and wind parks in Norway"></main>
 
-    <div class="modal-overlay" id="info-modal">
-        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="info-title">
-            <button class="modal-close" id="info-modal-close" aria-label="Close information">&times;</button>
-
-            <h2 id="info-title">Coexisting with Birds</h2>
-            <p class="concept-text">
-                Human infrastructure (wind farms, power lines, buildings) causes significant bird mortality worldwide.
-                This tool visualizes the nearby bird observations and wind energy infrastructure in Norway,
-                enabling data driven pre-stage screening before new projects are planned.
-            </p>
-            <p class="concept-text">
-                By combining open biodiversity data with turbine locations and species flight altitudes,
-                we can identify areas where endangered species are most at risk from rotor collisions,
-                helping developers and regulators make informed decisions about site selection.
-            </p>
-
-            <h3>Red list categories</h3>
-            <p>Norwegian Red List for Species 2021, published by Artsdatabanken. Categories follow the IUCN framework.</p>
-            <table class="legend-table">
-                <tr>
-                    <td><span class="rl-badge" style="background:var(--rl-cr);font-size:11px;padding:2px 6px">CR</span></td>
-                    <td><b style="color:#e0e0e0">Critically endangered</b><br>Extremely high risk of extinction. Fewer than 50 mature individuals or 80%+ population decline over 3 generations.</td>
-                </tr>
-                <tr>
-                    <td><span class="rl-badge" style="background:var(--rl-en);font-size:11px;padding:2px 6px">EN</span></td>
-                    <td><b style="color:#e0e0e0">Endangered</b><br>Very high risk of extinction. 50 to 250 mature individuals or 50-80% population decline over 3 generations.</td>
-                </tr>
-                <tr>
-                    <td><span class="rl-badge" style="background:var(--rl-vu);font-size:11px;padding:2px 6px">VU</span></td>
-                    <td><b style="color:#e0e0e0">Vulnerable</b><br>High risk of extinction. 30-50% population decline or fewer than 10,000 mature individuals.</td>
-                </tr>
-                <tr>
-                    <td><span class="rl-badge" style="background:var(--rl-nt);color:#333;font-size:11px;padding:2px 6px">NT</span></td>
-                    <td><b style="color:#e0e0e0">Near threatened</b><br>Close to qualifying for a threatened category. Declining trends that may worsen.</td>
-                </tr>
-            </table>
-
-            <h3>Rotor zone risk</h3>
-            <p>
-                Norwegian wind turbines have hub heights of 31 to 145m and rotor diameters of 27 to 150m.
-                The rotor swept zone varies per park. In the conflict scoring, each park is evaluated against its own rotor zone from NVE data.
-            </p>
-            <table class="legend-table">
-                <tr>
-                    <td style="color:#ff6b6b;font-size:16px">&#9650;</td>
-                    <td><b style="color:#e0e0e0">High overlap</b><br>More than 50% of the species' typical flight altitude band falls within the rotor zone. Examples for this reference zone include buzzards (30-200m) and gulls (10-150m).</td>
-                </tr>
-                <tr>
-                    <td style="color:#fbc02d;font-size:16px">&#9679;</td>
-                    <td><b style="color:#e0e0e0">Partial overlap</b><br>Some flight altitude overlaps with the rotor zone but less than 50%. For the reference zone, white-tailed eagle (50-300m) has partial overlap. Classifications change with turbine dimensions.</td>
-                </tr>
-                <tr>
-                    <td style="color:#888;font-size:11px">no icon</td>
-                    <td><b style="color:#e0e0e0">Low or no overlap</b><br>Species typically flies below 30m or above 200m. Examples: small passerines (2-30m), high-migrating geese (50-800m in transit).</td>
-                </tr>
-            </table>
-            <p>Flight altitudes are approximate estimates based on general ornithological knowledge of each species' typical flight behavior. They are informed by published literature on collision risk and marine bird flight heights (see references below) but the specific [min, max] values were not directly extracted from those papers. Values represent typical local flight, not migration altitude.</p>
-
-            <p><a href="docs/bird-images.html">Bird photograph credits and licenses</a></p>
-            <h3>Heatmap and observation density</h3>
-            <p>
-                The heatmap shows observation density from a 10,000 record sample. Brighter areas have more
-                reported bird observations. This reflects <em>where people observe birds</em>, not necessarily where
-                bird density is highest. Urban areas and popular birding sites are overrepresented.
-            </p>
-            <p>
-                <b style="color:#e0e0e0">Points view</b> shows individual observations as colored circles.
-                Each species gets a unique color. Click a point to see species details, red list status,
-                flight altitude, rotor zone overlap and observation count in the current filtered view.
-            </p>
-            <table class="legend-table">
-                <tr><td style="width:100px;background:linear-gradient(to right,#1a0533,#3b0f70,#8c2981,#de4968,#fe9f6d,#fcfdbf);border-radius:4px;height:14px"></td><td>Low to high observation density (inferno color scale)</td></tr>
-                <tr><td style="text-align:center"><svg viewBox="0 0 60 90" width="20" height="30" style="vertical-align:middle"><path d="M28 35 L27 87 L33 87 L32 35 Z" fill="#ff6b6b"/><circle cx="30" cy="32" r="4" fill="#ff6b6b"/><path d="M26 28 C 16 16, 6 4, 2 0 C 14 10, 26 24, 34 35 Z" fill="#ff6b6b"/><path d="M34 28 C 46 18, 54 9, 60 3 C 53 15, 40 28, 28 36 Z" fill="#ff6b6b"/><path d="M33 36 C 40 43, 48 51, 54 58 C 47 52, 37 41, 28 32 Z" fill="#ff6b6b" opacity="0.5"/></svg></td><td>Wind turbine park (icon size = installed capacity in MW)</td></tr>
-            </table>
-
-            <h3>Wind park bird conflict scoring</h3>
-            <p>
-                Each wind park is color coded from
-                <span style="color:rgb(0,180,40);font-weight:700">green</span> (low conflict) through
-                <span style="color:rgb(200,150,40);font-weight:700">yellow</span> (moderate) to
-                <span style="color:rgb(255,0,40);font-weight:700">red</span> (high conflict)
-                based on a composite score of nearby bird observations.
-            </p>
-            <p style="font-size:12px;margin-top:8px;"><b style="color:#e0e0e0">Step 1. Find nearby observations</b></p>
-            <p style="font-size:11px;color:#aaa;">
-                For each park, all bird observations within a <b>30 km radius</b> are collected.
-                Distance is computed using a flat-Earth approximation (sufficient at Norway's scale).
-            </p>
-            <pre style="background:rgba(255,255,255,0.04);border-radius:6px;padding:10px;font-size:11px;color:#ccc;overflow-x:auto;margin:8px 0;">dx = (obs.lon - park.lon) × 111 × cos(park.lat)
-dy = (obs.lat - park.lat) × 111
-distance = sqrt(dx² + dy²)     // in km</pre>
-            <p style="font-size:10px;color:#777;margin:4px 0 0 0;">
-                111 km = one degree of latitude (Earth circumference 40 000 km / 360°). The cos(lat) term corrects longitude because meridians converge toward the poles. At 60°N (southern Norway) one degree of longitude is ~55 km, not 111. This flat earth shortcut gives the same result as the Haversine formula at distances under 30 km, while being simpler and faster to compute.
-            </p>
-
-            <p style="font-size:12px;margin-top:10px;"><b style="color:#e0e0e0">Step 2. Weight each observation</b></p>
-            <p style="font-size:11px;color:#aaa;">
-                Each observation starts with a base weight of 1. Two multipliers are applied.
-            </p>
-            <table class="legend-table" style="font-size:11px;">
-                <tr><td colspan="2" style="color:#aaa;font-weight:600;border-bottom:1px solid rgba(255,255,255,0.1)">Red list multiplier</td></tr>
-                <tr><td><span class="rl-badge" style="background:var(--rl-cr);font-size:10px;padding:1px 5px">CR</span></td><td>× 8</td></tr>
-                <tr><td><span class="rl-badge" style="background:var(--rl-en);font-size:10px;padding:1px 5px">EN</span></td><td>× 5</td></tr>
-                <tr><td><span class="rl-badge" style="background:var(--rl-vu);font-size:10px;padding:1px 5px">VU</span></td><td>× 3</td></tr>
-                <tr><td><span class="rl-badge" style="background:var(--rl-nt);color:#333;font-size:10px;padding:1px 5px">NT</span></td><td>× 1.5</td></tr>
-                <tr><td style="color:#888">Not listed</td><td>× 1 (no change)</td></tr>
-                <tr><td colspan="2" style="color:#aaa;font-weight:600;border-bottom:1px solid rgba(255,255,255,0.1);padding-top:6px">Rotor zone overlap multiplier</td></tr>
-                <tr><td style="color:#ff6b6b">High overlap</td><td>× 3</td></tr>
-                <tr><td style="color:#fbc02d">Partial overlap</td><td>× 1.5</td></tr>
-                <tr><td style="color:#888">Low / unknown</td><td>× 1 (no change)</td></tr>
-            </table>
-            <p style="font-size:10px;color:#777;margin:4px 0 0 0;">
-                Red list weights reflect the relative severity of IUCN categories: CR species face imminent extinction, so each observation is weighted heavily (×8). The specific multipliers (8, 5, 3, 1.5) are author chosen, not from a published standard, but preserve the ordering of conservation priority. The 30 km search radius approximates a typical foraging and commuting range for medium to large birds. All observations within this radius are weighted equally (no distance decay).
-            </p>
-            <pre style="background:rgba(255,255,255,0.04);border-radius:6px;padding:10px;font-size:11px;color:#ccc;overflow-x:auto;margin:8px 0;">weight = 1.0
-if species in Red List:    weight × red_list_multiplier
-if species rotor overlap:  weight × rotor_multiplier
-
-score = sum of all weighted observations within 30 km</pre>
-
-            <p style="font-size:12px;margin-top:10px;"><b style="color:#e0e0e0">Step 3. Normalize and color</b></p>
-            <p style="font-size:11px;color:#aaa;">
-                The raw score is normalized to a 0 to 1 range by dividing by 300 (empirical threshold based on our 10K sample), clamped at 1.0.
-                The color is interpolated: green channel fades out above 0.5, red channel fades in below 0.5.
-            </p>
-            <pre style="background:rgba(255,255,255,0.04);border-radius:6px;padding:10px;font-size:11px;color:#ccc;overflow-x:auto;margin:8px 0;">normalized = min(1, score / 300)
-
-Color mapping:
-  0.0 - 0.2  →  green   (low bird conflict)
-  0.2 - 0.5  →  yellow  (moderate bird conflict)
-  0.5 - 0.75 →  orange  (high bird conflict)
-  0.75 - 1.0 →  red     (very high bird conflict)</pre>
-            <p style="font-size:10px;color:#777;margin:4px 0 0 0;">
-                The normalization constant (300) is empirical, calibrated so that the 10K observation sample produces a spread of scores across all four risk levels. If the dataset grows significantly, this threshold should be recalibrated.
-            </p>
-
-            <h3>Rotor zone overlap calculation</h3>
-            <p style="font-size:11px;color:#aaa;">
-                For each species with known flight altitude data, we calculate how much of its typical
-                flight band overlaps with the park's specific rotor swept zone (derived from NVE hub height and rotor diameter data for each park).
-            </p>
-            <pre style="background:rgba(255,255,255,0.04);border-radius:6px;padding:10px;font-size:11px;color:#ccc;overflow-x:auto;margin:8px 0;">rotor_zone = [park.rotor_min, park.rotor_max]  // per-park, from NVE data
-bird_flight = [min_m, max_m]
-
-overlap = max(0, min(bird_max, rotor_max) - max(bird_min, rotor_min))
-flight_range = bird_max - bird_min
-overlap_ratio = overlap / flight_range
-
-Risk classification:
-  overlap = 0           →  low    (no icon)
-  overlap_ratio > 50%   →  high   (&#9650; red triangle)
-  overlap_ratio ≤ 50%   →  medium (&#9679; yellow dot)</pre>
-            <p style="font-size:11px;color:#aaa;">
-                Example: white-tailed eagle flies at 50 to 300m.
-                At Smøla (rotor zone 30-110m): overlap = min(300,110) - max(50,30) = 60m. Range = 250m. Ratio = 24% → <span style="color:#fbc02d;font-weight:700">medium</span>.
-                At Kjølberget (rotor zone 70-220m): overlap = min(300,220) - max(50,70) = 150m. Ratio = 60% → <span style="color:#ff6b6b;font-weight:700">high</span>.
-            </p>
-
-            <h3>Data confidence layer</h3>
-            <p style="font-size:11px;color:#aaa;">
-                When enabled, each of Norway's 357 municipalities (kommuner) is colored by observation count.
-                This shows where our sample data is dense enough for meaningful analysis and where predictions should be treated with caution.
-            </p>
-            <p style="font-size:12px;margin-top:8px;"><b style="color:#e0e0e0">Method</b></p>
-            <p style="font-size:11px;color:#aaa;">
-                Each bird observation is assigned to a kommune using point in polygon spatial join (ray-casting algorithm).
-                The observation count per kommune determines the fill color.
-            </p>
-            <table class="legend-table" style="font-size:11px;">
-                <tr><td style="width:80px;text-align:center"><span style="display:inline-block;width:20px;height:12px;border-radius:2px;background:#555;"></span></td><td><b style="color:#e0e0e0">0 observations</b> — no data, lowest confidence</td></tr>
-                <tr><td style="text-align:center"><span style="display:inline-block;width:20px;height:12px;border-radius:2px;background:#d32f2f;opacity:0.7"></span></td><td><b style="color:#e0e0e0">1 to 4 observations</b> — very low confidence</td></tr>
-                <tr><td style="text-align:center"><span style="display:inline-block;width:20px;height:12px;border-radius:2px;background:#f57c00;opacity:0.6"></span></td><td><b style="color:#e0e0e0">5 to 14 observations</b> — low confidence</td></tr>
-                <tr><td style="text-align:center"><span style="display:inline-block;width:20px;height:12px;border-radius:2px;background:#fbc02d;opacity:0.5"></span></td><td><b style="color:#e0e0e0">15 to 29 observations</b> — moderate confidence</td></tr>
-                <tr><td style="text-align:center"><span style="display:inline-block;width:20px;height:12px;border-radius:2px;background:transparent;border:1px solid rgba(255,255,255,0.1)"></span></td><td><b style="color:#e0e0e0">30+ observations</b> — good coverage (transparent)</td></tr>
-            </table>
-            <p style="font-size:11px;color:#aaa;">
-                With a 10K sample across 357 kommuner, the average is ~28 observations per kommune.
-                Inland mountain and northern municipalities typically have fewer observations due to lower population and fewer citizen-science contributors.
-                Grey and red areas should not be used for risk assessment without additional data collection.
-            </p>
-
-            <h3>Data sources</h3>
-
-            <div class="source-card">
-                <div class="src-name">Bird observations</div>
-                <div class="src-detail">
-                    <a href="https://www.gbif.org/" target="_blank">GBIF</a> (Global Biodiversity Information Facility)<br>
-                    33.7M georeferenced bird records in Norway. Sample: 10,000 records (833 per month).<br>
-                    API: <code style="font-size:10px;color:#999">api.gbif.org/v1/occurrence/search</code> | License: CC BY 4.0 / CC0 | No auth required
-                </div>
-            </div>
-
-            <div class="source-card">
-                <div class="src-name">Wind turbines</div>
-                <div class="src-detail">
-                    <a href="https://www.nve.no/" target="_blank">NVE</a> (Norwegian Water Resources and Energy Directorate)
-                    via <a href="https://huggingface.co/datasets/rebase-energy/nve-windpower-data" target="_blank">HuggingFace</a><br>
-                    393 turbine records across 62 wind parks. Includes hub height, rotor diameter, capacity.<br>
-                    License: NVE open data | No auth required
-                </div>
-            </div>
-
-            <div class="source-card">
-                <div class="src-name">Municipality boundaries</div>
-                <div class="src-detail">
-                    <a href="https://www.kartverket.no/" target="_blank">Kartverket</a> via
-                    <a href="https://github.com/robhop/fylker-og-kommuner" target="_blank">GitHub</a><br>
-                    357 Norwegian municipalities (kommuner), simplified GeoJSON.<br>
-                    License: CC BY 4.0 | No auth required
-                </div>
-            </div>
-
-            <div class="source-card">
-                <div class="src-name">Red list</div>
-                <div class="src-detail">
-                    <a href="https://artsdatabanken.no/rodlisteforarter2021/Artsgruppene/fugler" target="_blank">Artsdatabanken</a>
-                    Norwegian Red List for Species 2021<br>
-                    56 bird species with IUCN categories (CR, EN, VU, NT). Manually curated.
-                </div>
-            </div>
-
-            <div class="source-card">
-                <div class="src-name">Flight altitude</div>
-                <div class="src-detail">
-                    98 species with typical flight altitude ranges [min, max] in meters AGL.
-                    Represents local/foraging flight, not migration altitude.
-                    Values are approximate estimates based on general ornithological knowledge. The following publications informed the overall approach and provided context for specific species groups:
-                </div>
-                <div class="src-detail" style="margin-top:6px;font-size:10px;line-height:1.6;color:#777;">
-                    <b style="color:#aaa">Johnston A. et al. (2014)</b>
-                    Modelling flight heights of marine birds to more accurately assess collision risk with offshore wind turbines.
-                    <i>Journal of Applied Ecology</i>, 51(1), 31-41.
-                    <a href="https://doi.org/10.1111/1365-2664.12191" target="_blank">doi:10.1111/1365-2664.12191</a><br>
-                    <b style="color:#aaa">Band W. et al. (2007)</b>
-                    Developing field and analytical methods to assess avian collision risk at wind farms.
-                    In: de Lucas M., Janss G., Ferrer M. (eds) <i>Birds and Wind Farms</i>. Quercus, Madrid.<br>
-                    <b style="color:#aaa">Scottish Natural Heritage (2000, rev. 2017)</b>
-                    Windfarms and birds: calculating a theoretical collision risk assuming no avoiding action.
-                    <i>SNH Guidance Note</i>.<br>
-                    <b style="color:#aaa">Dahl E.L. et al. (2012)</b>
-                    Reduced breeding success in white-tailed eagles at Smøla windfarm, western Norway.
-                    <i>Environmental Research Letters</i>, 7(4).
-                    <a href="https://doi.org/10.1088/1748-9326/7/4/044009" target="_blank">doi:10.1088/1748-9326/7/4/044009</a><br>
-                    <b style="color:#aaa">BirdLife Norge</b>
-                    Species fact sheets and field guides.
-                    <a href="https://www.birdlife.no/" target="_blank">birdlife.no</a>
-                </div>
-            </div>
-
-            <h3>Limitations</h3>
-            <p>
-                This is a screening tool, not a regulatory environmental impact assessment.
-                Observation density reflects citizen-science reporting patterns, not true abundance.
-                Flight altitudes are approximate estimates, not site-specific measurements.
-                For actual wind farm planning, site-specific radar surveys and environmental assessments are required.
-            </p>
-
-            <h3>Team</h3>
-            <p style="font-size:11px;color:#aaa;">
-                Built at <a href="https://www.tekna.no/en/events/hackathon-code-your-way-to-a-greener-world-51380/" target="_blank" style="color:#4ecdc4">Tekna Hackathon: Code your way to a greener world</a> (Feb 27-28, 2026, Oslo).
-            </p>
-            <table class="legend-table" style="font-size:11px;">
-                <tr><td><a href="https://www.linkedin.com/in/almazermilov/" target="_blank" style="color:#4ecdc4">Almaz Ermilov</a></td></tr>
-                <tr><td><a href="https://www.linkedin.com/in/michael-bitney/" target="_blank" style="color:#4ecdc4">Michael Bitney</a></td></tr>
-                <tr><td><a href="https://www.linkedin.com/in/kuzkindmitriy/" target="_blank" style="color:#4ecdc4">Dmitri Kuzkin</a></td></tr>
-                <tr><td><a href="https://www.linkedin.com/in/marianhelcloverli/" target="_blank" style="color:#4ecdc4">Marian Øverli</a></td></tr>
-            </table>
-            <p style="font-size:11px;margin-top:8px;">
-                <a href="https://github.com/AlmazErmilov/coexisting-with-birds" target="_blank" style="color:#4ecdc4">GitHub repository</a>
-                &nbsp;·&nbsp;
-                <a href="https://coexisting-with-birds.no/" target="_blank" style="color:#4ecdc4">Live demo</a>
-            </p>
-            <p style="color:#555;font-size:10px;margin-top:12px;text-align:center">
-                All data from open sources. Code is open for hackathon purposes.
-            </p>
-        </div>
-    </div>
+    <div class="modal-overlay" id="info-modal"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="info-title"><button class="modal-close" id="info-modal-close" aria-label="Close information">&times;</button><h2 id="info-title">Coexisting with Birds</h2><p>Explore bird observations and wind farms across Norway.</p><ul class="help-steps"><li><b>Map</b><span>Filter species or months.</span></li><li><b>Birds</b><span>Use ⓘ for facts and a sample summary.</span></li><li><b>Rotor</b><span>Open a wind park to compare flight heights.</span></li></ul><details class="compact-help"><summary>Data &amp; limits</summary><p>9,996 historical GBIF records, 250 species and 62 wind parks. Sample retrieved February 2026, across observation years.</p><p>Altitude bands and scores are screening estimates. Nearby records do not establish habitat or collision probability.</p><p>The local snapshot works after a successful online visit. External map tiles need a connection.</p></details><p class="help-links"><a href="about.html">Methods &amp; sources</a><a href="docs/bird-images.html">Photo credits</a></p></div></div>
 
     <div class="modal-overlay" id="kommune-modal">
         <div class="modal kommune-modal" role="dialog" aria-modal="true" aria-labelledby="kommune-name">
@@ -385,11 +112,11 @@ Risk classification:
                     <input type="number" id="kommune-rotor" min="10" max="500" step="1">
                 </div>
             </div>
-            <p class="study-note">Hypothetical turbine dimensions, adjustable above. Municipality scores count species and use an uncalibrated normalization of 60. They cannot be compared directly with park scores or collision probabilities.</p>
+            <p class="study-note">Hypothetical turbine. Adjust dimensions above.</p>
             <div id="kommune-diagram"></div>
             <div id="kommune-swept" class="rotor-zone-display"></div>
 
-            <div id="kommune-risk" style="margin:10px 0;font-size:16px;font-weight:700"></div>
+            <details class="compact-help"><summary>How the municipality score works</summary><p>Counts unique species using an uncalibrated normalization of 60. Compare estimated heights, not scores between municipalities and parks.</p></details><div id="kommune-risk" style="margin:10px 0;font-size:16px;font-weight:700"></div>
             <div id="kommune-species-list"></div>
             <div id="kommune-footnote" style="color:#666;font-size:10px;margin-top:10px;border-top:1px solid rgba(255,255,255,0.1);padding-top:8px"></div>
         </div>
@@ -411,7 +138,7 @@ Risk classification:
             </div>
         </div>
 
-        <p id="snapshot-status" class="snapshot-status" role="status">Preparing a local snapshot…</p>
+        <p class="sample-caption">Historical sample · February 2026 <a href="about.html">ⓘ</a></p><p id="snapshot-status" class="snapshot-status" role="status">Preparing a local snapshot…</p>
         <div class="view-toggle">
             <button class="view-btn active" data-view="heatmap">Heatmap</button>
             <button class="view-btn" data-view="points">Points</button>
@@ -452,11 +179,11 @@ Risk classification:
                     Show uncertainty by kommune
                 </label>
             </div>
-            <div id="confidence-info" style="font-size:10px;color:#666;margin-top:3px;">Grey = no data, red = few observations (low confidence)</div>
+            <div id="confidence-info" style="font-size:10px;color:#666;margin-top:3px;">Grey: no data · red: sparse sample</div>
         </div>
 
         <div class="filter-section">
-            <label>Top species in view</label><p style="font-size:10px;color:#a4b7c3">Historical sample, up to 833 records per month across years. This is not a daily population census.</p>
+            <label>Birds in view</label>
             <div class="species-list" id="species-list"></div>
         </div>
     </aside>
@@ -511,13 +238,14 @@ Risk classification:
             <p class="drawing-eyebrow">Wind park study · vertical section</p>
             <h2 id="park-name"></h2>
             <p id="park-meta"></p>
-            <p class="study-note">One representative turbine using park average dimensions from the NVE sample.</p>
+            <p class="study-note">Representative turbine · NVE park averages</p>
             <div id="park-diagram"></div>
             <p id="park-summary"></p>
             <div id="park-species" class="park-species"></div>
-            <p class="study-note">Bird records within 30 km indicate nearby observations, not mapped habitat or confirmed flight paths. Flight bands are approximate estimates. Overlap is a screening indicator, not a collision probability.</p>
+            <details class="compact-help"><summary>Data &amp; limits</summary><p>Bird records within 30 km indicate nearby observations, not mapped habitat or confirmed flight paths. Flight bands are approximate estimates. Overlap is a screening indicator, not a collision probability.</p></details>
         </div>
     </div>
+    <div class="modal-overlay" id="bird-modal"><div class="modal bird-detail-modal" role="dialog" aria-modal="true" aria-labelledby="bird-name"><button class="modal-close" aria-label="Close bird details">&times;</button><div id="bird-card"></div></div></div>
     <button class="panel-toggle" id="panel-toggle" aria-expanded="true" aria-controls="filter-panel">Filters &amp; birds</button>
     <button class="hide-ui-btn" id="hide-ui-btn">
         Hide UI <span class="shortcut">[H]</span>

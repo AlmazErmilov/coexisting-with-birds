@@ -5,6 +5,7 @@ import {
     MAX_RENDERED_POINTS, escapeHtml
 } from './data.js';
 import { birdThumbnail } from './bird-images.js';
+import { birdIdentity, birdDetailsButton } from './bird-cards.js';
 import { getAltRisk, speciesColor, pointInFeature } from './scoring.js';
 
 // Filter predicates (pure functions, independently testable)
@@ -107,7 +108,7 @@ export function applyFilters() {
             const kommune = d._kl?.feature?.properties?.kommunenavn || d._kl?.feature?.properties?.name || '';
             const statsHtml = `<br><span style="color:#888;font-size:11px;border-top:1px solid rgba(255,255,255,0.15);display:block;margin-top:4px;padding-top:4px">${kommune ? escapeHtml(kommune) + ' · ' : ''}${sCount} obs of this species in view (${pct}%)</span>`;
 
-            marker.bindPopup(`<b style="font-style:italic">${escapeHtml(d.species)}</b>${rlHtml}${altHtml}${riskHtml}<br>Month: ${MONTH_NAMES[d.month] || '?'}<br>County: ${escapeHtml(d.county || '?')}${statsHtml}`);
+            marker.bindPopup(`<div class="bird-popup-head">${birdDetailsButton(d.species, birdThumbnail(d.species))}${birdIdentity(d.species)}</div>${rlHtml}${altHtml}${riskHtml}<br>Month: ${MONTH_NAMES[d.month] || '?'}<br>County: ${escapeHtml(d.county || '?')}${statsHtml}`);
             pointsLayer.addLayer(marker);
         }
     }
@@ -151,11 +152,11 @@ export function updateSpeciesList(data) {
             ? `<span class="alt-tag">${altText}${riskHtml}</span>`
             : '';
         return `
-                <button type="button" class="species-item" data-species="${escapeHtml(name)}" aria-label="Filter ${escapeHtml(name)}">
+                <div class="species-row"><button type="button" class="species-item" data-species="${escapeHtml(name)}" aria-label="Filter ${escapeHtml(name)}">
                     ${birdThumbnail(name)}
-                    <span class="species-name">${badge}<span>${escapeHtml(name)}</span>${altHtml}</span>
+                    <span class="species-name">${badge}${birdIdentity(name)}${altHtml}</span>
                     <span class="species-count">${count}</span>
-                </button>`;
+                </button>${birdDetailsButton(name)}</div>`;
     }).join('');
 }
 
