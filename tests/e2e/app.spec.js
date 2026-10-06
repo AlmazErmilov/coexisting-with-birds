@@ -2,6 +2,12 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Coexisting with Birds', () => {
     test.beforeEach(async ({ page }) => {
+        // Automated tests never fetch the community tile service.
+        await page.route('https://tile.openstreetmap.org/**', route => route.fulfill({
+            contentType: 'image/png',
+            body: Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a3ioAAAAASUVORK5CYII=', 'base64')
+        }));
+        await page.route('**/_vercel/**', route => route.fulfill({contentType: 'text/javascript', body: ''}));
         await page.goto('/');
         // Wait for data to load (loading indicator disappears)
         await expect(page.locator('#loading')).toBeHidden({ timeout: 15000 });
@@ -194,4 +200,72 @@ test.describe('Coexisting with Birds', () => {
         expect(newSwept).not.toBe(initialSwept);
         expect(newSwept).toMatch(/Swept zone/);
     });
+});
+
+
+test('wind park drawing and keyboard dismissal', async ({page}) => {
+    await page.route('https://tile.openstreetmap.org/**', route => route.abort());
+    await page.goto('/');
+    await expect(page.locator('#loading')).toBeHidden();
+    await page.getByRole('button', {name: 'Smøla', exact: true}).click();
+    await page.getByRole('button', {name: 'Explore flight overlap'}).click();
+    await expect(page.locator('#park-modal')).toHaveClass(/open/);
+    await expect(page.locator('#park-diagram svg')).toBeVisible();
+    await expect(page.locator('#park-summary')).toContainText('current filters');
+    await expect(page.locator('#park-modal')).toContainText('not mapped habitat');
+    await page.locator('#park-diagram summary').last().focus();
+    await page.keyboard.press('Tab');
+    await expect(page.getByRole('button', {name: 'Close wind park details'})).toBeFocused();
+    await page.screenshot({path: 'test-results/flight-overlap-desktop.png'});
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#park-modal')).not.toHaveClass(/open/);
+});
+
+test('empty filtered park is unknown rather than low conflict', async ({page}) => {
+    await page.route('https://tile.openstreetmap.org/**', route => route.abort());
+    await page.goto('/');
+    await expect(page.locator('#loading')).toBeHidden();
+    await page.selectOption('#species-filter', 'Alcedo atthis');
+    await page.locator('#month-slider').fill('1');
+    await page.evaluate(() => document.querySelector('.turbine-marker').click());
+    await expect(page.locator('.leaflet-popup-content')).toContainText('No nearby records');
+    await page.getByRole('button', {name: 'Explore flight overlap'}).click();
+    await expect(page.locator('#park-summary')).toContainText('cannot be assessed');
+});
+
+test('mobile panel can reveal the map and species support keyboard', async ({page}) => {
+    await page.setViewportSize({width: 390, height: 844});
+    await page.route('https://tile.openstreetmap.org/**', route => route.abort());
+    await page.goto('/');
+    await expect(page.locator('#loading')).toBeHidden();
+    await page.locator('#panel-toggle').click();
+    await expect(page.locator('.panel')).toBeHidden();
+    await expect(page.locator('.leaflet-control-attribution')).toBeVisible();
+    await page.locator('#panel-toggle').click();
+    const first = page.locator('.species-item').first();
+    const species = await first.getAttribute('data-species');
+    await first.press('Enter');
+    await expect(page.locator('#species-filter')).toHaveValue(species);
+    await page.screenshot({path: 'test-results/birds-mobile.png'});
+});
+
+test('bird data failure provides a recovery action', async ({page}) => {
+    await page.route('**/data/birds_norway.json', route => route.fulfill({status: 503, body: 'unavailable'}));
+    await page.route('https://tile.openstreetmap.org/**', route => route.abort());
+    await page.goto('/');
+    await expect(page.locator('#loading')).toContainText('could not load');
+    await expect(page.getByRole('button', {name: 'Reload', exact: true})).toBeVisible();
+});
+
+ test('intro respects reduced motion and has replay and dismiss controls', async ({page}) => {
+    await page.emulateMedia({reducedMotion: 'reduce'});
+    await page.route('https://tile.openstreetmap.org/**', route => route.abort());
+    await page.goto('/');
+    await expect(page.locator('#loading')).toBeHidden();
+    await page.getByRole('button', {name: 'Replay flight introduction'}).click();
+    await expect(page.locator('.flight-intro__card')).toBeVisible();
+    const animation = await page.locator('.flight-intro .flight-rotor').evaluate(el => getComputedStyle(el).animationName);
+    expect(animation).toBe('none');
+    await page.getByRole('button', {name: 'Dismiss introduction'}).click();
+    await expect(page.locator('.flight-intro__card')).toBeHidden();
 });

@@ -4,40 +4,77 @@ import {
     RED_LIST, RED_LIST_CATEGORIES, FLIGHT_ALT, SEARCH_RADIUS_KM,
     DEFAULT_HUB_HEIGHT, DEFAULT_ROTOR_DIAMETER, MONTH_NAMES, escapeHtml
 } from './data.js';
-import { scorePark, scoreToColor, riskLabel, getAltRisk, pointInFeature, scoreKommune } from './scoring.js';
+import { scorePark, scoreToColor, riskLabel, getAltRisk, pointInFeature, scoreKommune, distanceKm } from './scoring.js';
 import {
     initUI, updateState, toggleUI, applyFilters, setView,
     toggleTurbines, toggleConfidence, getFilteredData
 } from './ui.js';
 
+import { initOfflineSnapshot } from './offline.js';
+import { BASEMAP } from './map-config.js';
+import { flightDiagram, initFlightIntro } from './flight-visual.js';
+import { birdThumbnail, initBirdImages } from './bird-images.js';
+import { openDialog, closeDialog, initDialogs } from './dialogs.js';
+
+initOfflineSnapshot();
+initDialogs();
+initBirdImages();
+initFlightIntro();
+
 // State
 let allData = [];
 let kommuneLayer = null;
 let turbineLayer = null;
+const parkMarkers = [];
+let selectedPark = null;
+let screeningRadius = null;
 
 // Init map centered on Norway
 const map = L.map('map', {
     center: [64.5, 14],
     zoom: 5,
     zoomControl: false,
-    attributionControl: false
+    attributionControl: true
 });
 
 L.control.zoom({ position: 'topright' }).addTo(map);
 
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; OpenStreetMap &copy; CARTO',
-    maxZoom: 18
-}).addTo(map);
+const basemap = L.tileLayer(BASEMAP.url, BASEMAP.options).addTo(map);
+const mapStatus = document.getElementById('map-status');
+let tileErrors = 0;
+basemap.on('loading', () => { tileErrors = 0; });
+basemap.on('tileerror', () => { tileErrors++; });
+basemap.on('load', () => {
+    mapStatus.hidden = tileErrors === 0;
+    updateState('basemapUnavailable', tileErrors > 0);
+    mapStatus.textContent = 'Basemap unavailable. Local municipality outlines remain visible; observations and studies still work.';
+    if (kommuneLayer && tileErrors > 0) kommuneLayer.setStyle({ color: '#5d8195', weight: .8, fillColor: '#203844', fillOpacity: .45 });
+});
+
+async function loadJSON(path) {
+    const response = await fetch(path);
+    if (!response.ok) throw new Error('Data request failed');
+    return response.json();
+}
 
 // Load data
 Promise.all([
-    fetch('data/birds_norway.json').then(r => r.json()),
-    fetch('data/kommuner.geojson').then(r => r.json()).catch(() => null),
-    fetch('data/wind_turbines.json').then(r => r.json()).catch(() => null)
+    loadJSON('data/birds_norway.json'),
+    loadJSON('data/kommuner.geojson').catch(() => null),
+    loadJSON('data/wind_turbines.json').catch(() => null)
 ]).then(([birdData, kommuneGeoJSON, turbineData]) => {
     document.getElementById('loading').style.display = 'none';
+    if (!Array.isArray(birdData.observations)) throw new Error('Invalid bird data');
     allData = birdData.observations;
+    const missing = [];
+    if (!kommuneGeoJSON) missing.push('Municipality boundaries');
+    if (!turbineData) missing.push('Wind park data');
+    if (missing.length) {
+        const warning = document.createElement('p');
+        warning.className = 'confidence-warning';
+        warning.textContent = missing.join(' and ') + ' unavailable. Reload to try again.';
+        document.querySelector('.panel').prepend(warning);
+    }
 
     document.getElementById('stat-obs').textContent = allData.length.toLocaleString();
     const uniqueSpecies = new Set(allData.map(d => d.species));
@@ -61,10 +98,10 @@ Promise.all([
     if (kommuneGeoJSON) {
         kommuneLayer = L.geoJSON(kommuneGeoJSON, {
             style: {
-                color: 'rgba(255,255,255,0.12)',
+                color: tileErrors ? '#5d8195' : 'rgba(255,255,255,0.12)',
                 weight: 0.5,
-                fillColor: 'transparent',
-                fillOpacity: 0
+                fillColor: tileErrors ? '#203844' : 'transparent',
+                fillOpacity: tileErrors ? .45 : 0
             },
             onEachFeature: (feature, layer) => {
                 const name = feature.properties.kommunenavn || feature.properties.name || '';
@@ -100,7 +137,7 @@ Promise.all([
         const parks = turbineData.parks;
         document.getElementById('turbine-count').textContent = parks.length + ' parks';
         document.getElementById('turbine-info').textContent =
-            turbineData.metadata.total_turbines + ' turbines total (NVE open data)';
+            turbineData.metadata.total_turbines + ' turbine records in the NVE sample';
 
         parks.forEach(park => {
             const { normScore, riskSpecies, nearbyCount } = scorePark(park, allData);
@@ -108,7 +145,7 @@ Promise.all([
             park._nearby = nearbyCount;
             park._riskSpecies = riskSpecies;
 
-            const parkColor = scoreToColor(normScore);
+            const parkColor = nearbyCount < 15 ? '#9daeb8' : scoreToColor(normScore);
             const sz = Math.max(20, Math.min(36, Math.sqrt(park.capacity_mw) * 4));
             const szH = Math.round(sz * 1.5);
             const icon = L.divIcon({
@@ -129,34 +166,27 @@ Promise.all([
                 iconSize: [sz, szH],
                 iconAnchor: [sz / 2, szH]
             });
-            const marker = L.marker([park.lat, park.lon], { icon });
+            const marker = L.marker([park.lat, park.lon], { icon, title: park.name, alt: park.name });
 
-            const risk = riskLabel(normScore);
-            const topRisk = Object.entries(riskSpecies)
-                .sort((a, b) => b[1].count - a[1].count)
-                .slice(0, 4)
-                .map(([sp, d]) => {
-                    const badge = d.rl ? `<span style="color:${RED_LIST_CATEGORIES[d.rl]?.color};font-weight:700">${d.rl}</span> ` : '';
-                    const riskMark = d.risk === 'high' ? ' &#9650;' : d.risk === 'medium' ? ' &#9679;' : '';
-                    return `${badge}<i>${escapeHtml(sp)}</i>${riskMark} (${d.count})`;
-                }).join('<br>');
-
-            const hubHtml = park.hub_height
-                ? `<br>Hub: ${park.hub_height}m | Rotor: ${park.rotor_diameter}m`
-                : '';
-            const sweptHtml = park.rotor_min != null
-                ? ` | Swept: ${park.rotor_min}-${park.rotor_max}m`
-                : '';
-
-            marker.bindPopup(
-                `<b>${escapeHtml(park.name)}</b><br>` +
-                `${park.turbine_count} turbines | ${park.capacity_mw} MW` +
-                hubHtml + sweptHtml +
-                `<br><span style="color:${risk.color};font-weight:700">${risk.text}</span>` +
-                ` <span style="color:#888">(${nearbyCount} obs within ${SEARCH_RADIUS_KM}km)</span>` +
-                (topRisk ? `<br><span style="font-size:11px">${topRisk}</span>` : '') +
-                `<br><span style="color:#888;font-size:10px">${escapeHtml(park.municipality)}, ${escapeHtml(park.county)}</span>`
-            );
+            marker.bindPopup(parkPopup(park, { normScore, riskSpecies, nearbyCount }));
+            marker.on('popupopen', () => {
+                if (screeningRadius) map.removeLayer(screeningRadius);
+                screeningRadius = L.circle([park.lat, park.lon], {
+                    radius: SEARCH_RADIUS_KM * 1000, color: '#80dace', weight: 1,
+                    dashArray: '5 7', fillOpacity: .04, interactive: false
+                }).addTo(map);
+                const button = marker.getPopup().getElement()?.querySelector('.park-details-button');
+                if (button) button.onclick = () => {
+                    selectedPark = park;
+                    renderParkDetail();
+                    openDialog('park-modal');
+                };
+            });
+            marker.on('popupclose', () => {
+                if (screeningRadius) map.removeLayer(screeningRadius);
+                screeningRadius = null;
+            });
+            parkMarkers.push({ park, marker });
             turbineLayer.addLayer(marker);
         });
         turbineLayer.addTo(map);
@@ -182,7 +212,8 @@ Promise.all([
         allData,
         currentView: 'heatmap',
         kommuneLayer,
-        confidenceMode: false
+        confidenceMode: false,
+        onFiltersChange: updateParks
     });
 
     applyFilters();
@@ -200,7 +231,7 @@ Promise.all([
     });
 
     document.querySelector('.info-btn').addEventListener('click', () => {
-        document.getElementById('info-modal').classList.add('open');
+        openDialog('info-modal');
     });
 
     // Species list click delegation
@@ -225,11 +256,11 @@ Promise.all([
 
         let hub = parseFloat(hubInput.value);
         let diam = parseFloat(rotorInput.value);
-        if (isNaN(hub) || hub <= 0 || hub > 500) {
+        if (!Number.isFinite(hub) || hub < 10 || hub > 500) {
             hub = DEFAULT_HUB_HEIGHT;
             hubInput.value = hub;
         }
-        if (isNaN(diam) || diam <= 0 || diam > 500) {
+        if (!Number.isFinite(diam) || diam < 10 || diam > 500) {
             diam = DEFAULT_ROTOR_DIAMETER;
             rotorInput.value = diam;
         }
@@ -243,6 +274,10 @@ Promise.all([
         const filtered = getFilteredData();
         const result = scoreKommune(currentKommuneLayer, filtered, rotorMin, rotorMax);
         const risk = riskLabel(result.normScore);
+        document.getElementById('kommune-diagram').innerHTML = flightDiagram({
+            hubHeight: hub, rotorDiameter: diam, rotorMin, rotorMax,
+            species: Object.entries(result.riskSpecies).sort((a,b) => b[1].count-a[1].count).slice(0,4).map(([sp]) => sp)
+        });
 
         document.getElementById('kommune-stats').textContent =
             `${result.observationCount.toLocaleString()} observations, ${result.speciesCount} species`;
@@ -265,6 +300,9 @@ Promise.all([
         const riskEl = document.getElementById('kommune-risk');
         if (result.observationCount === 0) {
             riskEl.innerHTML = '<span class="kommune-empty">No data available</span>';
+        } else if (result.observationCount < 15) {
+            riskEl.textContent = 'Sparse records · conflict uncertain';
+            riskEl.style.color = '#aebbc2';
         } else {
             riskEl.innerHTML = `<span style="color:${risk.color}">${risk.text}</span>`;
         }
@@ -345,35 +383,80 @@ Promise.all([
         hubInput.value = DEFAULT_HUB_HEIGHT;
         rotorInput.value = DEFAULT_ROTOR_DIAMETER;
         recalculate();
-        document.getElementById('kommune-modal').classList.add('open');
+        openDialog('kommune-modal');
     }
+}).catch(() => {
+    const loading = document.getElementById('loading');
+    loading.style.display = 'block';
+    loading.textContent = 'Bird data could not load. Check your connection and reload.';
+    const retry = document.createElement('button');
+    retry.textContent = 'Reload';
+    retry.addEventListener('click', () => location.reload());
+    loading.appendChild(retry);
 });
+
+function parkPopup(park, result) {
+    const risk = riskLabel(result.normScore);
+    const label = result.nearbyCount === 0 ? 'No nearby records in this view' : result.nearbyCount < 15 ? 'Sparse records · conflict uncertain' : risk.text;
+    return '<b>' + escapeHtml(park.name) + '</b><br>' +
+        park.turbine_count + ' turbines in sample | ' + park.capacity_mw + ' MW<br>' +
+        '<span style="color:' + (result.nearbyCount < 15 ? '#aebbc2' : risk.color) + '">' + label + '</span><br>' +
+        result.nearbyCount + ' observations within ' + SEARCH_RADIUS_KM + ' km · current filters<br><small>Dashed circle: screening radius, not habitat</small><br>' +
+        '<button type="button" class="park-details-button">Explore flight overlap</button>';
+}
+function updateParks(filtered) {
+    parkMarkers.forEach(({park, marker}) => {
+        const result = scorePark(park, filtered);
+        park._result = result;
+        marker.setPopupContent(parkPopup(park, result));
+        const color = result.nearbyCount < 15 ? '#9daeb8' : scoreToColor(result.normScore);
+        marker.getIcon().options.html = marker.getIcon().options.html.replace(/fill="(?!rgba)[^"]*"/g, 'fill="' + color + '"');
+        marker.getElement()?.querySelectorAll('[fill]').forEach(el => {
+            if (!el.getAttribute('fill').startsWith('rgba')) el.setAttribute('fill', color);
+        });
+    });
+    if (selectedPark && document.getElementById('park-modal').classList.contains('open')) renderParkDetail();
+}
+function renderParkDetail() {
+    const park = selectedPark;
+    const result = park._result || scorePark(park, getFilteredData());
+    const nearby = getFilteredData().filter(o => distanceKm(park.lat, park.lon, o.lat, o.lon) < SEARCH_RADIUS_KM);
+    const counts = new Map();
+    nearby.forEach(o => counts.set(o.species, (counts.get(o.species) || 0) + 1));
+    const species = [...counts].sort((a,b) => b[1]-a[1]);
+    document.getElementById('park-name').textContent = park.name;
+    document.getElementById('park-meta').textContent = park.municipality + ' · ' + park.turbine_count + ' sampled turbines · ' + park.capacity_mw + ' MW';
+    document.getElementById('park-diagram').innerHTML = flightDiagram({
+        hubHeight: park.hub_height, rotorDiameter: park.rotor_diameter,
+        rotorMin: park.rotor_min, rotorMax: park.rotor_max,
+        species: [...species].sort((a,b) => {
+            const rank = {high: 3, medium: 2, low: 1};
+            return (rank[getAltRisk(b[0], park.rotor_min, park.rotor_max)] || 0) -
+                (rank[getAltRisk(a[0], park.rotor_min, park.rotor_max)] || 0) || b[1] - a[1];
+        }).slice(0,4).map(([sp]) => sp)
+    });
+    document.getElementById('park-summary').textContent = result.nearbyCount + ' nearby records · ' + species.length + ' species · current filters. ' +
+        (result.nearbyCount === 0 ? 'No records, so conflict cannot be assessed.' : result.nearbyCount < 15 ? 'Sparse records, so confidence is limited.' : riskLabel(result.normScore).text);
+    // ASVS 1.2.1: encode dataset names at the HTML output boundary.
+    document.getElementById('park-species').innerHTML = species.slice(0,12).map(([sp,count]) =>
+        '<div class="park-bird">' + birdThumbnail(sp) + '<span><i>' + escapeHtml(sp) + '</i><small>' +
+        (FLIGHT_ALT[sp] ? FLIGHT_ALT[sp].join('–') + ' m estimated flight band' : 'Flight altitude unknown') +
+        '</small></span><span>' + count + ' records</span></div>').join('');
+}
 
 // Global event listeners (need to work before data loads)
 document.getElementById('hide-ui-btn').addEventListener('click', toggleUI);
 
-document.getElementById('info-modal').addEventListener('click', function (e) {
-    if (e.target === this) this.classList.remove('open');
-});
-
-document.getElementById('info-modal-close').addEventListener('click', () => {
-    document.getElementById('info-modal').classList.remove('open');
-});
-
-document.getElementById('kommune-modal').addEventListener('click', function (e) {
-    if (e.target === this) this.classList.remove('open');
-});
-
-document.getElementById('kommune-modal-close').addEventListener('click', () => {
-    document.getElementById('kommune-modal').classList.remove('open');
-});
-
 document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
-        document.getElementById('info-modal').classList.remove('open');
-        document.getElementById('kommune-modal').classList.remove('open');
+        document.querySelectorAll('.modal-overlay.open').forEach(closeDialog);
         return;
     }
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') return;
     if (e.key === 'h' || e.key === 'H') toggleUI();
+});
+
+document.getElementById('panel-toggle').addEventListener('click', e => {
+    const collapsed = document.body.classList.toggle('panel-collapsed');
+    e.currentTarget.setAttribute('aria-expanded', String(!collapsed));
 });

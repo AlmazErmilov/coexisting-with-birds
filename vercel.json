@@ -1,0 +1,30 @@
+{
+  "headers": [
+    {
+      "source": "/service-worker.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'sha256-iyp17wjkLD44TLK1nrd2DpJ67FJIpIWd7pbspOQZU2k=' 'sha256-ONRZYZuShNwVHh3BUwUvQfVbsjTNyL0canAx8F8t4SY=' 'sha256-tkH0P/L/rW0hUE9NBDYplfrm/alB8g/BRZWoT9gftVk='; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://tile.openstreetmap.org; connect-src 'self' https://vitals.vercel-insights.com https://va.vercel-scripts.com; font-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'self'"
+        }
+      ]
+    }
+  ]
+}

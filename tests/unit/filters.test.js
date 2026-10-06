@@ -67,3 +67,8 @@ describe('FILTER_PREDICATES', () => {
         });
     });
 });
+
+it('accepted GBIF names retain red list and flight reference metadata', () => {
+    expect(FILTER_PREDICATES['red-list']({ species: 'Mareca penelope' })).toBe(true);
+    expect(FILTER_PREDICATES['rotor-risk']({ species: 'Chroicocephalus ridibundus' })).toBe(true);
+});

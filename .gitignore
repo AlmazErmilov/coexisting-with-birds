@@ -4,3 +4,11 @@ __pycache__/
 .env
 node_modules/
 test-results/
+.vercel/
+playwright-report/
+output/
+
+.env.*
+!.env.example
+*.pem
+*.key

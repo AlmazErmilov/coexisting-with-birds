@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">Illustration placeholder, not a species photo</title>
+  <rect width="64" height="64" rx="10" fill="#19333a"/>
+  <circle cx="32" cy="32" r="23" fill="#244a52"/>
+  <path d="M12 38c5-8 13-12 23-11 4-7 12-9 18-6-4 1-6 3-7 6 5 2 8 6 9 11-5-3-10-4-15-3-6 8-17 11-28 3Z" fill="#d8e5df"/>
+  <path d="m51 28 8 3-8 3Z" fill="#e8b85b"/>
+  <circle cx="46" cy="28" r="1.5" fill="#19333a"/>
+  <circle cx="50" cy="50" r="8" fill="#e8b85b"/>
+  <text x="50" y="53" text-anchor="middle" font-family="sans-serif" font-size="9" font-weight="700" fill="#19333a">?</text>
+</svg>
