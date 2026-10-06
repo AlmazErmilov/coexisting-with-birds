@@ -238,7 +238,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 .species-name { flex: 1; min-width: 0; flex-wrap: wrap; font-size: 11px; }
 .species-name > span:not(.rl-badge):not(.alt-tag) { overflow-wrap: anywhere; }
 .bird-thumb { width: 44px; height: 44px; border-radius: 7px; object-fit: cover; flex-shrink: 0; }
-.panel { width: 350px; max-height: calc(100dvh - 305px); }
+.panel { width: 350px; max-height: calc(100dvh - 340px); }
 .panel .subtitle { line-height: 1.6; }
 .legend { max-width: 350px; }
 .info-badge { bottom: 30px; }
