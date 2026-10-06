@@ -300,6 +300,9 @@ Promise.all([
         const riskEl = document.getElementById('kommune-risk');
         if (result.observationCount === 0) {
             riskEl.innerHTML = '<span class="kommune-empty">No data available</span>';
+        } else if (result.observationCount < 15) {
+            riskEl.textContent = 'Sparse records · conflict uncertain';
+            riskEl.style.color = '#aebbc2';
         } else {
             riskEl.innerHTML = `<span style="color:${risk.color}">${risk.text}</span>`;
         }
