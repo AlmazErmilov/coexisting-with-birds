@@ -203,6 +203,86 @@ const BIRD_PHOTOS = new Map([
       source: "https://commons.wikimedia.org/wiki/File:Hooded_Crow_(Corvus_cornix)_(11).jpg",
     },
   ],
+  [
+    "Fratercula arctica",
+    {
+      commonName: "Atlantic Puffin",
+      file: "fratercula-arctica.jpg",
+      author: "Andreas Trepte",
+      license: "CC BY-SA 2.5",
+      source: "https://commons.wikimedia.org/wiki/File%3AAtlantic_Puffin_Fratercula_arctica.jpg",
+    },
+  ],
+  [
+    "Uria lomvia",
+    {
+      commonName: "Brünnich’s Guillemot",
+      file: "uria-lomvia.jpg",
+      author: "AWeith",
+      license: "CC BY-SA 4.0",
+      source: "https://commons.wikimedia.org/wiki/File%3AA_Br%C3%BCnnich's_guillemot_(Uria_lomvia)_with_prey.jpg",
+    },
+  ],
+  [
+    "Alle alle",
+    {
+      commonName: "Little Auk",
+      file: "alle-alle.jpg",
+      author: "AWeith",
+      license: "CC BY-SA 4.0",
+      source: "https://commons.wikimedia.org/wiki/File%3ALittle_Auk_(Alle_alle)%2C_Fuglesangen%2C_Svalbard.jpg",
+    },
+  ],
+  [
+    "Cepphus grylle",
+    {
+      commonName: "Black Guillemot",
+      file: "cepphus-grylle.jpg",
+      author: "óskar elías sigurðsson",
+      license: "CC BY 2.0",
+      source: "https://commons.wikimedia.org/wiki/File%3ATeista_-_Cepphus_grylle_-_Black_Guillemot.jpg",
+    },
+  ],
+  [
+    "Morus bassanus",
+    {
+      commonName: "Northern Gannet",
+      file: "morus-bassanus.jpg",
+      author: "Andreas Trepte",
+      license: "CC BY-SA 2.5",
+      source: "https://commons.wikimedia.org/wiki/File%3AMorus_bassanus_adu.jpg",
+    },
+  ],
+  [
+    "Fulmarus glacialis",
+    {
+      commonName: "Northern Fulmar",
+      file: "fulmarus-glacialis.jpg",
+      author: "Diego Delso",
+      license: "CC BY-SA 4.0",
+      source: "https://commons.wikimedia.org/wiki/File%3AFulmar_boreal_(Fulmarus_glacialis)%2C_Heimaey%2C_Islas_Vestman%2C_Su%C3%B0urland%2C_Islandia%2C_2014-08-17%2C_DD_100.jpg",
+    },
+  ],
+  [
+    "Phalacrocorax carbo",
+    {
+      commonName: "Great Cormorant",
+      file: "phalacrocorax-carbo.jpg",
+      author: "JJ Harrison ( https://www.jjharrison.com.au/ )",
+      license: "CC BY-SA 3.0",
+      source: "https://commons.wikimedia.org/wiki/File%3APhalacrocorax_carbo_Vic.jpg",
+    },
+  ],
+  [
+    "Larus argentatus",
+    {
+      commonName: "European Herring Gull",
+      file: "larus-argentatus.jpg",
+      author: "Lukasz Lukomski",
+      license: "CC BY-SA 3.0",
+      source: "https://commons.wikimedia.org/wiki/File%3ALarus_argentatus_argenteus01.jpg",
+    },
+  ],
 ]);
 
 function escapeHtml(value) {

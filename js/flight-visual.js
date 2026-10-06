@@ -1,6 +1,8 @@
 import {
     FLIGHT_ALT, escapeHtml, DEFAULT_HUB_HEIGHT, DEFAULT_ROTOR_DIAMETER
 } from './data.js';
+import { birdThumbnail } from './bird-images.js';
+import { birdName, birdDetailsButton } from './bird-cards.js';
 
 let diagramSequence = 0;
 let introController = null;
@@ -87,8 +89,8 @@ export function flightDiagram(options = {}) {
         return { name, min, max, known, overlapMin, overlapMax, overlap, touches };
     });
     const id = `flight-visual-${++diagramSequence}`;
-    const plotTop = 52;
-    const plotBottom = 340;
+    const plotTop = 36;
+    const plotBottom = 248;
     const extentMin = Math.min(0, turbine.hub - turbine.diameter / 2);
     const extentMax = Math.max(100, turbine.max, turbine.hub + turbine.diameter / 2,
         ...birds.filter(bird => bird.known).map(bird => bird.max));
@@ -97,71 +99,67 @@ export function flightDiagram(options = {}) {
     const scaleMax = Math.ceil(extentMax / step) * step;
     const scale = (plotBottom - plotTop) / (scaleMax - scaleMin);
     const y = value => plotBottom - (value - scaleMin) * scale;
-    const width = Math.max(560, 382 + Math.max(1, birds.length) * 62 + 24);
-    const hubX = 200;
+    const width = Math.max(336, 222 + Math.max(1, birds.length) * 24 + 18);
+    const hubX = 118;
     const hubY = y(turbine.hub);
     const radius = turbine.diameter * scale / 2;
     const ground = y(0);
     const zoneTop = y(turbine.max);
     const zoneBottom = y(turbine.min);
-    const dimensionX = Math.max(315, hubX + radius + 16);
+    const dimensionX = 206;
     const ticks = [];
     for (let value = scaleMin; value <= scaleMax + step / 100; value += step) {
-        ticks.push(`<g class="flight-grid"><path d="M 52 ${y(value)} H ${width - 18}"/><text x="43" y="${y(value) + 4}" text-anchor="end">${formatMetres(value)}</text></g>`);
+        ticks.push(`<g class="flight-grid"><path d="M 40 ${y(value)} H ${width - 12}"/><text x="32" y="${y(value) + 4}" text-anchor="end">${formatMetres(value)}</text></g>`);
     }
 
     const bands = birds.map((bird, index) => {
-        const x = 382 + index * 62;
-        const centre = x + 14;
+        const x = 222 + index * 24;
+        const centre = x + 7;
         const detail = !bird.known ? 'Flight altitude unavailable. No band or overlap inferred.'
             : bird.overlap ? `Estimated band ${rangeText(bird.min, bird.max)}. Intersection ${rangeText(bird.overlapMin, bird.overlapMax)}.`
                 : bird.touches ? `Estimated band ${rangeText(bird.min, bird.max)}. Touches the swept boundary only.`
                     : `Estimated band ${rangeText(bird.min, bird.max)}. No intersection in these estimated ranges.`;
         // ASVS 1.2.1: encode names where they enter HTML or SVG attributes/text.
         const label = escapeHtml(`${bird.name}. ${detail} Open species details.`);
-        return `<a class="flight-band" href="#${id}-species-${index}" aria-label="${label}">
+        return `<a class="flight-band" data-bird-details="${escapeHtml(bird.name)}" href="#${id}-species-${index}" aria-label="${label}">
             <title>${label}</title>
-            <rect class="flight-band__hit" x="${x - 9}" y="${plotTop}" width="46" height="${plotBottom - plotTop + 35}"/>
+            <rect class="flight-band__hit" x="${x - 4}" y="${plotTop}" width="22" height="${plotBottom - plotTop + 35}"/>
             <path class="flight-band__guide" d="M ${centre} ${plotTop} V ${plotBottom}"/>
-            ${bird.known ? `<rect class="flight-band__range" x="${x}" y="${y(bird.max)}" width="28" height="${(bird.max - bird.min) * scale}"/>
-                <path class="flight-band__caps" d="M ${x - 3} ${y(bird.max)} H ${x + 31} M ${x - 3} ${y(bird.min)} H ${x + 31}"/>
-                ${bird.overlap ? `<rect class="flight-band__overlap" x="${x}" y="${y(bird.overlapMax)}" width="28" height="${(bird.overlapMax - bird.overlapMin) * scale}" fill="url(#${id}-hatch)"/>` : ''}
-                ${bird.touches ? `<path class="flight-band__touch" d="M ${x} ${y(bird.overlapMin)} H ${x + 28}"/>` : ''}
-                <path class="flight-bird" d="${birdPath(centre, y((bird.min + bird.max) / 2))}"/>`
+            ${bird.known ? `<rect class="flight-band__range" x="${x}" y="${y(bird.max)}" width="14" height="${(bird.max - bird.min) * scale}"/>
+                <path class="flight-band__caps" d="M ${x - 3} ${y(bird.max)} H ${x + 17} M ${x - 3} ${y(bird.min)} H ${x + 17}"/>
+                ${bird.overlap ? `<rect class="flight-band__overlap" x="${x}" y="${y(bird.overlapMax)}" width="14" height="${(bird.overlapMax - bird.overlapMin) * scale}" fill="url(#${id}-hatch)"/>` : ''}
+                ${bird.touches ? `<path class="flight-band__touch" d="M ${x} ${y(bird.overlapMin)} H ${x + 14}"/>` : ''}
+                <path class="flight-bird" d="${birdPath(centre, y((bird.min + bird.max) / 2), 5)}"/>`
             : `<text class="flight-band__unknown" x="${centre}" y="${plotTop + 120}" text-anchor="middle">?</text>`}
             <text class="flight-band__number" x="${centre}" y="${plotBottom + 25}" text-anchor="middle">${index + 1}</text>
-        </a>
-            <g class="flight-band__readout" aria-hidden="true">
-                <rect x="52" y="386" width="${width - 70}" height="30" rx="4"/>
-                <text x="64" y="405">${!bird.known ? `Band ${index + 1}: altitude unknown` : `Band ${index + 1}: ${rangeText(bird.min, bird.max)} · ${bird.overlap ? `intersection ${rangeText(bird.overlapMin, bird.overlapMax)}` : bird.touches ? 'boundary contact only' : 'no intersection'}`}</text>
-            </g>`;
+        </a>`;
     }).join('');
 
     const speciesDetails = birds.map((bird, index) => `<details class="flight-species">
-        <summary id="${id}-species-${index}"><span class="flight-species__number">${index + 1}</span><i>${escapeHtml(bird.name)}</i><span class="flight-species__range">${bird.known ? `${rangeText(bird.min, bird.max)} estimated` : 'Altitude unknown'}</span></summary>
+        <summary id="${id}-species-${index}"><span class="flight-species__number">${index + 1}</span>${/^[A-Z][a-z]+ [a-z]+$/.test(bird.name) ? birdThumbnail(bird.name) : ''}<span class="bird-profile-line"><strong>${escapeHtml(birdName(bird.name))}</strong><span class="flight-species__range">${bird.known ? `${rangeText(bird.min, bird.max)} estimated` : 'Altitude unknown'}</span></span></summary>
         <p>${!bird.known ? 'No flight altitude estimate is available for this species. Overlap cannot be assessed.'
-            : `${bird.overlap ? `Geometric intersection with the swept zone is ${rangeText(bird.overlapMin, bird.overlapMax)} AGL.` : bird.touches ? 'The estimated flight band touches the swept boundary. No interval is hatched.' : 'The estimated flight band does not intersect the displayed swept zone.'} This approximate reference band is not a local flight measurement or a collision probability.`}</p>
+            : `${bird.overlap ? `Geometric intersection with the swept zone is ${rangeText(bird.overlapMin, bird.overlapMax)} AGL.` : bird.touches ? 'The estimated flight band touches the swept boundary. No interval is hatched.' : 'The estimated flight band does not intersect the displayed swept zone.'} This approximate reference band is not a local flight measurement or a collision probability.`}</p>${/^[A-Z][a-z]+ [a-z]+$/.test(bird.name) ? birdDetailsButton(bird.name, 'Bird facts &amp; summary', 'bird-card-action') : ''}
     </details>`).join('');
 
     return `<figure class="flight-diagram" aria-labelledby="${id}-heading">
-        <figcaption class="flight-diagram__heading" id="${id}-heading">Flight altitude &amp; rotor swept zone<span>Vertical section · metres above ground level</span></figcaption>
+        <figcaption class="flight-diagram__heading" id="${id}-heading">Flight &amp; rotor<span>Height above ground · metres</span></figcaption>
         <dl class="flight-dimensions">
-            <div><dt>Hub height</dt><dd>${formatMetres(turbine.hub)} m<small>${turbine.hubSource}</small></dd></div>
-            <div><dt>Rotor diameter</dt><dd>${formatMetres(turbine.diameter)} m<small>${turbine.diameterSource}</small></dd></div>
-            <div><dt>Swept zone</dt><dd>${rangeText(turbine.min, turbine.max)}<small>${turbine.zoneSource}</small></dd></div>
+            <div><dt>Hub</dt><dd>${formatMetres(turbine.hub)} m${turbine.hubSource === 'supplied' ? '' : `<small>${turbine.hubSource}</small>`}</dd></div>
+            <div><dt>Rotor Ø</dt><dd>${formatMetres(turbine.diameter)} m${turbine.diameterSource === 'supplied' ? '' : `<small>${turbine.diameterSource}</small>`}</dd></div>
+            <div><dt>Rotor zone</dt><dd>${rangeText(turbine.min, turbine.max)}${turbine.zoneSource === 'supplied bounds' || turbine.zoneSource === 'derived from dimensions' ? '' : `<small>${turbine.zoneSource}</small>`}</dd></div>
         </dl>
         ${turbine.notes.map(note => `<p class="flight-diagram__notice">${note}</p>`).join('')}
-        <div class="flight-diagram__scroll" tabindex="0" role="region" aria-label="Altitude drawing. Scroll horizontally on narrow screens.">
-            <svg class="flight-diagram__svg" xmlns="http://www.w3.org/2000/svg" width="${width}" height="424" viewBox="0 0 ${width} 424" style="min-width:${width}px" role="group" aria-labelledby="${id}-title ${id}-desc">
+        <div class="flight-diagram__scroll" role="region" aria-label="Full altitude drawing">
+            <svg class="flight-diagram__svg" xmlns="http://www.w3.org/2000/svg" width="${width}" height="286" viewBox="0 0 ${width} 286" role="group" aria-labelledby="${id}-title ${id}-desc">
                 <title id="${id}-title">Bird altitude bands and turbine geometry</title>
                 <desc id="${id}-desc">One linear vertical metre scale for the rotor and all bird bands. Amber hatching marks only altitude intersection. Numbered bands link to species details. Horizontal spacing represents separate lanes, not distance from a turbine.</desc>
                 <defs><pattern id="${id}-hatch" width="7" height="7" patternUnits="userSpaceOnUse"><path d="M -2 2 L 2 -2 M 0 7 L 7 0 M 5 9 L 9 5" class="flight-hatch"/></pattern></defs>
-                <text class="flight-plot-label" x="14" y="26">m AGL</text>
-                <text class="flight-plot-label" x="200" y="26" text-anchor="middle">Turbine section</text>
-                <text class="flight-plot-label" x="382" y="26">Bird bands</text>
-                <rect class="flight-swept" x="52" y="${zoneTop}" width="${width - 70}" height="${zoneBottom - zoneTop}"/>
+                <text class="flight-plot-label" x="4" y="20">m AGL</text>
+                <text class="flight-plot-label" x="118" y="20" text-anchor="middle">Rotor</text>
+                <text class="flight-plot-label" x="222" y="20">Birds</text>
+                <rect class="flight-swept" x="40" y="${zoneTop}" width="${width - 52}" height="${zoneBottom - zoneTop}"/>
                 ${ticks.join('')}
-                <path class="flight-ground" d="M 52 ${ground} H ${width - 18}"/>
+                <path class="flight-ground" d="M 40 ${ground} H ${width - 12}"/>
                 <path class="flight-tower flight-draw" d="M ${hubX - 4} ${hubY} L ${hubX - 12} ${ground} H ${hubX + 12} L ${hubX + 4} ${hubY}"/>
                 <circle class="flight-rotor-envelope flight-draw" cx="${hubX}" cy="${hubY}" r="${radius}"/>
                 <g transform="translate(${hubX} ${hubY})"><g class="flight-rotor">
@@ -170,108 +168,111 @@ export function flightDiagram(options = {}) {
                 <circle class="flight-hub" cx="${hubX}" cy="${hubY}" r="4"/>
                 <path class="flight-dimension" d="M 68 ${ground} V ${hubY} M 62 ${ground} H 74 M 62 ${hubY} H 74 M 74 ${hubY} H ${hubX - 8}"/>
                 <path class="flight-dimension" d="M ${dimensionX} ${hubY - radius} V ${hubY + radius} M ${dimensionX - 6} ${hubY - radius} H ${dimensionX + 6} M ${dimensionX - 6} ${hubY + radius} H ${dimensionX + 6}"/>
-                <text class="flight-dimension-label" x="82" y="${plotBottom + 25}">H ${formatMetres(turbine.hub)} m</text>
-                <text class="flight-dimension-label" x="220" y="${plotBottom + 25}">Ø ${formatMetres(turbine.diameter)} m</text>
+                <text class="flight-dimension-label" x="40" y="${plotBottom + 25}">H ${formatMetres(turbine.hub)} m</text>
+                <text class="flight-dimension-label" x="144" y="${plotBottom + 25}">Ø ${formatMetres(turbine.diameter)} m</text>
                 ${bands}
-                <text class="flight-readout-hint" x="52" y="405">${birds.length ? 'Hover or focus a band; select it for species details.' : 'No species selected. Turbine geometry only.'}</text>
             </svg>
         </div>
-        <div class="flight-key" aria-label="Drawing legend"><span><b class="flight-key__band"></b>Estimated flight band</span><span><b class="flight-key__zone"></b>Swept zone</span><span><b class="flight-key__overlap"></b>Altitude intersection</span></div>
+        <div class="flight-key" aria-label="Drawing legend"><span><b class="flight-key__band"></b>Flight</span><span><b class="flight-key__zone"></b>Rotor</span><span><b class="flight-key__overlap"></b>Overlap</span></div>
         <div class="flight-species-list">${speciesDetails || '<p class="flight-diagram__empty">No species selected. Add species to compare their estimated flight bands.</p>'}</div>
-        <p class="flight-diagram__caveat">Flight bands are approximate reference estimates from general ornithological knowledge. Horizontal spacing is schematic. Altitude intersection alone does not establish collision risk, habitat use or measured local flight activity.</p>
+        <details class="flight-method"><summary>About this drawing</summary><p class="flight-diagram__caveat">Estimated altitude bands, not local flight measurements. Horizontal spacing is schematic. Intersection does not establish collision risk or habitat use.</p></details>
     </figure>`;
 }
 
 function introDrawing() {
-    // Decorative schematic only. It has no altitude labels or site data claims.
-    return `<svg class="flight-intro__drawing" viewBox="0 0 300 120" aria-hidden="true" focusable="false">
-        <defs><clipPath id="intro-swept-clip"><circle cx="214" cy="53" r="36"/></clipPath><pattern id="intro-overlap-hatch" width="7" height="7" patternUnits="userSpaceOnUse"><path d="M0 7L7 0" class="flight-hatch"/></pattern></defs>
-        <rect class="flight-intro__altitude-band" x="12" y="36" width="276" height="34"/>
-        <rect x="178" y="36" width="72" height="34" fill="url(#intro-overlap-hatch)" clip-path="url(#intro-swept-clip)"/>
-        <text class="flight-intro__band-label" x="14" y="30">Illustrative flight band</text>
-        <path class="flight-intro__grid" d="M 12 26 H 288 M 12 52 H 288 M 12 78 H 288 M 52 14 V 106 M 104 14 V 106 M 156 14 V 106 M 208 14 V 106 M 260 14 V 106"/>
-        <circle class="flight-rotor-envelope flight-draw" cx="214" cy="53" r="36"/>
-        <path class="flight-tower flight-draw" d="M 211 53 L 206 106 H 222 L 217 53"/>
-        <path class="flight-ground flight-draw" d="M 12 106 H 288"/>
-        <g transform="translate(214 53)"><g class="flight-rotor">${[0, 120, 240].map(angle => `<path class="flight-blade" transform="rotate(${angle})" d="M -2 0 L -3 -14 L 0 -35 L 3 -8 Z"/>`).join('')}</g></g>
-        <circle class="flight-hub" cx="214" cy="53" r="3"/>
-        <path class="flight-intro__route flight-draw" d="M 18 77 C 60 79 80 39 121 42 S 163 61 185 36"/>
-        <path class="flight-bird flight-intro__bird" d="${birdPath(75, 62, 12)}"/>
-        <path class="flight-bird flight-intro__bird flight-intro__bird--second" d="${birdPath(133, 35, 9)}"/>
+    return `<svg class="flight-intro__drawing flight-intro__drawing--wide" viewBox="0 0 1000 450" aria-hidden="true" focusable="false">
+        <defs><pattern id="intro-grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" class="flight-intro__grid"/></pattern><clipPath id="intro-swept-clip"><circle cx="670" cy="205" r="124"/></clipPath><pattern id="intro-overlap-hatch" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M0 8L8 0" class="flight-hatch"/></pattern><marker id="intro-arrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto-start-reverse"><path d="M1 1L7 4L1 7" fill="none" stroke="#aac3c8"/></marker></defs>
+        <rect class="flight-intro__grid-stage" x="20" y="20" width="960" height="400" fill="url(#intro-grid)"/>
+        <path class="flight-intro__datum flight-draw" d="M40 370H960 M40 45V390 M35 80H45 M35 170H45 M35 260H45 M35 370H45"/>
+        <g class="flight-intro__band-stage"><rect class="flight-intro__altitude-band" x="40" y="152" width="920" height="108"/><path class="flight-swept" d="M40 152H960M40 260H960"/><text class="flight-intro__band-label" x="52" y="140">ILLUSTRATIVE FLIGHT BAND</text></g>
+        <circle class="flight-rotor-envelope flight-draw" cx="670" cy="205" r="124"/>
+        <rect class="flight-intro__intersection" x="546" y="152" width="248" height="108" fill="url(#intro-overlap-hatch)" clip-path="url(#intro-swept-clip)"/>
+        <path class="flight-tower flight-draw" d="M665 205L650 370H690L675 205"/>
+        <g transform="translate(670 205)"><g class="flight-rotor">${[0,120,240].map(angle => `<path class="flight-blade" transform="rotate(${angle})" d="M-3 0L-6 -47L0 -122L6 -27Z"/>`).join('')}</g></g>
+        <circle class="flight-hub" cx="670" cy="205" r="5"/>
+        <path class="flight-intro__route flight-draw" d="M64 293C180 300 225 146 340 174S479 238 557 142"/>
+        <g class="flight-intro__bird"><path class="flight-bird" d="${birdPath(240,230,18)}"/></g><g class="flight-intro__bird flight-intro__bird--second"><path class="flight-bird" d="${birdPath(420,182,14)}"/></g>
+        <g class="flight-intro__annotation-stage"><path class="flight-dimension" d="M830 82V328M820 82H840M820 328H840M670 395H794" marker-start="url(#intro-arrow)" marker-end="url(#intro-arrow)"/><text class="flight-intro__band-label" x="850" y="199">ROTOR</text><text class="flight-intro__band-label" x="850" y="222">DIAMETER</text><path class="flight-dimension" d="M718 231L840 288H958"/><text class="flight-intro__band-label" x="843" y="313">INTERSECTION</text><text class="flight-intro__band-label" x="52" y="402">VERTICAL SECTION</text><text class="flight-intro__band-label" x="52" y="424">SCHEMATIC · NOT TO SCALE</text></g>
+    </svg><svg class="flight-intro__drawing flight-intro__drawing--compact" viewBox="0 0 420 380" aria-hidden="true" focusable="false">
+        <defs><pattern id="intro-mobile-grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" class="flight-intro__grid"/></pattern><pattern id="intro-mobile-overlap-hatch" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M0 8L8 0" class="flight-hatch"/></pattern><clipPath id="intro-mobile-swept"><circle cx="267" cy="171" r="87"/></clipPath></defs>
+        <rect class="flight-intro__grid-stage" x="20" y="24" width="380" height="316" fill="url(#intro-mobile-grid)"/>
+        <path class="flight-intro__datum flight-draw" d="M24 320H396 M24 32V332"/>
+        <g class="flight-intro__band-stage"><rect class="flight-intro__altitude-band" x="24" y="132" width="372" height="76"/><path class="flight-swept" d="M24 132H396 M24 208H396"/><text class="flight-intro__band-label" x="34" y="120">ILLUSTRATIVE FLIGHT BAND</text></g>
+        <circle class="flight-rotor-envelope flight-draw" cx="267" cy="171" r="87"/>
+        <rect class="flight-intro__intersection" x="180" y="132" width="174" height="76" fill="url(#intro-mobile-overlap-hatch)" clip-path="url(#intro-mobile-swept)"/>
+        <path class="flight-tower flight-draw" d="M263 171L252 320H282L271 171"/>
+        <g transform="translate(267 171)"><g class="flight-rotor">${[0,120,240].map(angle => `<path class="flight-blade" transform="rotate(${angle})" d="M-2 0L-4 -35L0 -85L4 -18Z"/>`).join('')}</g></g><circle class="flight-hub" cx="267" cy="171" r="4"/>
+        <path class="flight-intro__route flight-draw" d="M34 270C98 276 112 152 170 168S218 204 248 140"/>
+        <g class="flight-intro__bird"><path class="flight-bird" d="${birdPath(103,223,12)}"/></g><g class="flight-intro__bird flight-intro__bird--second"><path class="flight-bird" d="${birdPath(180,174,10)}"/></g>
+        <g class="flight-intro__annotation-stage"><path class="flight-dimension" d="M354 207L370 278H393"/><text class="flight-intro__band-label" x="290" y="299">OVERLAP</text><text class="flight-intro__band-label" x="26" y="351">VERTICAL SECTION · SCHEMATIC</text></g>
     </svg>`;
 }
 
-/** Mount once, without stealing focus, covering the map with a backdrop or trapping input. */
 export function initFlightIntro() {
     if (typeof document === 'undefined') return null;
     if (!document.body) {
         if (!introPending) {
             introPending = true;
-            document.addEventListener('DOMContentLoaded', () => {
-                introPending = false;
-                initFlightIntro();
-            }, { once: true });
+            document.addEventListener('DOMContentLoaded', () => { introPending = false; initFlightIntro(); }, {once:true});
         }
         return null;
     }
     if (introController?.element.isConnected) return introController;
-    // A removed instance should release its timer and listeners before remounting.
     introController?.destroy();
     const root = document.createElement('div');
     root.className = 'flight-intro';
     const titleId = `flight-intro-title-${++diagramSequence}`;
-    root.innerHTML = `<section class="flight-intro__card" id="${titleId}-card" aria-labelledby="${titleId}">
+    root.innerHTML = `<section class="flight-intro__card" id="${titleId}-card" role="dialog" aria-modal="true" aria-labelledby="${titleId}">
         <div class="flight-intro__topline"><span>Coexisting with birds</span><button class="flight-intro__close" type="button" aria-label="Dismiss introduction">×</button></div>
-        ${introDrawing()}
-        <h2 id="${titleId}">Room for flight.</h2>
-        <p>Explore bird records and turbine geometry.<br>Open a wind park to compare altitude bands.</p>
-        <small>Illustrative drawing · the map is ready to explore</small>
-    </section>
-    <button class="flight-intro__replay" type="button" aria-label="Replay flight introduction" aria-controls="${titleId}-card" aria-expanded="true">↻ <span>Flight intro</span></button>`;
-    const card = root.querySelector('.flight-intro__card');
-    const close = root.querySelector('.flight-intro__close');
-    const replay = root.querySelector('.flight-intro__replay');
-    let timer;
+        <div class="flight-intro__composition"><header><p class="flight-intro__eyebrow">Norway · birds &amp; wind energy</p><h2 id="${titleId}">Room for flight.</h2></header>${introDrawing()}<footer><p>Observe. Compare. Coexist.</p><button class="flight-intro__explore" type="button">Explore the map <span>↗</span></button></footer></div>
+        <small class="flight-intro__caption">Estimated bands · illustrative geometry</small>
+    </section><button class="flight-intro__replay" type="button" aria-label="Replay flight introduction" aria-controls="${titleId}-card" aria-expanded="true">↻ <span>Flight intro</span></button>`;
+    const card = root.querySelector('.flight-intro__card'), close = root.querySelector('.flight-intro__close'), replay = root.querySelector('.flight-intro__replay'), explore = root.querySelector('.flight-intro__explore');
+    let timer, previousFocus, interacted = false;
+    const inertBefore = new Map();
     const hide = () => {
         clearTimeout(timer);
-        const focused = card.contains(document.activeElement);
         card.hidden = true;
-        replay.setAttribute('aria-expanded', 'false');
-        if (focused) replay.focus({ preventScroll: true });
+        root.classList.remove('flight-intro--open');
+        replay.hidden = false;
+        replay.setAttribute('aria-expanded','false');
+        for (const [element, wasInert] of inertBefore) element.inert = wasInert;
+        inertBefore.clear();
+        if (previousFocus?.isConnected && previousFocus !== document.body) previousFocus.focus({preventScroll:true});
+        else replay.focus({preventScroll:true});
     };
-    const autoHide = () => {
-        // Do not remove a control while a keyboard user is interacting with it.
-        if (card.contains(document.activeElement)) timer = setTimeout(autoHide, 1000);
-        else hide();
-    };
-    const show = () => {
+    const show = (automatic = false) => {
         clearTimeout(timer);
+        previousFocus = document.activeElement;
+        interacted = false;
+        for (const element of document.body.children) {
+            if (element === root || element.tagName === 'SCRIPT') continue;
+            if (!inertBefore.has(element)) inertBefore.set(element, element.inert);
+            element.inert = true;
+        }
         card.hidden = false;
+        root.classList.add('flight-intro--open');
         card.classList.remove('flight-intro__card--playing');
-        // Restart the finite CSS reveal on each explicit replay.
         void card.offsetWidth;
         card.classList.add('flight-intro__card--playing');
-        replay.setAttribute('aria-expanded', 'true');
-        timer = setTimeout(autoHide, 4000);
+        replay.hidden = true;
+        replay.setAttribute('aria-expanded','true');
+        close.focus({preventScroll:true});
+        if (automatic) timer = setTimeout(() => { if (!interacted) hide(); }, 8000);
     };
-    const onEscape = event => {
-        if (event.key === 'Escape' && !card.hidden && root.contains(document.activeElement)) hide();
-    };
-    close.addEventListener('click', hide);
-    replay.addEventListener('click', show);
-    root.addEventListener('keydown', onEscape);
-    document.body.append(root);
-    introController = {
-        element: root, show, hide,
-        destroy() {
-            clearTimeout(timer);
-            close.removeEventListener('click', hide);
-            replay.removeEventListener('click', show);
-            root.removeEventListener('keydown', onEscape);
-            root.remove();
-            if (introController?.element === root) introController = null;
+    const onKey = event => {
+        if (card.hidden) return;
+        interacted = true;
+        if (event.key === 'Escape') { event.stopPropagation(); hide(); return; }
+        if (event.key === 'Tab') {
+            if (event.shiftKey && document.activeElement === close) {event.preventDefault(); explore.focus();}
+            else if (!event.shiftKey && document.activeElement === explore) {event.preventDefault(); close.focus();}
         }
     };
-    show();
+    const replayIntro = () => show(false);
+    close.addEventListener('click',hide); explore.addEventListener('click',hide); replay.addEventListener('click',replayIntro); root.addEventListener('keydown',onKey);
+    document.body.append(root);
+    introController = {element:root,show:() => show(false),hide,destroy() {hide();close.removeEventListener('click',hide);explore.removeEventListener('click',hide);replay.removeEventListener('click',replayIntro);root.removeEventListener('keydown',onKey);root.remove();if(introController?.element === root) introController=null;}};
+    show(true);
     return introController;
 }

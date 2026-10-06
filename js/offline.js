@@ -2,14 +2,14 @@
 export function initOfflineSnapshot() {
     const status = document.getElementById('snapshot-status');
     if (!('serviceWorker' in navigator)) {
-        status.textContent = 'Offline storage is unavailable in this browser.';
+        status.textContent = 'Offline storage unavailable.';
         return;
     }
     let snapshot;
     const render = () => {
         const state = navigator.onLine ? 'Local snapshot ready' : 'Offline · using saved snapshot';
         status.textContent = snapshot
-            ? state + ' · saved ' + new Date(snapshot.savedAt).toLocaleDateString('en-GB') + '. Observation sample: February 2026.'
+            ? state + ' · ' + new Date(snapshot.savedAt).toLocaleDateString('en-GB')
             : navigator.onLine ? 'Preparing a local snapshot…' : 'Offline · no saved snapshot yet.';
     };
     window.addEventListener('online', render);
@@ -40,6 +40,6 @@ export function initOfflineSnapshot() {
             ]);
         })
         .then(registration => registration.active?.postMessage({type: 'SNAPSHOT_STATUS'}))
-        .catch(() => { status.textContent = 'Offline snapshot could not be saved. Online viewing still works.'; });
+        .catch(() => { status.textContent = 'Snapshot unavailable · online viewing works.'; });
     render();
 }

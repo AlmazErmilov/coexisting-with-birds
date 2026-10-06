@@ -1,0 +1,3738 @@
+{
+  "source": "https://download.geonames.org/export/dump/cities1000.zip",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "retrieved": "2026-10-06",
+  "cities": [
+    {
+      "id": 3143244,
+      "name": "Oslo",
+      "lat": 59.91273,
+      "lon": 10.74609,
+      "population": 1082575
+    },
+    {
+      "id": 3161732,
+      "name": "Bergen",
+      "lat": 60.39299,
+      "lon": 5.32415,
+      "population": 294029
+    },
+    {
+      "id": 3133880,
+      "name": "Trondheim",
+      "lat": 63.43049,
+      "lon": 10.39506,
+      "population": 216518
+    },
+    {
+      "id": 3137115,
+      "name": "Stavanger",
+      "lat": 58.97005,
+      "lon": 5.73332,
+      "population": 151669
+    },
+    {
+      "id": 3149318,
+      "name": "Kristiansand",
+      "lat": 58.14671,
+      "lon": 7.9956,
+      "population": 117237
+    },
+    {
+      "id": 3159016,
+      "name": "Drammen",
+      "lat": 59.74389,
+      "lon": 10.20449,
+      "population": 106013
+    },
+    {
+      "id": 3147465,
+      "name": "Lillestrøm",
+      "lat": 59.95597,
+      "lon": 11.04918,
+      "population": 89684
+    },
+    {
+      "id": 3140321,
+      "name": "Sandnes",
+      "lat": 58.85244,
+      "lon": 5.73521,
+      "population": 85386
+    },
+    {
+      "id": 3156529,
+      "name": "Fredrikstad",
+      "lat": 59.2181,
+      "lon": 10.9298,
+      "population": 83761
+    },
+    {
+      "id": 3140390,
+      "name": "Sandefjord",
+      "lat": 59.13118,
+      "lon": 10.21665,
+      "population": 64345
+    },
+    {
+      "id": 3162657,
+      "name": "Asker",
+      "lat": 59.83333,
+      "lon": 10.43721,
+      "population": 61906
+    },
+    {
+      "id": 3140084,
+      "name": "Sarpsborg",
+      "lat": 59.28391,
+      "lon": 11.10962,
+      "population": 59038
+    },
+    {
+      "id": 3134331,
+      "name": "Tønsberg",
+      "lat": 59.26754,
+      "lon": 10.40762,
+      "population": 55387
+    },
+    {
+      "id": 3163392,
+      "name": "Ålesund",
+      "lat": 62.47225,
+      "lon": 6.15492,
+      "population": 52626
+    },
+    {
+      "id": 3139075,
+      "name": "Skien",
+      "lat": 59.20962,
+      "lon": 9.60897,
+      "population": 50595
+    },
+    {
+      "id": 3145375,
+      "name": "Moss",
+      "lat": 59.43403,
+      "lon": 10.65771,
+      "population": 49668
+    },
+    {
+      "id": 3133895,
+      "name": "Tromsø",
+      "lat": 69.6489,
+      "lon": 18.95508,
+      "population": 41915
+    },
+    {
+      "id": 3153623,
+      "name": "Haugesund",
+      "lat": 59.41378,
+      "lon": 5.268,
+      "population": 40321
+    },
+    {
+      "id": 3162778,
+      "name": "Åsane",
+      "lat": 60.47444,
+      "lon": 5.325,
+      "population": 40146
+    },
+    {
+      "id": 3144631,
+      "name": "Nesttun",
+      "lat": 60.31821,
+      "lon": 5.35317,
+      "population": 35638
+    },
+    {
+      "id": 3142657,
+      "name": "Porsgrunn",
+      "lat": 59.14054,
+      "lon": 9.6561,
+      "population": 34377
+    },
+    {
+      "id": 3160881,
+      "name": "Bodø",
+      "lat": 67.28267,
+      "lon": 14.37513,
+      "population": 34073
+    },
+    {
+      "id": 3162955,
+      "name": "Arendal",
+      "lat": 58.46151,
+      "lon": 8.77253,
+      "population": 30916
+    },
+    {
+      "id": 3137942,
+      "name": "Sola",
+      "lat": 58.88854,
+      "lon": 5.65285,
+      "population": 29541
+    },
+    {
+      "id": 3154084,
+      "name": "Hamar",
+      "lat": 60.7945,
+      "lon": 11.06798,
+      "population": 29479
+    },
+    {
+      "id": 3147474,
+      "name": "Lillehammer",
+      "lat": 61.11514,
+      "lon": 10.46628,
+      "population": 29011
+    },
+    {
+      "id": 3151770,
+      "name": "Horten",
+      "lat": 59.41721,
+      "lon": 10.48343,
+      "population": 27178
+    },
+    {
+      "id": 6697344,
+      "name": "Ytrebygda",
+      "lat": 60.30504,
+      "lon": 5.28236,
+      "population": 24044
+    },
+    {
+      "id": 3155041,
+      "name": "Grimstad",
+      "lat": 58.3405,
+      "lon": 8.59343,
+      "population": 24017
+    },
+    {
+      "id": 3149312,
+      "name": "Kristiansund",
+      "lat": 63.11045,
+      "lon": 7.72795,
+      "population": 24013
+    },
+    {
+      "id": 3148129,
+      "name": "Larvik",
+      "lat": 59.05328,
+      "lon": 10.03517,
+      "population": 23113
+    },
+    {
+      "id": 3145580,
+      "name": "Molde",
+      "lat": 62.73752,
+      "lon": 7.15912,
+      "population": 22410
+    },
+    {
+      "id": 3154209,
+      "name": "Halden",
+      "lat": 59.12478,
+      "lon": 11.38754,
+      "population": 21970
+    },
+    {
+      "id": 3153823,
+      "name": "Harstad",
+      "lat": 68.79833,
+      "lon": 16.54165,
+      "population": 20953
+    },
+    {
+      "id": 3147698,
+      "name": "Levanger",
+      "lat": 63.74644,
+      "lon": 11.29963,
+      "population": 20171
+    },
+    {
+      "id": 3134628,
+      "name": "Time",
+      "lat": 58.73333,
+      "lon": 5.7,
+      "population": 19781
+    },
+    {
+      "id": 3145614,
+      "name": "Mo i Rana",
+      "lat": 66.31278,
+      "lon": 14.14278,
+      "population": 18866
+    },
+    {
+      "id": 3133904,
+      "name": "Tromsdalen",
+      "lat": 69.65,
+      "lon": 19.01667,
+      "population": 18291
+    },
+    {
+      "id": 3149563,
+      "name": "Kongsberg",
+      "lat": 59.66858,
+      "lon": 9.65017,
+      "population": 17667
+    },
+    {
+      "id": 3155573,
+      "name": "Gjøvik",
+      "lat": 60.79574,
+      "lon": 10.69155,
+      "population": 17596
+    },
+    {
+      "id": 3136765,
+      "name": "Stjørdalshalsen",
+      "lat": 63.4681,
+      "lon": 10.92618,
+      "population": 15693
+    },
+    {
+      "id": 847633,
+      "name": "Alta",
+      "lat": 69.96887,
+      "lon": 23.27165,
+      "population": 15094
+    },
+    {
+      "id": 3144987,
+      "name": "Narvik",
+      "lat": 68.43838,
+      "lon": 17.4272,
+      "population": 14141
+    },
+    {
+      "id": 3147822,
+      "name": "Leirvik",
+      "lat": 59.77977,
+      "lon": 5.50051,
+      "population": 14126
+    },
+    {
+      "id": 3151917,
+      "name": "Hønefoss",
+      "lat": 60.16804,
+      "lon": 10.25647,
+      "population": 13678
+    },
+    {
+      "id": 3135833,
+      "name": "Strand",
+      "lat": 59.05,
+      "lon": 5.93333,
+      "population": 13474
+    },
+    {
+      "id": 3136947,
+      "name": "Steinkjer",
+      "lat": 64.01487,
+      "lon": 11.49537,
+      "population": 13060
+    },
+    {
+      "id": 6951004,
+      "name": "Stjørdal",
+      "lat": 63.46803,
+      "lon": 10.91776,
+      "population": 13032
+    },
+    {
+      "id": 3132208,
+      "name": "Vennesla",
+      "lat": 58.26856,
+      "lon": 7.97314,
+      "population": 12816
+    },
+    {
+      "id": 3139081,
+      "name": "Ski",
+      "lat": 59.71949,
+      "lon": 10.83576,
+      "population": 12513
+    },
+    {
+      "id": 3158300,
+      "name": "Elverum",
+      "lat": 60.88191,
+      "lon": 11.56231,
+      "population": 12490
+    },
+    {
+      "id": 3162651,
+      "name": "Askim",
+      "lat": 59.58326,
+      "lon": 11.16286,
+      "population": 12482
+    },
+    {
+      "id": 3159822,
+      "name": "Bryne",
+      "lat": 58.73536,
+      "lon": 5.64766,
+      "population": 12465
+    },
+    {
+      "id": 3150851,
+      "name": "Jessheim",
+      "lat": 60.14151,
+      "lon": 11.17515,
+      "population": 12365
+    },
+    {
+      "id": 3144075,
+      "name": "Notodden",
+      "lat": 59.55936,
+      "lon": 9.25853,
+      "population": 12359
+    },
+    {
+      "id": 3149533,
+      "name": "Kongsvinger",
+      "lat": 60.19049,
+      "lon": 11.99772,
+      "population": 12338
+    },
+    {
+      "id": 3147743,
+      "name": "Lenvik",
+      "lat": 69.44318,
+      "lon": 18.15643,
+      "population": 11679
+    },
+    {
+      "id": 3136725,
+      "name": "Stokke",
+      "lat": 59.22255,
+      "lon": 10.30055,
+      "population": 11657
+    },
+    {
+      "id": 3149512,
+      "name": "Kopervik",
+      "lat": 59.28354,
+      "lon": 5.30669,
+      "population": 11561
+    },
+    {
+      "id": 779683,
+      "name": "Hammerfest",
+      "lat": 70.66313,
+      "lon": 23.68092,
+      "population": 11448
+    },
+    {
+      "id": 3158792,
+      "name": "Egersund",
+      "lat": 58.45133,
+      "lon": 5.9997,
+      "population": 11433
+    },
+    {
+      "id": 3135642,
+      "name": "Strømmen",
+      "lat": 59.95063,
+      "lon": 11.01009,
+      "population": 11410
+    },
+    {
+      "id": 3158960,
+      "name": "Drøbak",
+      "lat": 59.66239,
+      "lon": 10.62801,
+      "population": 11363
+    },
+    {
+      "id": 3146463,
+      "name": "Mandal",
+      "lat": 58.0274,
+      "lon": 7.45342,
+      "population": 11053
+    },
+    {
+      "id": 3159894,
+      "name": "Brumunddal",
+      "lat": 60.88095,
+      "lon": 10.93948,
+      "population": 11019
+    },
+    {
+      "id": 3336585,
+      "name": "Nesoddtangen",
+      "lat": 59.86244,
+      "lon": 10.66308,
+      "population": 10911
+    },
+    {
+      "id": 3131449,
+      "name": "Volda",
+      "lat": 62.146,
+      "lon": 6.07108,
+      "population": 10809
+    },
+    {
+      "id": 3137405,
+      "name": "Sortland",
+      "lat": 68.69569,
+      "lon": 15.40498,
+      "population": 10468
+    },
+    {
+      "id": 3156804,
+      "name": "Førde",
+      "lat": 61.45217,
+      "lon": 5.85717,
+      "population": 10339
+    },
+    {
+      "id": 7626354,
+      "name": "Kleppe",
+      "lat": 58.77423,
+      "lon": 5.62936,
+      "population": 10092
+    },
+    {
+      "id": 12450785,
+      "name": "Ensjø",
+      "lat": 59.91427,
+      "lon": 10.78746,
+      "population": 10000
+    },
+    {
+      "id": 3145386,
+      "name": "Mosjøen",
+      "lat": 65.83599,
+      "lon": 13.19076,
+      "population": 9636
+    },
+    {
+      "id": 3153890,
+      "name": "Haram",
+      "lat": 62.65781,
+      "lon": 6.24094,
+      "population": 9357
+    },
+    {
+      "id": 3157090,
+      "name": "Flekkefjord",
+      "lat": 58.29705,
+      "lon": 6.66069,
+      "population": 9048
+    },
+    {
+      "id": 3156980,
+      "name": "Florø",
+      "lat": 61.59957,
+      "lon": 5.0328,
+      "population": 9024
+    },
+    {
+      "id": 3137971,
+      "name": "Søgne",
+      "lat": 58.09328,
+      "lon": 7.78294,
+      "population": 9000
+    },
+    {
+      "id": 3142539,
+      "name": "Råholt",
+      "lat": 60.27513,
+      "lon": 11.17901,
+      "population": 8593
+    },
+    {
+      "id": 3145023,
+      "name": "Namsos",
+      "lat": 64.46624,
+      "lon": 11.49572,
+      "population": 8413
+    },
+    {
+      "id": 3132176,
+      "name": "Verdal",
+      "lat": 63.79332,
+      "lon": 11.4817,
+      "population": 8308
+    },
+    {
+      "id": 3143423,
+      "name": "Orkanger",
+      "lat": 63.30668,
+      "lon": 9.85025,
+      "population": 8204
+    },
+    {
+      "id": 3147467,
+      "name": "Lillesand",
+      "lat": 58.24879,
+      "lon": 8.3778,
+      "population": 7966
+    },
+    {
+      "id": 3162797,
+      "name": "Ås",
+      "lat": 59.66472,
+      "lon": 10.79465,
+      "population": 7961
+    },
+    {
+      "id": 3140621,
+      "name": "Sæveland",
+      "lat": 59.26667,
+      "lon": 5.2,
+      "population": 7873
+    },
+    {
+      "id": 3142228,
+      "name": "Raufoss",
+      "lat": 60.72604,
+      "lon": 10.6133,
+      "population": 7839
+    },
+    {
+      "id": 9403880,
+      "name": "Orstad",
+      "lat": 58.78526,
+      "lon": 5.70411,
+      "population": 7358
+    },
+    {
+      "id": 3145080,
+      "name": "Nærbø",
+      "lat": 58.66546,
+      "lon": 5.63788,
+      "population": 7269
+    },
+    {
+      "id": 3150742,
+      "name": "Jørpeland",
+      "lat": 59.02251,
+      "lon": 6.04078,
+      "population": 7230
+    },
+    {
+      "id": 3135601,
+      "name": "Stryn",
+      "lat": 61.90259,
+      "lon": 6.7179,
+      "population": 7207
+    },
+    {
+      "id": 3162668,
+      "name": "Ask",
+      "lat": 60.07131,
+      "lon": 11.0362,
+      "population": 6890
+    },
+    {
+      "id": 3162924,
+      "name": "Indre Arna",
+      "lat": 60.41768,
+      "lon": 5.47087,
+      "population": 6536
+    },
+    {
+      "id": 3157686,
+      "name": "Fetsund",
+      "lat": 59.92463,
+      "lon": 11.15711,
+      "population": 6441
+    },
+    {
+      "id": 3146470,
+      "name": "Malvik",
+      "lat": 63.43333,
+      "lon": 10.68333,
+      "population": 6419
+    },
+    {
+      "id": 3146125,
+      "name": "Melhus",
+      "lat": 63.28555,
+      "lon": 10.27806,
+      "population": 6393
+    },
+    {
+      "id": 3134865,
+      "name": "Tananger",
+      "lat": 58.93618,
+      "lon": 5.5741,
+      "population": 6377
+    },
+    {
+      "id": 3336588,
+      "name": "Ørsta",
+      "lat": 62.19983,
+      "lon": 6.12904,
+      "population": 6337
+    },
+    {
+      "id": 3152132,
+      "name": "Holmestrand",
+      "lat": 59.48761,
+      "lon": 10.31761,
+      "population": 6135
+    },
+    {
+      "id": 3133681,
+      "name": "Tvedestrand",
+      "lat": 58.62203,
+      "lon": 8.93147,
+      "population": 6115
+    },
+    {
+      "id": 3148776,
+      "name": "Kvinesdal",
+      "lat": 58.31215,
+      "lon": 6.96187,
+      "population": 6024
+    },
+    {
+      "id": 3157781,
+      "name": "Fauske",
+      "lat": 67.25883,
+      "lon": 15.39181,
+      "population": 5953
+    },
+    {
+      "id": 3149813,
+      "name": "Kløfta",
+      "lat": 60.07407,
+      "lon": 11.13805,
+      "population": 5942
+    },
+    {
+      "id": 3137091,
+      "name": "Stavern",
+      "lat": 59,
+      "lon": 10.03333,
+      "population": 5902
+    },
+    {
+      "id": 3137390,
+      "name": "Sørumsand",
+      "lat": 59.98621,
+      "lon": 11.24154,
+      "population": 5878
+    },
+    {
+      "id": 3149720,
+      "name": "Knarvik",
+      "lat": 60.5453,
+      "lon": 5.28208,
+      "population": 5875
+    },
+    {
+      "id": 3133349,
+      "name": "Ulsteinvik",
+      "lat": 62.34317,
+      "lon": 5.84869,
+      "population": 5788
+    },
+    {
+      "id": 3140301,
+      "name": "Sandnessjøen",
+      "lat": 66.02166,
+      "lon": 12.63158,
+      "population": 5778
+    },
+    {
+      "id": 3227582,
+      "name": "Hommersåk",
+      "lat": 58.92556,
+      "lon": 5.85104,
+      "population": 5692
+    },
+    {
+      "id": 3141332,
+      "name": "Røros",
+      "lat": 62.57468,
+      "lon": 11.3842,
+      "population": 5572
+    },
+    {
+      "id": 3131329,
+      "name": "Voss",
+      "lat": 60.62869,
+      "lon": 6.41474,
+      "population": 5571
+    },
+    {
+      "id": 3145094,
+      "name": "Mysen",
+      "lat": 59.55354,
+      "lon": 11.32578,
+      "population": 5516
+    },
+    {
+      "id": 9404494,
+      "name": "Flaktveit",
+      "lat": 60.46531,
+      "lon": 5.35989,
+      "population": 5439
+    },
+    {
+      "id": 3151942,
+      "name": "Hommelvik",
+      "lat": 63.41083,
+      "lon": 10.79424,
+      "population": 5418
+    },
+    {
+      "id": 3132058,
+      "name": "Vestby",
+      "lat": 59.60511,
+      "lon": 10.75233,
+      "population": 5330
+    },
+    {
+      "id": 3134070,
+      "name": "Tranby",
+      "lat": 59.8085,
+      "lon": 10.26114,
+      "population": 5322
+    },
+    {
+      "id": 8558570,
+      "name": "Luster",
+      "lat": 61.44322,
+      "lon": 7.45992,
+      "population": 5302
+    },
+    {
+      "id": 3162321,
+      "name": "Austevoll",
+      "lat": 60.10952,
+      "lon": 5.16246,
+      "population": 5297
+    },
+    {
+      "id": 3149412,
+      "name": "Kragerø",
+      "lat": 58.8693,
+      "lon": 9.41494,
+      "population": 5158
+    },
+    {
+      "id": 3159954,
+      "name": "Brønnøysund",
+      "lat": 65.47487,
+      "lon": 12.21285,
+      "population": 5045
+    },
+    {
+      "id": 3163443,
+      "name": "Åkrehamn",
+      "lat": 59.26053,
+      "lon": 5.18689,
+      "population": 5018
+    },
+    {
+      "id": 3157679,
+      "name": "Fevik",
+      "lat": 58.3782,
+      "lon": 8.67601,
+      "population": 4989
+    },
+    {
+      "id": 3134521,
+      "name": "Tjøme",
+      "lat": 59.1109,
+      "lon": 10.3933,
+      "population": 4928
+    },
+    {
+      "id": 3143830,
+      "name": "Odda",
+      "lat": 60.06912,
+      "lon": 6.54565,
+      "population": 4876
+    },
+    {
+      "id": 3150911,
+      "name": "Jaren",
+      "lat": 60.39273,
+      "lon": 10.56155,
+      "population": 4848
+    },
+    {
+      "id": 3135020,
+      "name": "Svolvær",
+      "lat": 68.23417,
+      "lon": 14.56834,
+      "population": 4720
+    },
+    {
+      "id": 3141156,
+      "name": "Rotnes",
+      "lat": 60.05707,
+      "lon": 10.86135,
+      "population": 4705
+    },
+    {
+      "id": 777073,
+      "name": "Vadsø",
+      "lat": 70.07348,
+      "lon": 29.74943,
+      "population": 4654
+    },
+    {
+      "id": 3141747,
+      "name": "Risør",
+      "lat": 58.72057,
+      "lon": 9.23422,
+      "population": 4609
+    },
+    {
+      "id": 3145689,
+      "name": "Moelv",
+      "lat": 60.93333,
+      "lon": 10.7,
+      "population": 4547
+    },
+    {
+      "id": 13561697,
+      "name": "Greverud",
+      "lat": 59.77276,
+      "lon": 10.80413,
+      "population": 4500
+    },
+    {
+      "id": 3144110,
+      "name": "Norheimsund",
+      "lat": 60.37089,
+      "lon": 6.14562,
+      "population": 4399
+    },
+    {
+      "id": 3143513,
+      "name": "Oppdal",
+      "lat": 62.59431,
+      "lon": 9.6912,
+      "population": 4310
+    },
+    {
+      "id": 3150842,
+      "name": "Jevnaker",
+      "lat": 60.23979,
+      "lon": 10.38709,
+      "population": 4308
+    },
+    {
+      "id": 3146270,
+      "name": "Maura",
+      "lat": 60.2583,
+      "lon": 11.03192,
+      "population": 4224
+    },
+    {
+      "id": 3140056,
+      "name": "Sauda",
+      "lat": 59.65059,
+      "lon": 6.35415,
+      "population": 4174
+    },
+    {
+      "id": 3135377,
+      "name": "Sunndalsøra",
+      "lat": 62.67519,
+      "lon": 8.56327,
+      "population": 4054
+    },
+    {
+      "id": 8558573,
+      "name": "Skarbøvik",
+      "lat": 62.4655,
+      "lon": 6.11407,
+      "population": 4000
+    },
+    {
+      "id": 7288345,
+      "name": "Sogndal",
+      "lat": 61.22908,
+      "lon": 7.09674,
+      "population": 3995
+    },
+    {
+      "id": 3135124,
+      "name": "Svelvik",
+      "lat": 59.6137,
+      "lon": 10.40872,
+      "population": 3926
+    },
+    {
+      "id": 3157549,
+      "name": "Finnsnes",
+      "lat": 69.22959,
+      "lon": 17.98114,
+      "population": 3907
+    },
+    {
+      "id": 3163506,
+      "name": "Ågotnes",
+      "lat": 60.40306,
+      "lon": 5.01927,
+      "population": 3821
+    },
+    {
+      "id": 3142520,
+      "name": "Rakkestad",
+      "lat": 59.42513,
+      "lon": 11.34535,
+      "population": 3779
+    },
+    {
+      "id": 9404010,
+      "name": "Nordstranda",
+      "lat": 62.51384,
+      "lon": 6.13166,
+      "population": 3700
+    },
+    {
+      "id": 3146684,
+      "name": "Lyngdal",
+      "lat": 58.1376,
+      "lon": 7.07002,
+      "population": 3671
+    },
+    {
+      "id": 3153861,
+      "name": "Hareid",
+      "lat": 62.37041,
+      "lon": 6.02902,
+      "population": 3626
+    },
+    {
+      "id": 3141682,
+      "name": "Rjukan",
+      "lat": 59.87891,
+      "lon": 8.59411,
+      "population": 3568
+    },
+    {
+      "id": 7626400,
+      "name": "Leknes",
+      "lat": 68.14746,
+      "lon": 13.61151,
+      "population": 3556
+    },
+    {
+      "id": 779303,
+      "name": "Kirkenes",
+      "lat": 69.72706,
+      "lon": 30.04578,
+      "population": 3529
+    },
+    {
+      "id": 3138423,
+      "name": "Skui",
+      "lat": 59.92746,
+      "lon": 10.4475,
+      "population": 3487
+    },
+    {
+      "id": 3143034,
+      "name": "Farnes",
+      "lat": 61.3085,
+      "lon": 7.79694,
+      "population": 3465
+    },
+    {
+      "id": 3146631,
+      "name": "Lysaker",
+      "lat": 59.90994,
+      "lon": 10.63545,
+      "population": 3439
+    },
+    {
+      "id": 3140573,
+      "name": "Sagvåg",
+      "lat": 59.78139,
+      "lon": 5.38996,
+      "population": 3419
+    },
+    {
+      "id": 3162412,
+      "name": "Aure",
+      "lat": 63.2679,
+      "lon": 8.52913,
+      "population": 3384
+    },
+    {
+      "id": 3157799,
+      "name": "Farsund",
+      "lat": 58.09479,
+      "lon": 6.80468,
+      "population": 3377
+    },
+    {
+      "id": 3134656,
+      "name": "Tertnes",
+      "lat": 60.45775,
+      "lon": 5.28837,
+      "population": 3376
+    },
+    {
+      "id": 3136690,
+      "name": "Stokmarknes",
+      "lat": 68.56462,
+      "lon": 14.91075,
+      "population": 3367
+    },
+    {
+      "id": 3146487,
+      "name": "Måløy",
+      "lat": 61.93535,
+      "lon": 5.11362,
+      "population": 3343
+    },
+    {
+      "id": 3138429,
+      "name": "Skudeneshavn",
+      "lat": 59.14945,
+      "lon": 5.25913,
+      "population": 3334
+    },
+    {
+      "id": 3132644,
+      "name": "Varhaug",
+      "lat": 58.6181,
+      "lon": 5.65702,
+      "population": 3314
+    },
+    {
+      "id": 3157162,
+      "name": "Flateby",
+      "lat": 59.82951,
+      "lon": 11.15345,
+      "population": 3298
+    },
+    {
+      "id": 3162906,
+      "name": "Årnes",
+      "lat": 60.12237,
+      "lon": 11.47005,
+      "population": 3289
+    },
+    {
+      "id": 3131684,
+      "name": "Vikersund",
+      "lat": 59.96838,
+      "lon": 9.99107,
+      "population": 3232
+    },
+    {
+      "id": 3134776,
+      "name": "Tau",
+      "lat": 59.06481,
+      "lon": 5.9225,
+      "population": 3212
+    },
+    {
+      "id": 3137245,
+      "name": "Spydeberg",
+      "lat": 59.61709,
+      "lon": 11.08559,
+      "population": 3166
+    },
+    {
+      "id": 3158616,
+      "name": "Eidsvåg",
+      "lat": 60.43677,
+      "lon": 5.31032,
+      "population": 3120
+    },
+    {
+      "id": 3134429,
+      "name": "Tofte",
+      "lat": 59.54275,
+      "lon": 10.56138,
+      "population": 3109
+    },
+    {
+      "id": 3145413,
+      "name": "Morvik",
+      "lat": 60.46985,
+      "lon": 5.27504,
+      "population": 3057
+    },
+    {
+      "id": 3140636,
+      "name": "Sætre",
+      "lat": 59.68129,
+      "lon": 10.52749,
+      "population": 3009
+    },
+    {
+      "id": 3144369,
+      "name": "Nordfjordeid",
+      "lat": 61.9122,
+      "lon": 5.98557,
+      "population": 2974
+    },
+    {
+      "id": 3135813,
+      "name": "Stranda",
+      "lat": 62.30864,
+      "lon": 6.93717,
+      "population": 2969
+    },
+    {
+      "id": 3161532,
+      "name": "Birkeland",
+      "lat": 58.33091,
+      "lon": 8.23229,
+      "population": 2962
+    },
+    {
+      "id": 3162682,
+      "name": "Åsgårdstrand",
+      "lat": 59.34938,
+      "lon": 10.46948,
+      "population": 2959
+    },
+    {
+      "id": 3160082,
+      "name": "Svortland",
+      "lat": 59.79284,
+      "lon": 5.17226,
+      "population": 2932
+    },
+    {
+      "id": 3159143,
+      "name": "Dokka",
+      "lat": 60.835,
+      "lon": 10.07362,
+      "population": 2924
+    },
+    {
+      "id": 7288344,
+      "name": "Vik",
+      "lat": 61.05712,
+      "lon": 6.57806,
+      "population": 2899
+    },
+    {
+      "id": 3147104,
+      "name": "Løding",
+      "lat": 67.30055,
+      "lon": 14.73852,
+      "population": 2835
+    },
+    {
+      "id": 3133498,
+      "name": "Tynset",
+      "lat": 62.27594,
+      "lon": 10.78241,
+      "population": 2779
+    },
+    {
+      "id": 3141107,
+      "name": "Røyken",
+      "lat": 59.74724,
+      "lon": 10.38832,
+      "population": 2775
+    },
+    {
+      "id": 3205608,
+      "name": "Vormedal",
+      "lat": 59.35607,
+      "lon": 5.31962,
+      "population": 2774
+    },
+    {
+      "id": 3155567,
+      "name": "Justvik",
+      "lat": 58.19691,
+      "lon": 8.03107,
+      "population": 2770
+    },
+    {
+      "id": 3146897,
+      "name": "Løten",
+      "lat": 60.81941,
+      "lon": 11.34209,
+      "population": 2754
+    },
+    {
+      "id": 3336591,
+      "name": "Vedavågen",
+      "lat": 59.29483,
+      "lon": 5.21874,
+      "population": 2728
+    },
+    {
+      "id": 3133402,
+      "name": "Ulefoss",
+      "lat": 59.28245,
+      "lon": 9.26548,
+      "population": 2697
+    },
+    {
+      "id": 3163146,
+      "name": "Andenes",
+      "lat": 69.31428,
+      "lon": 16.11939,
+      "population": 2694
+    },
+    {
+      "id": 3131538,
+      "name": "Vinstra",
+      "lat": 61.59496,
+      "lon": 9.75134,
+      "population": 2678
+    },
+    {
+      "id": 3162475,
+      "name": "Auli",
+      "lat": 60.0345,
+      "lon": 11.36046,
+      "population": 2638
+    },
+    {
+      "id": 3131246,
+      "name": "Ytre Arna",
+      "lat": 60.46175,
+      "lon": 5.43265,
+      "population": 2626
+    },
+    {
+      "id": 3141310,
+      "name": "Rørvik",
+      "lat": 64.86201,
+      "lon": 11.23734,
+      "population": 2615
+    },
+    {
+      "id": 3154539,
+      "name": "Gullhaug",
+      "lat": 59.5013,
+      "lon": 10.25224,
+      "population": 2604
+    },
+    {
+      "id": 3131189,
+      "name": "Skålevik",
+      "lat": 58.07955,
+      "lon": 8.01602,
+      "population": 2599
+    },
+    {
+      "id": 3141548,
+      "name": "Rognan",
+      "lat": 67.10021,
+      "lon": 15.39086,
+      "population": 2584
+    },
+    {
+      "id": 3140825,
+      "name": "Rygge",
+      "lat": 59.37762,
+      "lon": 10.75034,
+      "population": 2567
+    },
+    {
+      "id": 3139244,
+      "name": "Skarnes",
+      "lat": 60.25391,
+      "lon": 11.68485,
+      "population": 2557
+    },
+    {
+      "id": 3138747,
+      "name": "Skodje",
+      "lat": 62.50468,
+      "lon": 6.69322,
+      "population": 2544
+    },
+    {
+      "id": 780643,
+      "name": "Bjørnevatn",
+      "lat": 69.66745,
+      "lon": 29.98722,
+      "population": 2536
+    },
+    {
+      "id": 3155422,
+      "name": "Gol",
+      "lat": 60.7014,
+      "lon": 8.94572,
+      "population": 2530
+    },
+    {
+      "id": 3160911,
+      "name": "Bø",
+      "lat": 59.41299,
+      "lon": 9.0693,
+      "population": 2522
+    },
+    {
+      "id": 3155913,
+      "name": "Geilo",
+      "lat": 60.53369,
+      "lon": 8.20539,
+      "population": 2500
+    },
+    {
+      "id": 7280466,
+      "name": "Frosta",
+      "lat": 63.5891,
+      "lon": 10.7423,
+      "population": 2495
+    },
+    {
+      "id": 779554,
+      "name": "Honningsvåg",
+      "lat": 70.98209,
+      "lon": 25.97037,
+      "population": 2484
+    },
+    {
+      "id": 3148602,
+      "name": "Kyrksæterøra",
+      "lat": 63.29057,
+      "lon": 9.08909,
+      "population": 2471
+    },
+    {
+      "id": 3139765,
+      "name": "Setermoen",
+      "lat": 68.86099,
+      "lon": 18.34857,
+      "population": 2464
+    },
+    {
+      "id": 777682,
+      "name": "Skjervøy",
+      "lat": 70.03114,
+      "lon": 20.97141,
+      "population": 2460
+    },
+    {
+      "id": 3140431,
+      "name": "Sandane",
+      "lat": 61.77277,
+      "lon": 6.21496,
+      "population": 2447
+    },
+    {
+      "id": 3163269,
+      "name": "Alvdal",
+      "lat": 62.10766,
+      "lon": 10.63073,
+      "population": 2445
+    },
+    {
+      "id": 3132428,
+      "name": "Vatne",
+      "lat": 62.55826,
+      "lon": 6.61708,
+      "population": 2439
+    },
+    {
+      "id": 3133819,
+      "name": "Innbygda",
+      "lat": 61.31484,
+      "lon": 12.26374,
+      "population": 2433
+    },
+    {
+      "id": 3137169,
+      "name": "Stange",
+      "lat": 60.71803,
+      "lon": 11.19417,
+      "population": 2416
+    },
+    {
+      "id": 3336590,
+      "name": "Ryggebyen",
+      "lat": 59.375,
+      "lon": 10.75,
+      "population": 2416
+    },
+    {
+      "id": 3163155,
+      "name": "Åndalsnes",
+      "lat": 62.56749,
+      "lon": 7.68709,
+      "population": 2403
+    },
+    {
+      "id": 7626371,
+      "name": "Elnesvågen",
+      "lat": 62.85426,
+      "lon": 7.13769,
+      "population": 2362
+    },
+    {
+      "id": 8504433,
+      "name": "Billingstad",
+      "lat": 59.87548,
+      "lon": 10.4823,
+      "population": 2349
+    },
+    {
+      "id": 3161346,
+      "name": "Bjørkelangen",
+      "lat": 59.88357,
+      "lon": 11.56396,
+      "population": 2346
+    },
+    {
+      "id": 3147720,
+      "name": "Lervik",
+      "lat": 59.27119,
+      "lon": 10.7461,
+      "population": 2331
+    },
+    {
+      "id": 3146942,
+      "name": "Løpsmarka",
+      "lat": 67.31343,
+      "lon": 14.44934,
+      "population": 2308
+    },
+    {
+      "id": 3150639,
+      "name": "Kabelvåg",
+      "lat": 68.21066,
+      "lon": 14.47554,
+      "population": 2291
+    },
+    {
+      "id": 779082,
+      "name": "Lakselv",
+      "lat": 70.05133,
+      "lon": 24.97182,
+      "population": 2283
+    },
+    {
+      "id": 3143120,
+      "name": "Otta",
+      "lat": 61.7712,
+      "lon": 9.53529,
+      "population": 2283
+    },
+    {
+      "id": 3163410,
+      "name": "Ål",
+      "lat": 60.63024,
+      "lon": 8.56071,
+      "population": 2278
+    },
+    {
+      "id": 3151272,
+      "name": "Hylkje",
+      "lat": 60.51028,
+      "lon": 5.35444,
+      "population": 2277
+    },
+    {
+      "id": 9404493,
+      "name": "Nyborg",
+      "lat": 60.46839,
+      "lon": 5.3358,
+      "population": 2264
+    },
+    {
+      "id": 3146160,
+      "name": "Melbu",
+      "lat": 68.50246,
+      "lon": 14.79962,
+      "population": 2257
+    },
+    {
+      "id": 3141982,
+      "name": "Rena",
+      "lat": 61.13222,
+      "lon": 11.37156,
+      "population": 2216
+    },
+    {
+      "id": 3147026,
+      "name": "Fossbergom",
+      "lat": 61.83772,
+      "lon": 8.56842,
+      "population": 2211
+    },
+    {
+      "id": 3134349,
+      "name": "Tomter",
+      "lat": 59.6591,
+      "lon": 10.99487,
+      "population": 2209
+    },
+    {
+      "id": 3144534,
+      "name": "Nodeland",
+      "lat": 58.15517,
+      "lon": 7.83576,
+      "population": 2208
+    },
+    {
+      "id": 11748571,
+      "name": "Lyefjell",
+      "lat": 58.73539,
+      "lon": 5.73615,
+      "population": 2200
+    },
+    {
+      "id": 3162385,
+      "name": "Aursmoen",
+      "lat": 59.92763,
+      "lon": 11.44275,
+      "population": 2173
+    },
+    {
+      "id": 780717,
+      "name": "Båtsfjord",
+      "lat": 70.63428,
+      "lon": 29.7175,
+      "population": 2166
+    },
+    {
+      "id": 3153694,
+      "name": "Hauge i Dalane",
+      "lat": 58.34361,
+      "lon": 6.28121,
+      "population": 2148
+    },
+    {
+      "id": 3160310,
+      "name": "Brattvåg",
+      "lat": 62.59991,
+      "lon": 6.44426,
+      "population": 2146
+    },
+    {
+      "id": 3152884,
+      "name": "Hermansverk",
+      "lat": 61.18461,
+      "lon": 6.85016,
+      "population": 2144
+    },
+    {
+      "id": 3147498,
+      "name": "Liknes",
+      "lat": 58.31216,
+      "lon": 6.9618,
+      "population": 2141
+    },
+    {
+      "id": 3157977,
+      "name": "Evjen",
+      "lat": 68.26667,
+      "lon": 13.73333,
+      "population": 2127
+    },
+    {
+      "id": 3142061,
+      "name": "Rensvik",
+      "lat": 63.09843,
+      "lon": 7.82026,
+      "population": 2121
+    },
+    {
+      "id": 3153517,
+      "name": "Hauknes",
+      "lat": 66.28333,
+      "lon": 14.06667,
+      "population": 2110
+    },
+    {
+      "id": 3131824,
+      "name": "Vigrestad",
+      "lat": 58.57103,
+      "lon": 5.68182,
+      "population": 2090
+    },
+    {
+      "id": 3345453,
+      "name": "Vestnes",
+      "lat": 62.62544,
+      "lon": 7.08696,
+      "population": 2088
+    },
+    {
+      "id": 3144733,
+      "name": "Nesbyen",
+      "lat": 60.56809,
+      "lon": 9.10274,
+      "population": 2086
+    },
+    {
+      "id": 3232860,
+      "name": "Myre",
+      "lat": 68.914,
+      "lon": 15.07843,
+      "population": 2086
+    },
+    {
+      "id": 3146049,
+      "name": "Melsomvik",
+      "lat": 59.22394,
+      "lon": 10.33616,
+      "population": 2067
+    },
+    {
+      "id": 3151719,
+      "name": "Hov",
+      "lat": 60.6987,
+      "lon": 10.35193,
+      "population": 2054
+    },
+    {
+      "id": 3229577,
+      "name": "Årøysund",
+      "lat": 59.18321,
+      "lon": 10.45743,
+      "population": 2052
+    },
+    {
+      "id": 3151574,
+      "name": "Høyanger",
+      "lat": 61.22348,
+      "lon": 6.08471,
+      "population": 2051
+    },
+    {
+      "id": 3132720,
+      "name": "Vanse",
+      "lat": 58.09812,
+      "lon": 6.69184,
+      "population": 2016
+    },
+    {
+      "id": 779330,
+      "name": "Kautokeino",
+      "lat": 69.01247,
+      "lon": 23.04116,
+      "population": 2000
+    },
+    {
+      "id": 3145148,
+      "name": "Myre",
+      "lat": 69.10588,
+      "lon": 15.96308,
+      "population": 1995
+    },
+    {
+      "id": 3157889,
+      "name": "Fagerstrand",
+      "lat": 59.73746,
+      "lon": 10.59404,
+      "population": 1990
+    },
+    {
+      "id": 3147102,
+      "name": "Lødingen",
+      "lat": 68.41373,
+      "lon": 15.99626,
+      "population": 1976
+    },
+    {
+      "id": 3137304,
+      "name": "Spetalen",
+      "lat": 60.18333,
+      "lon": 11.9,
+      "population": 1969
+    },
+    {
+      "id": 3157897,
+      "name": "Fagernes",
+      "lat": 60.98584,
+      "lon": 9.23236,
+      "population": 1951
+    },
+    {
+      "id": 3138701,
+      "name": "Skogn",
+      "lat": 63.70374,
+      "lon": 11.19262,
+      "population": 1935
+    },
+    {
+      "id": 3145617,
+      "name": "Moi",
+      "lat": 58.45674,
+      "lon": 6.55184,
+      "population": 1926
+    },
+    {
+      "id": 3153158,
+      "name": "Hell",
+      "lat": 63.44582,
+      "lon": 10.90093,
+      "population": 1921
+    },
+    {
+      "id": 3161059,
+      "name": "Blakstad",
+      "lat": 59.8191,
+      "lon": 10.4645,
+      "population": 1898
+    },
+    {
+      "id": 3152989,
+      "name": "Hemsedal",
+      "lat": 60.86293,
+      "lon": 8.55337,
+      "population": 1876
+    },
+    {
+      "id": 777019,
+      "name": "Vardø",
+      "lat": 70.37048,
+      "lon": 31.11066,
+      "population": 1875
+    },
+    {
+      "id": 3138955,
+      "name": "Skjeberg",
+      "lat": 59.21148,
+      "lon": 11.19025,
+      "population": 1862
+    },
+    {
+      "id": 779350,
+      "name": "Kárášjohka",
+      "lat": 69.47187,
+      "lon": 25.51122,
+      "population": 1844
+    },
+    {
+      "id": 3160100,
+      "name": "Brekstad",
+      "lat": 63.68697,
+      "lon": 9.66541,
+      "population": 1835
+    },
+    {
+      "id": 3139826,
+      "name": "Selvik",
+      "lat": 59.56645,
+      "lon": 10.26004,
+      "population": 1829
+    },
+    {
+      "id": 3139819,
+      "name": "Sem",
+      "lat": 59.2823,
+      "lon": 10.33004,
+      "population": 1827
+    },
+    {
+      "id": 3150437,
+      "name": "Karlshus",
+      "lat": 59.35195,
+      "lon": 10.87226,
+      "population": 1801
+    },
+    {
+      "id": 3158046,
+      "name": "Espeland",
+      "lat": 60.38249,
+      "lon": 5.4657,
+      "population": 1793
+    },
+    {
+      "id": 3157436,
+      "name": "Fitjar",
+      "lat": 59.91803,
+      "lon": 5.31674,
+      "population": 1751
+    },
+    {
+      "id": 847634,
+      "name": "Rypefjord",
+      "lat": 70.64126,
+      "lon": 23.67213,
+      "population": 1731
+    },
+    {
+      "id": 3143427,
+      "name": "Ørje",
+      "lat": 59.48023,
+      "lon": 11.66016,
+      "population": 1722
+    },
+    {
+      "id": 3138624,
+      "name": "Skoppum",
+      "lat": 59.38613,
+      "lon": 10.41077,
+      "population": 1713
+    },
+    {
+      "id": 3139148,
+      "name": "Skaun",
+      "lat": 63.25149,
+      "lon": 10.05236,
+      "population": 1682
+    },
+    {
+      "id": 3135728,
+      "name": "Straumen",
+      "lat": 63.87163,
+      "lon": 11.29617,
+      "population": 1670
+    },
+    {
+      "id": 3155152,
+      "name": "Gravdal",
+      "lat": 68.11832,
+      "lon": 13.55339,
+      "population": 1662
+    },
+    {
+      "id": 3149727,
+      "name": "Knappskog",
+      "lat": 60.37906,
+      "lon": 5.05602,
+      "population": 1640
+    },
+    {
+      "id": 3142754,
+      "name": "Øystese",
+      "lat": 60.38825,
+      "lon": 6.19251,
+      "population": 1634
+    },
+    {
+      "id": 3143368,
+      "name": "Ørnes",
+      "lat": 66.86878,
+      "lon": 13.70579,
+      "population": 1624
+    },
+    {
+      "id": 3156521,
+      "name": "Frekhaug",
+      "lat": 60.51321,
+      "lon": 5.24252,
+      "population": 1610
+    },
+    {
+      "id": 3136618,
+      "name": "Storebø",
+      "lat": 60.09485,
+      "lon": 5.22705,
+      "population": 1588
+    },
+    {
+      "id": 3154704,
+      "name": "Grua",
+      "lat": 60.25701,
+      "lon": 10.66222,
+      "population": 1587
+    },
+    {
+      "id": 7626337,
+      "name": "Vang",
+      "lat": 61.12529,
+      "lon": 8.5729,
+      "population": 1587
+    },
+    {
+      "id": 3139557,
+      "name": "Sjøholt",
+      "lat": 62.48263,
+      "lon": 6.81376,
+      "population": 1586
+    },
+    {
+      "id": 3135137,
+      "name": "Sveio",
+      "lat": 59.5419,
+      "lon": 5.35178,
+      "population": 1529
+    },
+    {
+      "id": 3160630,
+      "name": "Borkenes",
+      "lat": 68.77261,
+      "lon": 16.17115,
+      "population": 1508
+    },
+    {
+      "id": 6693002,
+      "name": "Sjølyststranda",
+      "lat": 59.92105,
+      "lon": 10.68017,
+      "population": 1500
+    },
+    {
+      "id": 6940426,
+      "name": "Frydenberg",
+      "lat": 59.92879,
+      "lon": 10.78875,
+      "population": 1500
+    },
+    {
+      "id": 3133053,
+      "name": "Vågåmo",
+      "lat": 61.87505,
+      "lon": 9.09671,
+      "population": 1487
+    },
+    {
+      "id": 3131848,
+      "name": "Vigeland",
+      "lat": 58.08437,
+      "lon": 7.30497,
+      "population": 1471
+    },
+    {
+      "id": 3149577,
+      "name": "Kolvereid",
+      "lat": 64.86549,
+      "lon": 11.60465,
+      "population": 1467
+    },
+    {
+      "id": 777381,
+      "name": "Storslett",
+      "lat": 69.76783,
+      "lon": 21.02466,
+      "population": 1455
+    },
+    {
+      "id": 3146811,
+      "name": "Lunde",
+      "lat": 59.29832,
+      "lon": 9.10268,
+      "population": 1422
+    },
+    {
+      "id": 3158578,
+      "name": "Eike",
+      "lat": 59.39833,
+      "lon": 5.36389,
+      "population": 1408
+    },
+    {
+      "id": 3133663,
+      "name": "Tveit",
+      "lat": 58.23366,
+      "lon": 8.12199,
+      "population": 1397
+    },
+    {
+      "id": 3140398,
+      "name": "Sande",
+      "lat": 59.58679,
+      "lon": 10.20809,
+      "population": 1389
+    },
+    {
+      "id": 3147441,
+      "name": "Lindås",
+      "lat": 60.73639,
+      "lon": 5.16102,
+      "population": 1383
+    },
+    {
+      "id": 3162970,
+      "name": "Årdalstangen",
+      "lat": 61.23581,
+      "lon": 7.7037,
+      "population": 1375
+    },
+    {
+      "id": 3148138,
+      "name": "Larkollen",
+      "lat": 59.33196,
+      "lon": 10.66687,
+      "population": 1373
+    },
+    {
+      "id": 3163079,
+      "name": "Åneby",
+      "lat": 60.08926,
+      "lon": 10.86998,
+      "population": 1373
+    },
+    {
+      "id": 3138532,
+      "name": "Skotterud",
+      "lat": 59.98281,
+      "lon": 12.12825,
+      "population": 1360
+    },
+    {
+      "id": 3152995,
+      "name": "Hemnesberget",
+      "lat": 66.22489,
+      "lon": 13.61643,
+      "population": 1335
+    },
+    {
+      "id": 3154321,
+      "name": "Hagavik",
+      "lat": 60.18076,
+      "lon": 5.40146,
+      "population": 1305
+    },
+    {
+      "id": 3158015,
+      "name": "Etne",
+      "lat": 59.66528,
+      "lon": 5.93708,
+      "population": 1283
+    },
+    {
+      "id": 3152862,
+      "name": "Herre",
+      "lat": 59.10351,
+      "lon": 9.56195,
+      "population": 1281
+    },
+    {
+      "id": 3146508,
+      "name": "Malm",
+      "lat": 64.07534,
+      "lon": 11.22398,
+      "population": 1268
+    },
+    {
+      "id": 3131178,
+      "name": "Strai",
+      "lat": 58.1893,
+      "lon": 7.92826,
+      "population": 1266
+    },
+    {
+      "id": 3141032,
+      "name": "Rubbestadneset",
+      "lat": 59.81559,
+      "lon": 5.26822,
+      "population": 1264
+    },
+    {
+      "id": 7626363,
+      "name": "Gaupne",
+      "lat": 61.40472,
+      "lon": 7.29458,
+      "population": 1257
+    },
+    {
+      "id": 3147763,
+      "name": "Lena",
+      "lat": 60.67391,
+      "lon": 10.81317,
+      "population": 1245
+    },
+    {
+      "id": 7626356,
+      "name": "Sand",
+      "lat": 59.48468,
+      "lon": 6.25109,
+      "population": 1245
+    },
+    {
+      "id": 3162032,
+      "name": "Barkåker",
+      "lat": 59.31859,
+      "lon": 10.38963,
+      "population": 1238
+    },
+    {
+      "id": 3150261,
+      "name": "Kirkenær",
+      "lat": 60.4579,
+      "lon": 12.05855,
+      "population": 1231
+    },
+    {
+      "id": 3142626,
+      "name": "Prestestranda",
+      "lat": 59.09773,
+      "lon": 9.05866,
+      "population": 1215
+    },
+    {
+      "id": 3144661,
+      "name": "Nesna",
+      "lat": 66.19817,
+      "lon": 13.01844,
+      "population": 1211
+    },
+    {
+      "id": 3135132,
+      "name": "Svelgen",
+      "lat": 61.76976,
+      "lon": 5.29544,
+      "population": 1207
+    },
+    {
+      "id": 3138713,
+      "name": "Skoger",
+      "lat": 59.71327,
+      "lon": 10.25356,
+      "population": 1206
+    },
+    {
+      "id": 3145589,
+      "name": "Fyresdal",
+      "lat": 59.18343,
+      "lon": 8.0921,
+      "population": 1198
+    },
+    {
+      "id": 3159438,
+      "name": "Dale",
+      "lat": 60.58639,
+      "lon": 5.81888,
+      "population": 1193
+    },
+    {
+      "id": 3159433,
+      "name": "Dale",
+      "lat": 61.36353,
+      "lon": 5.40036,
+      "population": 1186
+    },
+    {
+      "id": 3139894,
+      "name": "Seljord",
+      "lat": 59.48477,
+      "lon": 8.63017,
+      "population": 1185
+    },
+    {
+      "id": 3147854,
+      "name": "Leirsund",
+      "lat": 59.99682,
+      "lon": 11.08746,
+      "population": 1177
+    },
+    {
+      "id": 3156470,
+      "name": "Frogner",
+      "lat": 60.02463,
+      "lon": 11.10284,
+      "population": 1174
+    },
+    {
+      "id": 3134993,
+      "name": "Syfteland",
+      "lat": 60.23803,
+      "lon": 5.45285,
+      "population": 1170
+    },
+    {
+      "id": 3134357,
+      "name": "Tomra",
+      "lat": 62.58118,
+      "lon": 6.93106,
+      "population": 1167
+    },
+    {
+      "id": 3145357,
+      "name": "Mosterhamn",
+      "lat": 59.69919,
+      "lon": 5.38585,
+      "population": 1167
+    },
+    {
+      "id": 3159107,
+      "name": "Dombås",
+      "lat": 62.07554,
+      "lon": 9.12785,
+      "population": 1163
+    },
+    {
+      "id": 6545367,
+      "name": "Neskollen",
+      "lat": 60.12159,
+      "lon": 11.33926,
+      "population": 1157
+    },
+    {
+      "id": 3158697,
+      "name": "Eide",
+      "lat": 62.91735,
+      "lon": 7.44669,
+      "population": 1155
+    },
+    {
+      "id": 3132893,
+      "name": "Våler",
+      "lat": 60.67122,
+      "lon": 11.83477,
+      "population": 1145
+    },
+    {
+      "id": 3163608,
+      "name": "Å i Åfjord",
+      "lat": 63.96068,
+      "lon": 10.22468,
+      "population": 1145
+    },
+    {
+      "id": 3160491,
+      "name": "Botngård",
+      "lat": 63.76484,
+      "lon": 9.80863,
+      "population": 1144
+    },
+    {
+      "id": 3162884,
+      "name": "Åros",
+      "lat": 59.7061,
+      "lon": 10.51092,
+      "population": 1142
+    },
+    {
+      "id": 779622,
+      "name": "Ávanuorri",
+      "lat": 70.99634,
+      "lon": 24.66217,
+      "population": 1138
+    },
+    {
+      "id": 3148569,
+      "name": "Lærdalsøyri",
+      "lat": 61.10001,
+      "lon": 7.47374,
+      "population": 1135
+    },
+    {
+      "id": 3149726,
+      "name": "Knappstad",
+      "lat": 59.62424,
+      "lon": 11.03274,
+      "population": 1133
+    },
+    {
+      "id": 3161724,
+      "name": "Berger",
+      "lat": 59.54994,
+      "lon": 10.38641,
+      "population": 1125
+    },
+    {
+      "id": 3132051,
+      "name": "Vestbygd",
+      "lat": 58.09991,
+      "lon": 6.58696,
+      "population": 1123
+    },
+    {
+      "id": 3149510,
+      "name": "Koppang",
+      "lat": 61.57219,
+      "lon": 11.04659,
+      "population": 1101
+    },
+    {
+      "id": 3155487,
+      "name": "Glomfjord",
+      "lat": 66.81663,
+      "lon": 13.94404,
+      "population": 1089
+    },
+    {
+      "id": 3161456,
+      "name": "Bjerkvik",
+      "lat": 68.54917,
+      "lon": 17.55709,
+      "population": 1088
+    },
+    {
+      "id": 3142060,
+      "name": "Reinsvoll",
+      "lat": 60.67977,
+      "lon": 10.62175,
+      "population": 1083
+    },
+    {
+      "id": 3133448,
+      "name": "Tysvær",
+      "lat": 59.33204,
+      "lon": 5.48981,
+      "population": 1077
+    },
+    {
+      "id": 3136023,
+      "name": "Storsteinnes",
+      "lat": 69.24081,
+      "lon": 19.23437,
+      "population": 1076
+    },
+    {
+      "id": 3144953,
+      "name": "Naustdal",
+      "lat": 61.51108,
+      "lon": 5.71694,
+      "population": 1071
+    },
+    {
+      "id": 6697345,
+      "name": "Sandsli",
+      "lat": 60.30323,
+      "lon": 5.28554,
+      "population": 1070
+    },
+    {
+      "id": 3133314,
+      "name": "Ulvik",
+      "lat": 60.56791,
+      "lon": 6.91645,
+      "population": 1067
+    },
+    {
+      "id": 3154907,
+      "name": "Grong",
+      "lat": 64.46459,
+      "lon": 12.31601,
+      "population": 1065
+    },
+    {
+      "id": 3146831,
+      "name": "Lundamo",
+      "lat": 63.15216,
+      "lon": 10.28555,
+      "population": 1063
+    },
+    {
+      "id": 3138479,
+      "name": "Skreia",
+      "lat": 60.65257,
+      "lon": 10.93564,
+      "population": 1036
+    },
+    {
+      "id": 6545362,
+      "name": "Fjellfoten",
+      "lat": 60.08967,
+      "lon": 11.47222,
+      "population": 1029
+    },
+    {
+      "id": 3131683,
+      "name": "Vikeså",
+      "lat": 58.63759,
+      "lon": 6.09133,
+      "population": 1017
+    },
+    {
+      "id": 3151288,
+      "name": "Hvittingfoss",
+      "lat": 59.48572,
+      "lon": 10.01173,
+      "population": 1016
+    },
+    {
+      "id": 3143573,
+      "name": "Oltedal",
+      "lat": 58.8286,
+      "lon": 6.03687,
+      "population": 1013
+    },
+    {
+      "id": 3207861,
+      "name": "Tingvoll",
+      "lat": 62.91318,
+      "lon": 8.20526,
+      "population": 1005
+    },
+    {
+      "id": 3152548,
+      "name": "Hjelset",
+      "lat": 62.7805,
+      "lon": 7.49277,
+      "population": 1001
+    },
+    {
+      "id": 3146023,
+      "name": "Meråker",
+      "lat": 63.41406,
+      "lon": 11.74298,
+      "population": 961
+    },
+    {
+      "id": 3140452,
+      "name": "Sand",
+      "lat": 60.3922,
+      "lon": 11.5403,
+      "population": 946
+    },
+    {
+      "id": 779261,
+      "name": "Kjøllefjord",
+      "lat": 70.94574,
+      "lon": 27.3465,
+      "population": 945
+    },
+    {
+      "id": 3161622,
+      "name": "Berkåk",
+      "lat": 62.82496,
+      "lon": 10.01177,
+      "population": 914
+    },
+    {
+      "id": 780687,
+      "name": "Berlevåg",
+      "lat": 70.85778,
+      "lon": 29.08636,
+      "population": 906
+    },
+    {
+      "id": 3135726,
+      "name": "Straumen",
+      "lat": 67.34769,
+      "lon": 15.60493,
+      "population": 892
+    },
+    {
+      "id": 3139676,
+      "name": "Siljan",
+      "lat": 59.28843,
+      "lon": 9.71,
+      "population": 891
+    },
+    {
+      "id": 3143628,
+      "name": "Ølen",
+      "lat": 59.60437,
+      "lon": 5.80799,
+      "population": 891
+    },
+    {
+      "id": 3158615,
+      "name": "Eidsvåg",
+      "lat": 62.77656,
+      "lon": 8.0655,
+      "population": 891
+    },
+    {
+      "id": 3149492,
+      "name": "Korgen",
+      "lat": 66.07662,
+      "lon": 13.8216,
+      "population": 878
+    },
+    {
+      "id": 3134327,
+      "name": "Tonstad",
+      "lat": 58.66263,
+      "lon": 6.71694,
+      "population": 874
+    },
+    {
+      "id": 3146978,
+      "name": "Lonevåg",
+      "lat": 60.52556,
+      "lon": 5.49563,
+      "population": 874
+    },
+    {
+      "id": 3154441,
+      "name": "Gvarv",
+      "lat": 59.38767,
+      "lon": 9.1724,
+      "population": 871
+    },
+    {
+      "id": 3134016,
+      "name": "Tretten",
+      "lat": 61.31423,
+      "lon": 10.30066,
+      "population": 859
+    },
+    {
+      "id": 3145649,
+      "name": "Moen",
+      "lat": 69.13043,
+      "lon": 18.61226,
+      "population": 847
+    },
+    {
+      "id": 3133983,
+      "name": "Trofors",
+      "lat": 65.53335,
+      "lon": 13.40631,
+      "population": 835
+    },
+    {
+      "id": 778829,
+      "name": "Lyngseidet",
+      "lat": 69.57629,
+      "lon": 20.21887,
+      "population": 821
+    },
+    {
+      "id": 3146451,
+      "name": "Manger",
+      "lat": 60.64145,
+      "lon": 5.04136,
+      "population": 814
+    },
+    {
+      "id": 3141292,
+      "name": "Rosendal",
+      "lat": 59.98589,
+      "lon": 6.01157,
+      "population": 804
+    },
+    {
+      "id": 3145171,
+      "name": "Myra",
+      "lat": 58.74921,
+      "lon": 8.86254,
+      "population": 781
+    },
+    {
+      "id": 3139516,
+      "name": "Sjøvegan",
+      "lat": 68.87363,
+      "lon": 17.84706,
+      "population": 780
+    },
+    {
+      "id": 778707,
+      "name": "Mehamn",
+      "lat": 71.04137,
+      "lon": 27.85133,
+      "population": 779
+    },
+    {
+      "id": 3162116,
+      "name": "Balestrand",
+      "lat": 61.20962,
+      "lon": 6.53608,
+      "population": 769
+    },
+    {
+      "id": 3147769,
+      "name": "Leland",
+      "lat": 66.06406,
+      "lon": 12.94325,
+      "population": 718
+    },
+    {
+      "id": 3139597,
+      "name": "Sistranda",
+      "lat": 63.72523,
+      "lon": 8.83318,
+      "population": 685
+    },
+    {
+      "id": 3143303,
+      "name": "Os",
+      "lat": 62.49647,
+      "lon": 11.22326,
+      "population": 672
+    },
+    {
+      "id": 3138076,
+      "name": "Snåase",
+      "lat": 64.2457,
+      "lon": 12.37779,
+      "population": 659
+    },
+    {
+      "id": 3141866,
+      "name": "Rindal",
+      "lat": 63.05547,
+      "lon": 9.21151,
+      "population": 649
+    },
+    {
+      "id": 3151056,
+      "name": "Inndyr",
+      "lat": 67.03353,
+      "lon": 14.02663,
+      "population": 649
+    },
+    {
+      "id": 3134404,
+      "name": "Tolga",
+      "lat": 62.40898,
+      "lon": 10.99883,
+      "population": 646
+    },
+    {
+      "id": 3138976,
+      "name": "Skjærhalden",
+      "lat": 59.02526,
+      "lon": 11.03685,
+      "population": 642
+    },
+    {
+      "id": 3137469,
+      "name": "Sørland",
+      "lat": 67.66564,
+      "lon": 12.69784,
+      "population": 640
+    },
+    {
+      "id": 3148726,
+      "name": "Kviteseid",
+      "lat": 59.40223,
+      "lon": 8.49267,
+      "population": 640
+    },
+    {
+      "id": 3148133,
+      "name": "Larsnes",
+      "lat": 62.20282,
+      "lon": 5.57729,
+      "population": 626
+    },
+    {
+      "id": 3151452,
+      "name": "Hundorp",
+      "lat": 61.55523,
+      "lon": 9.94069,
+      "population": 615
+    },
+    {
+      "id": 3162199,
+      "name": "Bagn",
+      "lat": 60.82249,
+      "lon": 9.55207,
+      "population": 607
+    },
+    {
+      "id": 3157994,
+      "name": "Evenskjer",
+      "lat": 68.58283,
+      "lon": 16.57203,
+      "population": 601
+    },
+    {
+      "id": 3163215,
+      "name": "Åmli",
+      "lat": 58.76566,
+      "lon": 8.48392,
+      "population": 572
+    },
+    {
+      "id": 3158668,
+      "name": "Eidfjord",
+      "lat": 60.4675,
+      "lon": 7.07193,
+      "population": 569
+    },
+    {
+      "id": 3150699,
+      "name": "Judaberg",
+      "lat": 59.17204,
+      "lon": 5.87617,
+      "population": 560
+    },
+    {
+      "id": 3226622,
+      "name": "Oppeid",
+      "lat": 68.08522,
+      "lon": 15.60942,
+      "population": 551
+    },
+    {
+      "id": 3134658,
+      "name": "Terråk",
+      "lat": 65.087,
+      "lon": 12.37148,
+      "population": 540
+    },
+    {
+      "id": 3159400,
+      "name": "Dalen",
+      "lat": 59.44499,
+      "lon": 8.00492,
+      "population": 532
+    },
+    {
+      "id": 778362,
+      "name": "Øksfjord",
+      "lat": 70.23936,
+      "lon": 22.3507,
+      "population": 515
+    },
+    {
+      "id": 3142371,
+      "name": "Ranemsletta",
+      "lat": 64.49447,
+      "lon": 11.94912,
+      "population": 510
+    },
+    {
+      "id": 3157656,
+      "name": "Fillan",
+      "lat": 63.60638,
+      "lon": 8.96961,
+      "population": 510
+    },
+    {
+      "id": 3156868,
+      "name": "Folldal",
+      "lat": 62.13246,
+      "lon": 9.9968,
+      "population": 497
+    },
+    {
+      "id": 3153910,
+      "name": "Hansnes",
+      "lat": 69.96701,
+      "lon": 19.62752,
+      "population": 493
+    },
+    {
+      "id": 3157766,
+      "name": "Fedje",
+      "lat": 60.7789,
+      "lon": 4.71485,
+      "population": 480
+    },
+    {
+      "id": 3154000,
+      "name": "Hamnvik",
+      "lat": 68.77927,
+      "lon": 17.17179,
+      "population": 474
+    },
+    {
+      "id": 3145922,
+      "name": "Midsund",
+      "lat": 62.67387,
+      "lon": 6.67412,
+      "population": 468
+    },
+    {
+      "id": 3148002,
+      "name": "Lauvsnes",
+      "lat": 64.50061,
+      "lon": 10.89396,
+      "population": 467
+    },
+    {
+      "id": 3142623,
+      "name": "Prestfoss",
+      "lat": 60.04343,
+      "lon": 9.6352,
+      "population": 465
+    },
+    {
+      "id": 3155247,
+      "name": "Granvin",
+      "lat": 60.52408,
+      "lon": 6.7194,
+      "population": 460
+    },
+    {
+      "id": 6639661,
+      "name": "Kinsarvik",
+      "lat": 60.37567,
+      "lon": 6.71948,
+      "population": 459
+    },
+    {
+      "id": 3159049,
+      "name": "Dovre",
+      "lat": 61.9875,
+      "lon": 9.25556,
+      "population": 439
+    },
+    {
+      "id": 3151676,
+      "name": "Hovden",
+      "lat": 59.56045,
+      "lon": 7.3567,
+      "population": 413
+    },
+    {
+      "id": 780524,
+      "name": "Burfjord",
+      "lat": 69.93804,
+      "lon": 22.05205,
+      "population": 405
+    },
+    {
+      "id": 3160846,
+      "name": "Bogen",
+      "lat": 68.52647,
+      "lon": 16.9928,
+      "population": 395
+    },
+    {
+      "id": 3161969,
+      "name": "Batnfjordsøra",
+      "lat": 62.89463,
+      "lon": 7.67251,
+      "population": 387
+    },
+    {
+      "id": 3131781,
+      "name": "Vik",
+      "lat": 65.31254,
+      "lon": 12.16734,
+      "population": 381
+    },
+    {
+      "id": 3153869,
+      "name": "Hardbakke",
+      "lat": 61.07562,
+      "lon": 4.84111,
+      "population": 334
+    },
+    {
+      "id": 3135739,
+      "name": "Straume",
+      "lat": 68.6888,
+      "lon": 14.47205,
+      "population": 333
+    },
+    {
+      "id": 3144113,
+      "name": "Noresund",
+      "lat": 60.17985,
+      "lon": 9.62411,
+      "population": 330
+    },
+    {
+      "id": 778346,
+      "name": "Olderdalen",
+      "lat": 69.60407,
+      "lon": 20.53272,
+      "population": 322
+    },
+    {
+      "id": 3156642,
+      "name": "Fossby",
+      "lat": 59.22218,
+      "lon": 11.69928,
+      "population": 318
+    },
+    {
+      "id": 3142127,
+      "name": "Reine",
+      "lat": 67.93249,
+      "lon": 13.08955,
+      "population": 314
+    },
+    {
+      "id": 3133425,
+      "name": "Uggdal",
+      "lat": 60.00402,
+      "lon": 5.52876,
+      "population": 313
+    },
+    {
+      "id": 3155536,
+      "name": "Gladstad",
+      "lat": 65.67683,
+      "lon": 11.96218,
+      "population": 300
+    },
+    {
+      "id": 3132852,
+      "name": "Valle",
+      "lat": 59.21259,
+      "lon": 7.53559,
+      "population": 289
+    },
+    {
+      "id": 3155676,
+      "name": "Gjerstad",
+      "lat": 58.88083,
+      "lon": 9.01861,
+      "population": 289
+    },
+    {
+      "id": 3137863,
+      "name": "Solfjellsjøen",
+      "lat": 66.11667,
+      "lon": 12.48333,
+      "population": 281
+    },
+    {
+      "id": 3141061,
+      "name": "Røyrvik",
+      "lat": 64.88394,
+      "lon": 13.56256,
+      "population": 254
+    },
+    {
+      "id": 3159905,
+      "name": "Bruflat",
+      "lat": 60.88781,
+      "lon": 9.64143,
+      "population": 235
+    },
+    {
+      "id": 3133145,
+      "name": "Utsira",
+      "lat": 59.3057,
+      "lon": 4.8862,
+      "population": 188
+    },
+    {
+      "id": 777032,
+      "name": "Vuonnabahta",
+      "lat": 70.17278,
+      "lon": 28.55598,
+      "population": 0
+    },
+    {
+      "id": 3131653,
+      "name": "Vikøyri",
+      "lat": 61.08707,
+      "lon": 6.57914,
+      "population": 0
+    },
+    {
+      "id": 3131901,
+      "name": "Vevelstad",
+      "lat": 65.6978,
+      "lon": 12.43706,
+      "population": 0
+    },
+    {
+      "id": 3133464,
+      "name": "Tysse",
+      "lat": 60.37404,
+      "lon": 5.75952,
+      "population": 0
+    },
+    {
+      "id": 3134011,
+      "name": "Treungen",
+      "lat": 59.02064,
+      "lon": 8.5202,
+      "population": 0
+    },
+    {
+      "id": 3134599,
+      "name": "Tingvatn",
+      "lat": 58.3757,
+      "lon": 7.2197,
+      "population": 0
+    },
+    {
+      "id": 3134827,
+      "name": "Tangvall",
+      "lat": 58.09781,
+      "lon": 7.81529,
+      "population": 0
+    },
+    {
+      "id": 3137973,
+      "name": "Sogndalsfjøra",
+      "lat": 61.22575,
+      "lon": 7.10178,
+      "population": 0
+    },
+    {
+      "id": 3139530,
+      "name": "Skjønhaug",
+      "lat": 59.64069,
+      "lon": 11.31591,
+      "population": 0
+    },
+    {
+      "id": 3140112,
+      "name": "Sandvika",
+      "lat": 64.46377,
+      "lon": 13.59125,
+      "population": 0
+    },
+    {
+      "id": 3140128,
+      "name": "Sandvika",
+      "lat": 59.89073,
+      "lon": 10.52774,
+      "population": 0
+    },
+    {
+      "id": 3141214,
+      "name": "Røst",
+      "lat": 67.51754,
+      "lon": 12.1176,
+      "population": 0
+    },
+    {
+      "id": 3141469,
+      "name": "Rollag",
+      "lat": 59.98431,
+      "lon": 9.29644,
+      "population": 0
+    },
+    {
+      "id": 3141671,
+      "name": "Roa",
+      "lat": 60.29093,
+      "lon": 10.61585,
+      "population": 0
+    },
+    {
+      "id": 3142396,
+      "name": "Randaberg",
+      "lat": 58.99955,
+      "lon": 5.61871,
+      "population": 0
+    },
+    {
+      "id": 3142502,
+      "name": "Ramberg",
+      "lat": 68.08991,
+      "lon": 13.22989,
+      "population": 0
+    },
+    {
+      "id": 3143237,
+      "name": "Osøyro",
+      "lat": 60.18385,
+      "lon": 5.4638,
+      "population": 0
+    },
+    {
+      "id": 3145021,
+      "name": "Namsskogan",
+      "lat": 64.92886,
+      "lon": 13.15954,
+      "population": 0
+    },
+    {
+      "id": 3145573,
+      "name": "Moldjord",
+      "lat": 67.00601,
+      "lon": 14.5743,
+      "population": 0
+    },
+    {
+      "id": 3145716,
+      "name": "Mo",
+      "lat": 60.81625,
+      "lon": 5.80575,
+      "population": 0
+    },
+    {
+      "id": 3145757,
+      "name": "Mjøndalen",
+      "lat": 59.75075,
+      "lon": 10.02477,
+      "population": 0
+    },
+    {
+      "id": 3146315,
+      "name": "Masfjorden",
+      "lat": 60.79887,
+      "lon": 5.30418,
+      "population": 0
+    },
+    {
+      "id": 3147788,
+      "name": "Leknes",
+      "lat": 65.1,
+      "lon": 11.7,
+      "population": 0
+    },
+    {
+      "id": 3148346,
+      "name": "Langevåg",
+      "lat": 62.44085,
+      "lon": 6.19137,
+      "population": 0
+    },
+    {
+      "id": 3148354,
+      "name": "Langesund",
+      "lat": 59.00071,
+      "lon": 9.74876,
+      "population": 0
+    },
+    {
+      "id": 3149239,
+      "name": "Krokstadøra",
+      "lat": 63.40099,
+      "lon": 9.50062,
+      "population": 0
+    },
+    {
+      "id": 3149640,
+      "name": "Kolbotn",
+      "lat": 59.81056,
+      "lon": 10.80389,
+      "population": 0
+    },
+    {
+      "id": 3149864,
+      "name": "Kleppestø",
+      "lat": 60.40844,
+      "lon": 5.2276,
+      "population": 0
+    },
+    {
+      "id": 3150805,
+      "name": "Jondal",
+      "lat": 60.27561,
+      "lon": 6.25229,
+      "population": 0
+    },
+    {
+      "id": 3151001,
+      "name": "Isdalstø",
+      "lat": 60.55519,
+      "lon": 5.26942,
+      "population": 0
+    },
+    {
+      "id": 3151265,
+      "name": "Hyllestad",
+      "lat": 61.17109,
+      "lon": 5.29603,
+      "population": 0
+    },
+    {
+      "id": 3151882,
+      "name": "Hopen",
+      "lat": 63.46539,
+      "lon": 8.01437,
+      "population": 0
+    },
+    {
+      "id": 3152327,
+      "name": "Hokksund",
+      "lat": 59.77077,
+      "lon": 9.90987,
+      "population": 0
+    },
+    {
+      "id": 3153364,
+      "name": "Heggenes",
+      "lat": 61.14383,
+      "lon": 9.06942,
+      "population": 0
+    },
+    {
+      "id": 3155196,
+      "name": "Gratangen",
+      "lat": 68.65,
+      "lon": 17.68333,
+      "population": 0
+    },
+    {
+      "id": 3156680,
+      "name": "Fosnavåg",
+      "lat": 62.34194,
+      "lon": 5.63396,
+      "population": 0
+    },
+    {
+      "id": 3157238,
+      "name": "Flå",
+      "lat": 60.43021,
+      "lon": 9.46197,
+      "population": 0
+    },
+    {
+      "id": 3157982,
+      "name": "Evje",
+      "lat": 58.58569,
+      "lon": 7.80363,
+      "population": 0
+    },
+    {
+      "id": 3158444,
+      "name": "Eivindvik",
+      "lat": 60.98133,
+      "lon": 5.07497,
+      "population": 0
+    },
+    {
+      "id": 3158608,
+      "name": "Eidsvoll",
+      "lat": 60.3311,
+      "lon": 11.26264,
+      "population": 0
+    },
+    {
+      "id": 3159582,
+      "name": "Bygland",
+      "lat": 58.8285,
+      "lon": 7.79616,
+      "population": 0
+    },
+    {
+      "id": 3162272,
+      "name": "Austrheim",
+      "lat": 60.7774,
+      "lon": 4.9323,
+      "population": 0
+    },
+    {
+      "id": 3162795,
+      "name": "Aas",
+      "lat": 63.05,
+      "lon": 11.65,
+      "population": 0
+    },
+    {
+      "id": 3162903,
+      "name": "Årnes",
+      "lat": 63.96114,
+      "lon": 10.22601,
+      "population": 0
+    },
+    {
+      "id": 3163198,
+      "name": "Åmot",
+      "lat": 59.56974,
+      "lon": 7.98871,
+      "population": 0
+    },
+    {
+      "id": 3163379,
+      "name": "Ålgård",
+      "lat": 58.76417,
+      "lon": 5.85253,
+      "population": 0
+    },
+    {
+      "id": 3163394,
+      "name": "Ålen",
+      "lat": 62.84185,
+      "lon": 11.3013,
+      "population": 0
+    },
+    {
+      "id": 7626136,
+      "name": "Meieribyen",
+      "lat": 59.47453,
+      "lon": 11.16083,
+      "population": 0
+    },
+    {
+      "id": 7626137,
+      "name": "Kirkebygda",
+      "lat": 59.4921,
+      "lon": 10.87432,
+      "population": 0
+    },
+    {
+      "id": 7626138,
+      "name": "Elvestad",
+      "lat": 59.62401,
+      "lon": 10.9508,
+      "population": 0
+    },
+    {
+      "id": 7626323,
+      "name": "Fjerdingby",
+      "lat": 59.92626,
+      "lon": 11.06527,
+      "population": 0
+    },
+    {
+      "id": 7626324,
+      "name": "Kirkebygda",
+      "lat": 59.76452,
+      "lon": 11.14492,
+      "population": 0
+    },
+    {
+      "id": 7626325,
+      "name": "Kjenn",
+      "lat": 59.93098,
+      "lon": 10.95373,
+      "population": 0
+    },
+    {
+      "id": 7626326,
+      "name": "Teigebyen",
+      "lat": 60.22069,
+      "lon": 11.0176,
+      "population": 0
+    },
+    {
+      "id": 7626327,
+      "name": "Hurdal",
+      "lat": 60.43518,
+      "lon": 11.06707,
+      "population": 0
+    },
+    {
+      "id": 7626328,
+      "name": "Flisa",
+      "lat": 60.61318,
+      "lon": 12.01088,
+      "population": 0
+    },
+    {
+      "id": 7626329,
+      "name": "Bergset",
+      "lat": 61.89126,
+      "lon": 11.07769,
+      "population": 0
+    },
+    {
+      "id": 7626330,
+      "name": "Engerdal",
+      "lat": 61.75904,
+      "lon": 11.95937,
+      "population": 0
+    },
+    {
+      "id": 7626331,
+      "name": "Lesja",
+      "lat": 62.11837,
+      "lon": 8.86424,
+      "population": 0
+    },
+    {
+      "id": 7626332,
+      "name": "Bismo",
+      "lat": 61.88406,
+      "lon": 8.26665,
+      "population": 0
+    },
+    {
+      "id": 7626334,
+      "name": "Ringebu",
+      "lat": 61.52965,
+      "lon": 10.13889,
+      "population": 0
+    },
+    {
+      "id": 7626335,
+      "name": "Segalstad bru",
+      "lat": 61.22819,
+      "lon": 10.22255,
+      "population": 0
+    },
+    {
+      "id": 7626336,
+      "name": "Slidre",
+      "lat": 61.08802,
+      "lon": 8.98141,
+      "population": 0
+    },
+    {
+      "id": 7626338,
+      "name": "Vik",
+      "lat": 60.07706,
+      "lon": 10.27908,
+      "population": 0
+    },
+    {
+      "id": 7626339,
+      "name": "Trøim",
+      "lat": 60.86114,
+      "lon": 8.56537,
+      "population": 0
+    },
+    {
+      "id": 7626340,
+      "name": "Hol",
+      "lat": 60.61511,
+      "lon": 8.29398,
+      "population": 0
+    },
+    {
+      "id": 7626341,
+      "name": "Lierbyen",
+      "lat": 59.78651,
+      "lon": 10.24447,
+      "population": 0
+    },
+    {
+      "id": 7626342,
+      "name": "Lampeland",
+      "lat": 59.83486,
+      "lon": 9.57912,
+      "population": 0
+    },
+    {
+      "id": 7626343,
+      "name": "Rødberg",
+      "lat": 60.26722,
+      "lon": 8.94721,
+      "population": 0
+    },
+    {
+      "id": 7626345,
+      "name": "Revetal",
+      "lat": 59.3724,
+      "lon": 10.26308,
+      "population": 0
+    },
+    {
+      "id": 7626347,
+      "name": "Borgheim",
+      "lat": 59.22629,
+      "lon": 10.40745,
+      "population": 0
+    },
+    {
+      "id": 7626349,
+      "name": "Sauland",
+      "lat": 59.6161,
+      "lon": 8.93755,
+      "population": 0
+    },
+    {
+      "id": 7626350,
+      "name": "Blakstad",
+      "lat": 58.5046,
+      "lon": 8.64648,
+      "population": 0
+    },
+    {
+      "id": 7626351,
+      "name": "Birketveit",
+      "lat": 58.45909,
+      "lon": 7.91692,
+      "population": 0
+    },
+    {
+      "id": 7626353,
+      "name": "Kyrkjebygda",
+      "lat": 58.61523,
+      "lon": 7.41391,
+      "population": 0
+    },
+    {
+      "id": 7626355,
+      "name": "Hjelmelandsvågen",
+      "lat": 59.23692,
+      "lon": 6.17907,
+      "population": 0
+    },
+    {
+      "id": 7626357,
+      "name": "Ydstebøhamn",
+      "lat": 59.06227,
+      "lon": 5.40249,
+      "population": 0
+    },
+    {
+      "id": 7626358,
+      "name": "Bokn",
+      "lat": 59.23062,
+      "lon": 5.43524,
+      "population": 0
+    },
+    {
+      "id": 7626359,
+      "name": "Aksdal",
+      "lat": 59.42408,
+      "lon": 5.44553,
+      "population": 0
+    },
+    {
+      "id": 7626361,
+      "name": "Straume",
+      "lat": 60.36131,
+      "lon": 5.12199,
+      "population": 0
+    },
+    {
+      "id": 7626362,
+      "name": "Aurlandsvangen",
+      "lat": 60.90578,
+      "lon": 7.18706,
+      "population": 0
+    },
+    {
+      "id": 7626364,
+      "name": "Askvoll",
+      "lat": 61.34673,
+      "lon": 5.06224,
+      "population": 0
+    },
+    {
+      "id": 7626365,
+      "name": "Hornindal",
+      "lat": 61.96921,
+      "lon": 6.52418,
+      "population": 0
+    },
+    {
+      "id": 7626366,
+      "name": "Fiskå",
+      "lat": 62.10059,
+      "lon": 5.55788,
+      "population": 0
+    },
+    {
+      "id": 7626367,
+      "name": "Stordal",
+      "lat": 62.38203,
+      "lon": 6.98629,
+      "population": 0
+    },
+    {
+      "id": 7626368,
+      "name": "Sykkylven",
+      "lat": 62.39594,
+      "lon": 6.5875,
+      "population": 0
+    },
+    {
+      "id": 7626369,
+      "name": "Valderøy",
+      "lat": 62.5007,
+      "lon": 6.13472,
+      "population": 0
+    },
+    {
+      "id": 7626370,
+      "name": "Falkhytta",
+      "lat": 62.805,
+      "lon": 6.88722,
+      "population": 0
+    },
+    {
+      "id": 7626372,
+      "name": "Bruhagen",
+      "lat": 63.05259,
+      "lon": 7.63416,
+      "population": 0
+    },
+    {
+      "id": 7626373,
+      "name": "Surnadal",
+      "lat": 62.97397,
+      "lon": 8.72472,
+      "population": 0
+    },
+    {
+      "id": 7626375,
+      "name": "Rissa",
+      "lat": 63.58368,
+      "lon": 9.95989,
+      "population": 0
+    },
+    {
+      "id": 7626377,
+      "name": "Steinsdalen",
+      "lat": 64.29875,
+      "lon": 10.51284,
+      "population": 0
+    },
+    {
+      "id": 7626379,
+      "name": "Støren",
+      "lat": 63.0391,
+      "lon": 10.28501,
+      "population": 0
+    },
+    {
+      "id": 7626380,
+      "name": "Børsa",
+      "lat": 63.32672,
+      "lon": 10.0692,
+      "population": 0
+    },
+    {
+      "id": 7626381,
+      "name": "Klæbu",
+      "lat": 63.29762,
+      "lon": 10.48261,
+      "population": 0
+    },
+    {
+      "id": 7626382,
+      "name": "Mebonden",
+      "lat": 63.23034,
+      "lon": 11.03099,
+      "population": 0
+    },
+    {
+      "id": 7626388,
+      "name": "Høylandet",
+      "lat": 64.62887,
+      "lon": 12.30206,
+      "population": 0
+    },
+    {
+      "id": 7626391,
+      "name": "Silvalen",
+      "lat": 65.9832,
+      "lon": 12.28856,
+      "population": 0
+    },
+    {
+      "id": 7626393,
+      "name": "Hattfjelldal",
+      "lat": 65.59736,
+      "lon": 13.98791,
+      "population": 0
+    },
+    {
+      "id": 7626395,
+      "name": "Lurøy",
+      "lat": 66.41887,
+      "lon": 12.84248,
+      "population": 0
+    },
+    {
+      "id": 7626396,
+      "name": "Husøya",
+      "lat": 66.50159,
+      "lon": 12.09645,
+      "population": 0
+    },
+    {
+      "id": 7626397,
+      "name": "Vågaholmen",
+      "lat": 66.71367,
+      "lon": 13.28711,
+      "population": 0
+    },
+    {
+      "id": 7626398,
+      "name": "Leinesfjorden",
+      "lat": 67.77548,
+      "lon": 15.01545,
+      "population": 0
+    },
+    {
+      "id": 7626402,
+      "name": "Tennevoll",
+      "lat": 68.7471,
+      "lon": 17.80621,
+      "population": 0
+    },
+    {
+      "id": 7626403,
+      "name": "Sørreisa",
+      "lat": 69.14527,
+      "lon": 18.15292,
+      "population": 0
+    },
+    {
+      "id": 7626404,
+      "name": "Brøstadbotn",
+      "lat": 69.08873,
+      "lon": 17.69489,
+      "population": 0
+    },
+    {
+      "id": 7626405,
+      "name": "Hatteng",
+      "lat": 69.27072,
+      "lon": 19.95944,
+      "population": 0
+    },
+    {
+      "id": 7626406,
+      "name": "Breivikbotn",
+      "lat": 70.58877,
+      "lon": 22.28712,
+      "population": 0
+    },
+    {
+      "id": 8558584,
+      "name": "Tana Bru",
+      "lat": 70.19863,
+      "lon": 28.19164,
+      "population": 0
+    }
+  ]
+}

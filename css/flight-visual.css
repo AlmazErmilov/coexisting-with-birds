@@ -188,3 +188,81 @@
 
 .flight-intro__altitude-band { fill: var(--flight-teal); fill-opacity: .12; }
 .flight-intro__band-label { fill: var(--flight-muted); font: 9px "Roboto Mono", monospace; }
+
+/* The whole comparison fits its container, including all bird lanes. */
+.flight-diagram__scroll { overflow: visible; padding-bottom: 0; }
+.flight-diagram__svg { max-width: 400px; margin: 0 auto; }
+.flight-diagram__svg text { font-size: 14px; }
+.flight-diagram__svg .flight-plot-label { font-size: 13px; }
+.flight-dimensions { grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 12px 0; }
+.flight-dimensions > div:last-child { grid-column: auto; }
+.flight-dimensions dd { font-size: 12px; }
+.flight-key { gap: 10px; justify-content: center; }
+.flight-species summary { display: flex; align-items: center; gap: 9px; }
+.flight-species summary::before { content: '+'; color: var(--flight-teal); }
+.flight-species[open] summary::before { content: '−'; }
+.flight-species__range { padding-left: 0; }
+.flight-method { margin-top: 12px; font-size: 11px; color: var(--flight-muted); }
+.flight-method summary { cursor: pointer; }
+
+/* Full viewport introduction. Replay stays open until the visitor dismisses it. */
+.flight-intro { inset: 0; width: 100%; height: 100dvh; z-index: 3000; }
+.flight-intro__card { position: absolute; inset: 0; margin: 0; padding: 30px 40px; border: 0; background: #0b1c26; pointer-events: auto; display: flex; flex-direction: column; overflow-y: auto; }
+.flight-intro__card::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 64% 53%, #21424a66, transparent 68%); }
+.flight-intro__topline, .flight-intro__composition, .flight-intro__caption { position: relative; }
+.flight-intro__topline { text-transform: uppercase; letter-spacing: 1px; font-size: 11px; border-bottom: 1px solid var(--flight-rule); padding-bottom: 14px; }
+.flight-intro .flight-intro__close { width: 44px; height: 44px; flex-basis: 44px; }
+.flight-intro__composition { width: min(1120px, 100%); margin: auto; padding: 26px 0; }
+.flight-intro__eyebrow { text-transform: uppercase; letter-spacing: 2px; font-size: 10px !important; }
+.flight-intro h2 { font-size: clamp(32px, 5.5vw, 72px); line-height: 1.15; margin: 8px 0 6px; letter-spacing: -2px; }
+.flight-intro__drawing { width: 100%; max-height: min(48dvh, 480px); min-height: 180px; margin: 18px 0; overflow: visible; }
+.flight-intro__band-label { font-size: 12px; letter-spacing: .7px; }
+.flight-intro__datum { fill: none; stroke: var(--flight-muted); stroke-width: 1; }
+.flight-intro__composition footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; border-top: 1px solid var(--flight-rule); padding-top: 20px; }
+.flight-intro__composition footer p { font-size: 14px; }
+.flight-intro .flight-intro__explore { padding: 14px 22px; color: #dcece9; border: 1px solid #73d6ca; font-size: 12px; }
+.flight-intro__explore span { margin-left: 24px; color: #73d6ca; }
+.flight-intro__caption { margin-top: auto !important; text-align: right; }
+.flight-intro .flight-intro__replay { position: fixed; bottom: 78px; right: 16px; }
+.flight-intro__replay[hidden] { display: none !important; }
+.flight-intro__card--playing .flight-rotor { animation: intro-rotor-turn 8s cubic-bezier(.22,.1,.2,1) both; }
+.flight-intro__card--playing .flight-intro__grid-stage { animation: intro-fade 1.5s ease both; }
+.flight-intro__card--playing .flight-intro__band-stage { animation: intro-fade 1.8s .5s ease both; }
+.flight-intro__card--playing .flight-intro__intersection { animation: intro-fade 2s 1.5s ease both; }
+.flight-intro__card--playing .flight-intro__annotation-stage { animation: intro-fade 1.5s 2s ease both; }
+.flight-intro__card--playing .flight-intro__route { stroke-dasharray: 650; animation: intro-route 5s .7s cubic-bezier(.3,0,.2,1) both; }
+.flight-intro__card--playing .flight-intro__bird { animation: intro-bird 6s .7s ease-in-out both; }
+.flight-intro__card--playing .flight-intro__bird--second { animation-delay: 1.4s; }
+.flight-intro__card--playing header, .flight-intro__card--playing footer { animation: intro-fade 1.6s .2s ease both; }
+@keyframes intro-fade { from {opacity:0;transform:translateY(5px)} to {opacity:1;transform:translateY(0)} }
+@keyframes intro-rotor-turn { from {transform:rotate(-35deg)} to {transform:rotate(160deg)} }
+@keyframes intro-route { from {stroke-dashoffset:650;opacity:0} to {stroke-dashoffset:0;opacity:1} }
+@keyframes intro-bird { 0% {opacity:0;transform:translate(-45px,18px)} 25%{opacity:1} 100% {opacity:1;transform:translate(40px,-15px)} }
+@media(max-width:700px) {
+    .flight-intro__card { padding: 16px 18px; }
+    .flight-intro__composition { padding: 24px 0; }
+    .flight-intro__drawing { max-height: 42dvh; min-height: 140px; margin: 24px 0; }
+    .flight-intro h2 { letter-spacing: -1px; }
+    .flight-intro__composition footer { align-items: flex-start; flex-direction: column; }
+    .flight-intro .flight-intro__replay { bottom: 94px; right: 12px; }
+    .flight-intro__caption { text-align: left; }
+}
+@media(max-height:500px) and (min-width:701px) {
+    .flight-intro__card { padding: 12px 24px; }
+    .flight-intro__composition { padding: 8px 0; }
+    .flight-intro h2 { font-size: 28px; }
+    .flight-intro__drawing { min-height: 110px; max-height: 34dvh; margin: 0; }
+    .flight-intro__composition footer { padding-top: 8px; }
+    .flight-intro .flight-intro__replay { bottom: 52px; }
+}
+@media(prefers-reduced-motion:reduce) { .flight-intro *, .flight-intro *::before { animation: none !important; transition: none !important; } }
+.flight-intro__drawing--compact { display: none; }
+@media(max-width:700px) {
+    .flight-intro__drawing--wide { display: none; }
+    .flight-intro__drawing--compact { display: block; max-height: 46dvh; min-height: 210px; margin: 12px 0; }
+    .flight-intro__band-label { font-size: 12px; }
+}
+.flight-intro__card--playing { animation: intro-screen-enter .6s ease both; }
+@keyframes intro-screen-enter { from {opacity:0} to {opacity:1} }
+
+body:has(.modal-overlay.open) .flight-intro .flight-intro__replay { bottom: 4px; padding: 6px 10px; min-height: 30px; }

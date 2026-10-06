@@ -6,7 +6,7 @@ const walk = directory => readdirSync(join(root, directory), {withFileTypes:true
     const path = join(directory, entry.name);
     return entry.isDirectory() ? walk(path) : [path];
 }).sort();
-const core = ['./', 'index.html', 'docs/bird-images.html', 'docs/bird-images.md', ...walk('js'), ...walk('css'), ...walk('data'), ...walk('fonts'),
+const core = ['./', 'index.html', 'about.html', 'docs/bird-images.html', 'docs/bird-images.md', ...walk('js'), ...walk('css'), ...walk('data'), ...walk('fonts'),
     ...walk('assets/vendor').filter(path => /\.(js|css|png)$/.test(path))];
 const photos = existsSync(join(root, 'assets/birds')) ? walk('assets/birds').filter(path => /\.(jpg|jpeg|png|svg|webp)$/i.test(path)) : [];
 const hash = createHash('sha256');

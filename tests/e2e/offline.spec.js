@@ -5,13 +5,16 @@ test('saved application works after the network is lost', async ({page, context}
     await page.route('https://tile.openstreetmap.org/**', route => route.abort());
     await page.goto('/');
     await expect(page.locator('#loading')).toBeHidden();
+    await page.getByRole('button',{name:'Dismiss introduction',exact:true}).click();
     await expect(page.locator('#snapshot-status')).toContainText('Local snapshot ready', {timeout: 20000});
     await page.reload();
     await expect(page.locator('#loading')).toBeHidden();
+    await page.getByRole('button',{name:'Dismiss introduction',exact:true}).click();
     const initial = await page.locator('#stat-obs').textContent();
     await context.setOffline(true);
     await page.reload();
     await expect(page.locator('#loading')).toBeHidden();
+    await page.getByRole('button',{name:'Dismiss introduction',exact:true}).click();
     await expect(page.locator('#stat-obs')).toHaveText(initial);
     await expect(page.locator('#snapshot-status')).toContainText('Offline');
     await expect(page.locator('.turbine-marker')).toHaveCount(62);

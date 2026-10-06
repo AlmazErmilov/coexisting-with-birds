@@ -12,9 +12,11 @@ import {
 
 import { initOfflineSnapshot } from './offline.js';
 import { BASEMAP } from './map-config.js';
+import { initCityLabels } from './city-labels.js';
 import { flightDiagram, initFlightIntro } from './flight-visual.js';
 import { birdThumbnail, initBirdImages } from './bird-images.js';
 import { openDialog, closeDialog, initDialogs } from './dialogs.js';
+import { initBirdCards, birdIdentity, birdDetailsButton } from './bird-cards.js';
 
 initOfflineSnapshot();
 initDialogs();
@@ -28,6 +30,7 @@ let turbineLayer = null;
 const parkMarkers = [];
 let selectedPark = null;
 let screeningRadius = null;
+let refreshBirdCard = () => {};
 
 // Init map centered on Norway
 const map = L.map('map', {
@@ -38,6 +41,7 @@ const map = L.map('map', {
 });
 
 L.control.zoom({ position: 'topright' }).addTo(map);
+initCityLabels(map);
 
 const basemap = L.tileLayer(BASEMAP.url, BASEMAP.options).addTo(map);
 const mapStatus = document.getElementById('map-status');
@@ -216,6 +220,10 @@ Promise.all([
         onFiltersChange: updateParks
     });
 
+    refreshBirdCard = initBirdCards({allRecords: () => allData, visibleRecords: getFilteredData, filterSpecies: name => {
+        document.getElementById('species-filter').value = name;
+        applyFilters();
+    }});
     applyFilters();
 
     // Event listeners (replacing inline handlers)
@@ -346,10 +354,7 @@ Promise.all([
                         : '';
                 const alt = FLIGHT_ALT[sp];
                 const altText = alt ? ` <span style="color:#888;font-size:10px">${alt[0]}\u2013${alt[1]}m</span>` : '';
-                return `<div class="risk-species-item">
-                    <span class="species-info">${badge}<i>${escapeHtml(sp)}</i>${riskMark}${altText}</span>
-                    <span class="obs-count">${d.count} obs</span>
-                </div>`;
+                return birdDetailsButton(sp, birdThumbnail(sp) + `<span class="species-info">${badge}${birdIdentity(sp)}${riskMark}${altText}</span><span class="obs-count">${d.count}</span>`, 'risk-species-item');
             }).join('');
         }
 
@@ -405,6 +410,7 @@ function parkPopup(park, result) {
         '<button type="button" class="park-details-button">Explore flight overlap</button>';
 }
 function updateParks(filtered) {
+    refreshBirdCard();
     parkMarkers.forEach(({park, marker}) => {
         const result = scorePark(park, filtered);
         park._result = result;
@@ -439,9 +445,9 @@ function renderParkDetail() {
         (result.nearbyCount === 0 ? 'No records, so conflict cannot be assessed.' : result.nearbyCount < 15 ? 'Sparse records, so confidence is limited.' : riskLabel(result.normScore).text);
     // ASVS 1.2.1: encode dataset names at the HTML output boundary.
     document.getElementById('park-species').innerHTML = species.slice(0,12).map(([sp,count]) =>
-        '<div class="park-bird">' + birdThumbnail(sp) + '<span><i>' + escapeHtml(sp) + '</i><small>' +
+        birdDetailsButton(sp, birdThumbnail(sp) + '<span>' + birdIdentity(sp) + '<small>' +
         (FLIGHT_ALT[sp] ? FLIGHT_ALT[sp].join('–') + ' m estimated flight band' : 'Flight altitude unknown') +
-        '</small></span><span>' + count + ' records</span></div>').join('');
+        '</small></span><span>' + count + '</span>', 'park-bird')).join('');
 }
 
 // Global event listeners (need to work before data loads)

@@ -1,15 +1,19 @@
 /* Versioned, same-origin application snapshot. No third party tiles are stored.
  * ASVS 1.2.2: cache only an explicit allowlist of paths from our own origin.
  */
-const VERSION = 'birds-0921f0f59b08ea52';
+const VERSION = 'birds-9c5302416095656b';
 const SNAPSHOT_KEY = '__snapshot_info__';
 const CORE = [
     "./",
     "index.html",
+    "about.html",
     "docs/bird-images.html",
     "docs/bird-images.md",
     "js/app.js",
+    "js/bird-cards.js",
     "js/bird-images.js",
+    "js/bird-info.js",
+    "js/city-labels.js",
     "js/data.js",
     "js/dialogs.js",
     "js/flight-visual.js",
@@ -20,6 +24,7 @@ const CORE = [
     "css/flight-visual.css",
     "css/style.css",
     "data/birds_norway.json",
+    "data/cities_norway.json",
     "data/kommuner.geojson",
     "data/wind_turbines.json",
     "fonts/RobotoMono-Bold.ttf",
@@ -35,16 +40,23 @@ const CORE = [
 // Photo paths are added when the thumbnail manifest is generated.
 const PHOTOS = [
     "assets/birds/alca-torda.jpg",
+    "assets/birds/alle-alle.jpg",
+    "assets/birds/cepphus-grylle.jpg",
     "assets/birds/clangula-hyemalis.jpg",
     "assets/birds/corvus-cornix.jpg",
     "assets/birds/crex-crex.jpg",
     "assets/birds/cyanistes-caeruleus.jpg",
     "assets/birds/erithacus-rubecula.jpg",
+    "assets/birds/fratercula-arctica.jpg",
+    "assets/birds/fulmarus-glacialis.jpg",
     "assets/birds/illustration-placeholder.svg",
+    "assets/birds/larus-argentatus.jpg",
     "assets/birds/larus-fuscus.jpg",
     "assets/birds/melanitta-fusca.jpg",
+    "assets/birds/morus-bassanus.jpg",
     "assets/birds/numenius-arquata.jpg",
     "assets/birds/parus-major.jpg",
+    "assets/birds/phalacrocorax-carbo.jpg",
     "assets/birds/pica-pica.jpg",
     "assets/birds/polysticta-stelleri.jpg",
     "assets/birds/pyrrhula-pyrrhula.jpg",
@@ -54,6 +66,7 @@ const PHOTOS = [
     "assets/birds/sterna-hirundo.jpg",
     "assets/birds/turdus-merula.jpg",
     "assets/birds/uria-aalge.jpg",
+    "assets/birds/uria-lomvia.jpg",
     "assets/birds/vanellus-vanellus.jpg"
 ];
 const urls = new Set([...CORE, ...PHOTOS].map(path => new URL(path, self.registration.scope).href));
