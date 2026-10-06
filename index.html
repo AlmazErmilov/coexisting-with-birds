@@ -14,10 +14,10 @@
     js/ui.js                 - DOM updates: filters, species list, toggles
     js/app.js                - entry point: map init, data loading, events
 
-  Dependencies (loaded from CDN):
+  Dependencies (vendored locally):
     Leaflet 1.9.4            - map rendering
     Leaflet.heat 0.2.0       - heatmap layer
-    CARTO dark basemap       - tile layer
+    OpenStreetMap tiles      - online basemap, no key required
 
   No build step. Serve with any static HTTP server.
 -->
@@ -81,21 +81,23 @@
     }
     </script>
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css" />
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/flight-visual.css" />
 </head>
 <body>
-    <div id="loading" class="loading">Loading bird data...</div>
-    <main id="map"></main>
+    <div id="loading" class="loading" role="status">Loading bird data...</div>
+    <div id="map-status" class="map-status" role="status" hidden></div>
+    <main id="map" aria-label="Bird observations and wind parks in Norway"></main>
 
     <div class="modal-overlay" id="info-modal">
-        <div class="modal">
-            <button class="modal-close" id="info-modal-close">&times;</button>
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="info-title">
+            <button class="modal-close" id="info-modal-close" aria-label="Close information">&times;</button>
 
-            <h2>Coexisting with Birds</h2>
+            <h2 id="info-title">Coexisting with Birds</h2>
             <p class="concept-text">
                 Human infrastructure (wind farms, power lines, buildings) causes significant bird mortality worldwide.
-                This tool visualizes the overlap between bird habitats and wind energy infrastructure in Norway,
+                This tool visualizes the nearby bird observations and wind energy infrastructure in Norway,
                 enabling data driven pre-stage screening before new projects are planned.
             </p>
             <p class="concept-text">
@@ -133,11 +135,11 @@
             <table class="legend-table">
                 <tr>
                     <td style="color:#ff6b6b;font-size:16px">&#9650;</td>
-                    <td><b style="color:#e0e0e0">High overlap</b><br>More than 50% of the species' typical flight altitude band falls within the rotor zone. Examples: white-tailed eagle (50-300m), buzzards (30-200m), gulls (10-150m).</td>
+                    <td><b style="color:#e0e0e0">High overlap</b><br>More than 50% of the species' typical flight altitude band falls within the rotor zone. Examples for this reference zone include buzzards (30-200m) and gulls (10-150m).</td>
                 </tr>
                 <tr>
                     <td style="color:#fbc02d;font-size:16px">&#9679;</td>
-                    <td><b style="color:#e0e0e0">Partial overlap</b><br>Some flight altitude overlaps with the rotor zone but less than 50%. Examples: barn swallows (5-100m), starlings (5-100m).</td>
+                    <td><b style="color:#e0e0e0">Partial overlap</b><br>Some flight altitude overlaps with the rotor zone but less than 50%. For the reference zone, white-tailed eagle (50-300m) has partial overlap. Classifications change with turbine dimensions.</td>
                 </tr>
                 <tr>
                     <td style="color:#888;font-size:11px">no icon</td>
@@ -146,6 +148,7 @@
             </table>
             <p>Flight altitudes are approximate estimates based on general ornithological knowledge of each species' typical flight behavior. They are informed by published literature on collision risk and marine bird flight heights (see references below) but the specific [min, max] values were not directly extracted from those papers. Values represent typical local flight, not migration altitude.</p>
 
+            <p><a href="docs/bird-images.html">Bird photograph credits and licenses</a></p>
             <h3>Heatmap and observation density</h3>
             <p>
                 The heatmap shows observation density from a 10,000 record sample. Brighter areas have more
@@ -284,7 +287,7 @@ Risk classification:
                 <div class="src-detail">
                     <a href="https://www.nve.no/" target="_blank">NVE</a> (Norwegian Water Resources and Energy Directorate)
                     via <a href="https://huggingface.co/datasets/rebase-energy/nve-windpower-data" target="_blank">HuggingFace</a><br>
-                    393 active turbines across 62 wind parks. Includes hub height, rotor diameter, capacity.<br>
+                    393 turbine records across 62 wind parks. Includes hub height, rotor diameter, capacity.<br>
                     License: NVE open data | No auth required
                 </div>
             </div>
@@ -366,8 +369,8 @@ Risk classification:
     </div>
 
     <div class="modal-overlay" id="kommune-modal">
-        <div class="modal kommune-modal">
-            <button class="modal-close" id="kommune-modal-close">&times;</button>
+        <div class="modal kommune-modal" role="dialog" aria-modal="true" aria-labelledby="kommune-name">
+            <button class="modal-close" id="kommune-modal-close" aria-label="Close municipality details">&times;</button>
             <h2 id="kommune-name"></h2>
             <div id="kommune-stats" style="color:#aaa;font-size:13px;margin-bottom:8px"></div>
             <div id="kommune-confidence" class="confidence-warning" style="display:none"></div>
@@ -382,6 +385,8 @@ Risk classification:
                     <input type="number" id="kommune-rotor" min="10" max="500" step="1">
                 </div>
             </div>
+            <p class="study-note">Hypothetical turbine dimensions, adjustable above.</p>
+            <div id="kommune-diagram"></div>
             <div id="kommune-swept" class="rotor-zone-display"></div>
 
             <div id="kommune-risk" style="margin:10px 0;font-size:16px;font-weight:700"></div>
@@ -390,7 +395,7 @@ Risk classification:
         </div>
     </div>
 
-    <aside class="panel" id="panel">
+    <aside class="panel" id="filter-panel">
         <h1>Coexisting with Birds</h1>
         <p class="subtitle">Bird observation density across Norway (GBIF)</p>
         <button class="info-btn" style="margin:6px 0 4px 0">How it works</button>
@@ -406,13 +411,14 @@ Risk classification:
             </div>
         </div>
 
+        <p id="snapshot-status" class="snapshot-status" role="status">Preparing a local snapshot…</p>
         <div class="view-toggle">
             <button class="view-btn active" data-view="heatmap">Heatmap</button>
             <button class="view-btn" data-view="points">Points</button>
         </div>
 
         <div class="filter-section">
-            <label>Species filter</label>
+            <label for="species-filter">Species filter</label>
             <select id="species-filter">
                 <option value="all">All species</option>
                 <option value="red-list" style="color:#ff6b6b">Red list only (CR/EN/VU/NT)</option>
@@ -422,7 +428,7 @@ Risk classification:
         </div>
 
         <div class="filter-section">
-            <label>Month</label>
+            <label for="month-slider">Month</label>
             <input type="range" id="month-slider" min="0" max="12" value="0">
             <div class="month-label" id="month-label">All months</div>
         </div>
@@ -450,15 +456,15 @@ Risk classification:
         </div>
 
         <div class="filter-section">
-            <label>Top species in view</label>
+            <label>Top species in view</label><p style="font-size:10px;color:#a4b7c3">Historical sample, up to 833 records per month across years. This is not a daily population census.</p>
             <div class="species-list" id="species-list"></div>
         </div>
     </aside>
 
     <div class="legend">
-        <div class="legend-title">Observation density</div>
+        <div class="legend-title">Sampled observation density</div>
         <div class="legend-gradient"></div>
-        <div class="legend-labels"><span>Low</span><span>Medium</span><span>High</span></div>
+        <div style="font-size:10px;color:#a4b7c3">Scale adjusts to the current filter</div><div class="legend-labels"><span>Low</span><span>Medium</span><span>High</span></div>
         <div style="margin-top:10px;border-top:1px solid rgba(255,255,255,0.08);padding-top:8px;">
             <div class="legend-title">Red list (Artsdatabanken 2021)</div>
             <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;">
@@ -470,6 +476,7 @@ Risk classification:
         </div>
         <div style="margin-top:8px;border-top:1px solid rgba(255,255,255,0.08);padding-top:8px;">
             <div class="legend-title">Wind park bird conflict</div>
+            <p style="font-size:10px;color:#a4b7c3">Grey: fewer than 15 records, limited confidence</p>
             <div style="display:flex;align-items:flex-end;gap:4px;margin-top:4px;">
                 <svg viewBox="0 0 60 90" width="16" height="24"><path d="M28 35 L27 87 L33 87 L32 35 Z" fill="rgb(0,180,40)"/><circle cx="30" cy="32" r="4" fill="rgb(0,180,40)"/><path d="M26 28 C 16 16, 6 4, 2 0 C 14 10, 26 24, 34 35 Z" fill="rgb(0,180,40)"/><path d="M34 28 C 46 18, 54 9, 60 3 C 53 15, 40 28, 28 36 Z" fill="rgb(0,180,40)"/><path d="M33 36 C 40 43, 48 51, 54 58 C 47 52, 37 41, 28 32 Z" fill="rgb(0,180,40)" opacity="0.5"/></svg>
                 <span style="font-size:10px;color:#888">Low</span>
@@ -498,12 +505,26 @@ Risk classification:
         Birds: <a href="https://www.gbif.org/" target="_blank">GBIF</a> | Turbines: <a href="https://www.nve.no/" target="_blank">NVE</a>
     </div>
 
+    <div class="modal-overlay" id="park-modal">
+        <div class="modal park-modal" role="dialog" aria-modal="true" aria-labelledby="park-name">
+            <button class="modal-close" aria-label="Close wind park details">&times;</button>
+            <p class="drawing-eyebrow">Wind park study · vertical section</p>
+            <h2 id="park-name"></h2>
+            <p id="park-meta"></p>
+            <p class="study-note">One representative turbine using park average dimensions from the NVE sample.</p>
+            <div id="park-diagram"></div>
+            <p id="park-summary"></p>
+            <div id="park-species" class="park-species"></div>
+            <p class="study-note">Bird records within 30 km indicate nearby observations, not mapped habitat or confirmed flight paths. Flight bands are approximate estimates. Overlap is a screening indicator, not a collision probability.</p>
+        </div>
+    </div>
+    <button class="panel-toggle" id="panel-toggle" aria-expanded="true" aria-controls="filter-panel">Filters &amp; birds</button>
     <button class="hide-ui-btn" id="hide-ui-btn">
         Hide UI <span class="shortcut">[H]</span>
     </button>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+    <script src="assets/vendor/leaflet/leaflet.js"></script>
+    <script src="assets/vendor/leaflet-heat.js"></script>
     <script type="module" src="js/app.js"></script>
 
     <!-- vercel web analytics -->

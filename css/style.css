@@ -224,3 +224,63 @@ select option { background: #1a1a1a; color: var(--text-primary); }
 }
 .leaflet-popup-tip { background: rgba(10,10,10,0.95) !important; }
 .leaflet-popup-close-button { color: var(--text-secondary) !important; }
+
+/* Geographic context stays quiet behind observation layers. Only tiles are toned. */
+.basemap-tile { filter: invert(1) hue-rotate(180deg) saturate(.3) brightness(.7); }
+.leaflet-container { background: #16232d; }
+.leaflet-control-attribution { background: #101d27 !important; color: #c2cdd3; font-size: 10px; }
+.leaflet-control-attribution a { color: #9cddd7; }
+.leaflet-top.leaflet-right { top: 42px; }
+:root { --bg-primary: #0b1721; --bg-glass: rgba(11,23,33,.96); --text-secondary: #a4b3bc; --border-subtle: rgba(168,204,220,.18); }
+button, select, input { font: inherit; }
+button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible { outline: 2px solid #80e2d6; outline-offset: 3px; }
+.species-item { background: none; color: inherit; border-top: 0; border-left: 0; border-right: 0; text-align: left; width: 100%; gap: 8px; padding: 8px 0; }
+.species-name { flex: 1; min-width: 0; flex-wrap: wrap; font-size: 11px; }
+.species-name > span:not(.rl-badge):not(.alt-tag) { overflow-wrap: anywhere; }
+.bird-thumb { width: 44px; height: 44px; border-radius: 7px; object-fit: cover; flex-shrink: 0; }
+.panel { width: 350px; max-height: calc(100dvh - 305px); }
+.panel .subtitle { line-height: 1.6; }
+.legend { max-width: 350px; }
+.info-badge { bottom: 30px; }
+.map-status { position: fixed; top: 18px; left: 390px; right: 150px; z-index: 1200; background: #29383f; color: #ffe1a6; padding: 12px; border-radius: 8px; font-size: 12px; }
+.map-status[hidden] { display: none; }
+.loading { max-width: calc(100vw - 32px); }
+.loading button { display: block; margin-top: 12px; padding: 8px 16px; }
+.park-details-button { margin-top: 10px; border: 1px solid #58958e; background: #163a40; color: #d6fff7; border-radius: 5px; padding: 9px 12px; cursor: pointer; }
+.park-modal { width: 800px; max-width: 94vw; background: #0e202c; }
+.study-note { font-size: 11px !important; color: #a4b7c3 !important; margin-top: 18px; }
+.park-bird { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #29404c; font-size: 12px; }
+.park-bird > span:first-of-type { flex: 1; min-width: 0; }
+.park-bird i { overflow-wrap: anywhere; }
+.park-bird small { display: block; margin-top: 4px; color: #a4b7c3; }
+.park-bird > span:last-child { font-size: 10px; color: #a4b7c3; }
+.panel-toggle { display: none; }
+@media (max-width: 700px) {
+    .panel-toggle { display: block; position: fixed; top: 12px; left: 12px; z-index: 1100; padding: 9px 12px; border: 1px solid #3c5b6c; border-radius: 7px; background: #0e202c; color: #dcebf2; font-size: 12px; }
+    .panel { top: 55px; left: 12px; width: min(320px, calc(100vw - 76px)); max-height: 55dvh; padding: 16px; }
+    .panel-collapsed .panel { display: none; }
+    .panel h1 { font-size: 15px; }
+    .legend { bottom: 22px; left: 12px; max-width: calc(100vw - 70px); padding: 8px 12px; }
+    .legend > div:nth-child(n+5) { display: none; }
+    .info-badge { display: none; }
+    .hide-ui-btn { top: 12px; right: 12px; }
+    .hide-ui-btn .shortcut { display: none; }
+    .modal { padding: 42px 18px 20px; max-height: 90dvh; }
+    .map-status { top: 55px; left: 12px; right: 12px; }
+    .turbine-inputs { flex-wrap: wrap; }
+}
+.ui-hidden .panel-toggle { display: none; }
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0s !important; }
+}
+.snapshot-status { margin: 0 0 14px; font-size: 10px; line-height: 1.6; color: #a4b7c3; }
+.bird-thumbnail { border-radius: 7px; }
+.snapshot-refresh { padding: 7px 10px; margin-bottom: 14px; color: #d6fff7; background: #163a40; border: 1px solid #58958e; border-radius: 5px; cursor: pointer; font-size: 11px; }
+.credits-page { margin: 32px auto; padding: 0 24px; max-width: 1000px; line-height: 1.6; }
+.credits-page h1 { margin: 20px 0; }
+.credits-page a { color: #80dace; }
+.credits-page table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.credits-page td, .credits-page th { padding: 12px; border-bottom: 1px solid #29404c; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+.credits-page .credit-table { overflow-x: auto; }
+
+#confidence-info { color: #a4b7c3 !important; }

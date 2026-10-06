@@ -15,7 +15,7 @@ Interactive heatmap of bird observations across Norway. A pre-stage screening to
 ## Quick start
 
 ```bash
-python3 -m http.server 8080
+node tests/server.cjs
 # open http://localhost:8080
 ```
 
@@ -47,6 +47,16 @@ npm run test:e2e        # playwright only
 - **Methodology modal**: "How it works" panel explaining scoring methods, data sources and limitations
 - **Hide UI**: toggle all overlays with a button or [H] key for a clean map view
 
+## Map and visual studies
+
+The basemap uses standard OpenStreetMap tiles, with visible attribution and browser caching. No runtime API key is needed. The former CARTO endpoint began returning API key watermarks. The public provider configuration is in `js/map-config.js`. See the [OSM tile policy](https://operations.osmfoundation.org/policies/tiles/) before changing request behavior. This community service has no availability guarantee; higher traffic deployments should choose a suitable provider.
+
+Click a wind park, then **Explore flight overlap**. The drawing uses that park's average NVE geometry and approximate species flight bands on the same vertical scale. Hatched segments identify altitude intersection, not measured collision risk. Nearby GBIF records are within 30 km and follow active filters. They do not map habitat or flight tracks. Empty samples are shown as unknown rather than safe. The municipality drawing uses adjustable hypothetical turbine dimensions.
+
+A short drawing sequence plays when the site opens and can be replayed. It does not block the map and respects reduced motion. Local bird photographs and licenses are documented in [bird image credits](docs/bird-images.md).
+
+Leaflet 1.9.4 and Leaflet.heat 0.2.0 are vendored with their licenses in `assets/vendor/`, so map initialization does not depend on a third party script CDN. Development tooling is separate from the static browser application.
+
 ## Dataset
 
 ### Bird observations
@@ -63,7 +73,7 @@ npm run test:e2e        # playwright only
 ### Wind turbines
 
 - **Source**: [NVE](https://www.nve.no/) via [HuggingFace](https://huggingface.co/datasets/rebase-energy/nve-windpower-data)
-- **Scope**: 393 active turbines across 62 wind parks in Norway
+- **Scope**: 393 turbine records across 62 wind parks in Norway
 - **Fields used**: latitude, longitude, park name, capacity (MW), municipality, county, turbine count
 - **License**: NVE open data
 - **Authentication**: none required
@@ -125,7 +135,7 @@ fonts/                  Roboto Mono (bundled for offline use)
 
 - [Leaflet](https://leafletjs.com/) for the map
 - [Leaflet.heat](https://github.com/Leaflet/Leaflet.heat) for the heatmap layer
-- [CARTO dark basemap](https://carto.com/basemaps/) tiles
+- [OpenStreetMap](https://www.openstreetmap.org/copyright) tiles with a dark presentation
 - Vanilla JS (ES modules), no framework, no build step
 - [Vitest](https://vitest.dev/) for unit tests
 - [Playwright](https://playwright.dev/) for E2E tests
@@ -175,3 +185,11 @@ Agafonkin, V. (n.d.). *Leaflet.heat: a tiny, simple and fast heatmap plugin for 
 ## License
 
 Data licenses as noted above. Code is MIT licensed.
+
+## Local snapshot on Vercel
+
+A Service Worker saves a versioned snapshot of the static application, observations, wind parks, municipality geometry, fonts and bird thumbnails in the visitor's browser. There is no database or server API. After one successful online visit, the same browser can reload and filter data offline. Third party map tiles and analytics are excluded. If tiles fail, local municipality geometry supplies geographic context.
+
+The status separates the snapshot's save date from the February 2026 observation sample. This is resilience for the existing sample, not a daily GBIF update. A first visit without a connection cannot create a snapshot, and browsers can evict local storage. When a new release is ready the interface offers **Load updated snapshot**. Failed core downloads preserve the previous working version.
+
+Run `npm run snapshot` after changing cached files. It regenerates the content based cache version, asset lists and inline script CSP hashes. Vercel serves the worker with `Cache-Control: no-cache`; third party tiles keep their normal provider caching rules. Automated tests block external tiles and verify offline reload, filters and a park drawing against the local snapshot.

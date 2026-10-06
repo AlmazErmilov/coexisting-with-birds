@@ -127,10 +127,22 @@ export const DEFAULT_ROTOR_DIAMETER = 115;
 export const KOMMUNE_SCORE_NORMALIZATION = 60;
 
 export function escapeHtml(str) {
-    return str
+    // ASVS 1.2.1: escape text and quoted HTML attributes at the rendering boundary.
+    return String(str ?? '')
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
+}
+
+// GBIF accepted names present in this sample, linked to the reference names above.
+const SPECIES_ALIASES = {
+    'Mareca penelope': 'Anas penelope',
+    'Chroicocephalus ridibundus': 'Larus ridibundus',
+    'Coloeus monedula': 'Corvus monedula'
+};
+for (const [accepted, reference] of Object.entries(SPECIES_ALIASES)) {
+    if (RED_LIST[reference]) RED_LIST[accepted] = RED_LIST[reference];
+    if (FLIGHT_ALT[reference]) FLIGHT_ALT[accepted] = FLIGHT_ALT[reference];
 }

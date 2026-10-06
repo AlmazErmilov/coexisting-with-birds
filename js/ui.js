@@ -4,6 +4,7 @@ import {
     RED_LIST, RED_LIST_CATEGORIES, FLIGHT_ALT, MONTH_NAMES,
     MAX_RENDERED_POINTS, escapeHtml
 } from './data.js';
+import { birdThumbnail } from './bird-images.js';
 import { getAltRisk, speciesColor, pointInFeature } from './scoring.js';
 
 // Filter predicates (pure functions, independently testable)
@@ -19,8 +20,11 @@ export const FILTER_PREDICATES = {
 // Shared state references (set by app.js via initUI)
 let map, heatLayer, pointsLayer, allData, currentView, kommuneLayer, confidenceMode;
 let lastFiltered = [];
+let onFiltersChange = () => {};
+let basemapUnavailable = false;
 
 export function initUI(state) {
+    onFiltersChange = state.onFiltersChange || (() => {});
     map = state.map;
     heatLayer = state.heatLayer;
     pointsLayer = state.pointsLayer;
@@ -32,7 +36,8 @@ export function initUI(state) {
 
 // Called by app.js when shared state changes
 export function updateState(key, value) {
-    if (key === 'currentView') currentView = value;
+    if (key === 'basemapUnavailable') basemapUnavailable = value;
+    else if (key === 'currentView') currentView = value;
     else if (key === 'kommuneLayer') kommuneLayer = value;
     else if (key === 'confidenceMode') confidenceMode = value;
     else if (key === 'allData') allData = value;
@@ -80,7 +85,7 @@ export function applyFilters() {
         const speciesCounts = new Map();
         filtered.forEach(o => speciesCounts.set(o.species, (speciesCounts.get(o.species) || 0) + 1));
 
-        const step = Math.max(1, Math.floor(filtered.length / MAX_RENDERED_POINTS));
+        const step = Math.max(1, Math.ceil(filtered.length / MAX_RENDERED_POINTS));
         for (let i = 0; i < filtered.length; i += step) {
             const d = filtered[i];
             const marker = L.circleMarker([d.lat, d.lon], {
@@ -112,6 +117,7 @@ export function applyFilters() {
     }
 
     updateSpeciesList(filtered);
+    onFiltersChange(filtered);
 }
 
 export function updateSpeciesList(data) {
@@ -145,10 +151,11 @@ export function updateSpeciesList(data) {
             ? `<span class="alt-tag">${altText}${riskHtml}</span>`
             : '';
         return `
-                <div class="species-item" data-species="${escapeHtml(name)}">
-                    <span class="species-name">${badge}${escapeHtml(name)}${altHtml}</span>
+                <button type="button" class="species-item" data-species="${escapeHtml(name)}" aria-label="Filter ${escapeHtml(name)}">
+                    ${birdThumbnail(name)}
+                    <span class="species-name">${badge}<span>${escapeHtml(name)}</span>${altHtml}</span>
                     <span class="species-count">${count}</span>
-                </div>`;
+                </button>`;
     }).join('');
 }
 
@@ -209,7 +216,7 @@ export function resetKommuneDisplay() {
     if (!kommuneLayer) return;
     kommuneLayer.eachLayer(layer => {
         const name = layer.feature.properties.kommunenavn || layer.feature.properties.name || '';
-        layer.setStyle({ fillColor: 'transparent', fillOpacity: 0 });
+        layer.setStyle({ fillColor: basemapUnavailable ? '#203844' : 'transparent', fillOpacity: basemapUnavailable ? .45 : 0 });
         layer.unbindTooltip();
         layer.bindTooltip(escapeHtml(name), {
             className: 'kommune-tooltip', sticky: true

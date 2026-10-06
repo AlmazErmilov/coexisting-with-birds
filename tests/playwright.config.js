@@ -5,9 +5,10 @@ export default defineConfig({
     timeout: 30000,
     use: {
         baseURL: 'http://localhost:8080',
+        serviceWorkers: 'block',
     },
     webServer: {
-        command: 'python3 -m http.server 8080 --directory ..',
+        command: 'node server.cjs',
         url: 'http://localhost:8080',
         reuseExistingServer: !process.env.CI,
     },

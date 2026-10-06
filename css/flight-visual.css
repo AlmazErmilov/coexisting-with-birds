@@ -1,0 +1,190 @@
+/* Shared drawing ink. All rules are scoped to the flight components. */
+.flight-diagram,
+.flight-intro {
+    --flight-paper: #0c2029;
+    --flight-ink: #daebe9;
+    --flight-muted: #aac3c8;
+    --flight-teal: #73d6ca;
+    --flight-amber: #e8c18a;
+    --flight-rule: #36555f;
+    color: var(--flight-ink);
+    font-family: 'Roboto Mono', monospace;
+    font-weight: 400;
+    line-height: 1.6;
+    box-sizing: border-box;
+}
+
+.flight-diagram {
+    margin: 16px 0;
+    padding: 16px;
+    min-width: 0;
+    max-width: 100%;
+    background: var(--flight-paper);
+    border: 1px solid var(--flight-rule);
+    border-radius: 10px;
+}
+
+.flight-diagram .flight-diagram__heading {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--flight-ink);
+}
+
+.flight-diagram__heading > span {
+    display: block;
+    margin-top: 4px;
+    color: var(--flight-muted);
+    font-size: 11px;
+    font-weight: 400;
+}
+
+.flight-dimensions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin: 16px 0 8px;
+}
+
+.flight-dimensions > div { min-width: 0; }
+.flight-dimensions dt { color: var(--flight-muted); font-size: 11px; }
+.flight-dimensions dd { margin: 4px 0 0; font-size: 14px; overflow-wrap: anywhere; }
+.flight-dimensions small { display: block; color: var(--flight-muted); font-size: 10px; }
+
+.flight-diagram .flight-diagram__notice {
+    margin: 10px 0;
+    padding: 8px 10px;
+    border-left: 2px solid var(--flight-amber);
+    background: rgba(232, 193, 138, .06);
+    color: var(--flight-amber);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.flight-diagram__scroll {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-color: var(--flight-rule) var(--flight-paper);
+    scrollbar-width: thin;
+    border-bottom: 1px solid var(--flight-rule);
+    margin-top: 6px;
+    padding-bottom: 6px;
+}
+
+/* Intrinsic minimum width preserves readable SVG type. Scroll, never squeeze. */
+.flight-diagram__svg { display: block; width: 100%; height: auto; max-width: none; }
+.flight-diagram__svg text { font: 12px 'Roboto Mono', monospace; fill: var(--flight-muted); }
+.flight-diagram__svg .flight-plot-label { font-size: 12px; fill: var(--flight-ink); }
+.flight-grid path { fill: none; stroke: var(--flight-rule); stroke-width: .65; }
+.flight-swept { fill: var(--flight-teal); fill-opacity: .08; stroke: var(--flight-teal); stroke-opacity: .4; stroke-dasharray: 5 5; }
+.flight-diagram .flight-ground,
+.flight-intro .flight-ground { fill: none; stroke: var(--flight-muted); stroke-width: 1.2; }
+.flight-diagram .flight-tower,
+.flight-intro .flight-tower { fill: var(--flight-paper); stroke: var(--flight-teal); stroke-width: 1.2; }
+.flight-diagram .flight-rotor-envelope,
+.flight-intro .flight-rotor-envelope { fill: none; stroke: var(--flight-teal); stroke-opacity: .65; stroke-width: 1; stroke-dasharray: 3 5; }
+.flight-diagram .flight-blade,
+.flight-intro .flight-blade { fill: var(--flight-paper); stroke: var(--flight-teal); stroke-width: 1.2; }
+.flight-diagram .flight-hub,
+.flight-intro .flight-hub { fill: var(--flight-teal); }
+.flight-dimension { fill: none; stroke: var(--flight-muted); stroke-width: .9; }
+.flight-diagram__svg .flight-dimension-label { fill: var(--flight-ink); }
+.flight-diagram .flight-bird,
+.flight-intro .flight-bird { fill: none; stroke: var(--flight-ink); stroke-width: 1.8; stroke-linecap: round; }
+
+.flight-band { cursor: pointer; outline: none; }
+.flight-band__hit { fill: transparent; stroke: transparent; stroke-width: 1.5; }
+.flight-band__guide { fill: none; stroke: var(--flight-rule); stroke-dasharray: 2 6; }
+.flight-band__range { fill: var(--flight-teal); fill-opacity: .19; stroke: var(--flight-teal); stroke-width: 1; transition: fill-opacity .18s ease; }
+.flight-band__caps { fill: none; stroke: var(--flight-teal); stroke-width: 1.2; }
+.flight-hatch { fill: none; stroke: var(--flight-amber); stroke-width: 1.8; }
+.flight-band__overlap { stroke: var(--flight-amber); stroke-width: 1; }
+.flight-band__touch { fill: none; stroke: var(--flight-amber); stroke-width: 2; }
+.flight-diagram__svg .flight-band__unknown { fill: var(--flight-muted); font-size: 20px; }
+.flight-diagram__svg .flight-band__number { fill: var(--flight-ink); font-size: 13px; }
+.flight-band__readout { visibility: hidden; pointer-events: none; }
+.flight-band__readout rect { fill: var(--flight-paper); stroke: var(--flight-rule); }
+.flight-band__readout text { fill: var(--flight-ink); }
+.flight-band:hover .flight-band__range,
+.flight-band:focus .flight-band__range { fill-opacity: .4; }
+.flight-band:hover .flight-band__hit,
+.flight-band:focus .flight-band__hit { stroke: var(--flight-teal); stroke-dasharray: 4 3; }
+.flight-band:hover + .flight-band__readout,
+.flight-band:focus + .flight-band__readout { visibility: visible; }
+.flight-diagram__svg:has(.flight-band:hover) .flight-readout-hint,
+.flight-diagram__svg:has(.flight-band:focus) .flight-readout-hint { visibility: hidden; }
+
+.flight-key { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 12px 0; color: var(--flight-muted); font-size: 10px; }
+.flight-key > span { display: inline-flex; align-items: center; gap: 6px; }
+.flight-key b { display: inline-block; width: 14px; height: 12px; border: 1px solid var(--flight-teal); }
+.flight-key__band { background: rgba(115, 214, 202, .19); }
+.flight-key .flight-key__zone { background: rgba(115, 214, 202, .08); border-style: dashed; }
+.flight-key .flight-key__overlap { border-color: var(--flight-amber); background: repeating-linear-gradient(135deg, transparent 0 3px, var(--flight-amber) 3px 4px, transparent 4px 7px); }
+.flight-species { border-top: 1px solid var(--flight-rule); }
+.flight-species summary { padding: 10px 0; cursor: pointer; font-size: 12px; color: var(--flight-ink); overflow-wrap: anywhere; scroll-margin: 24px; }
+.flight-species summary::marker { color: var(--flight-teal); }
+.flight-species__number { display: inline-block; min-width: 23px; color: var(--flight-teal); font-size: 11px; }
+.flight-species__range { display: block; padding-left: 38px; color: var(--flight-muted); font-size: 11px; }
+.flight-diagram .flight-species p { margin: 0 0 12px; color: var(--flight-muted); font-size: 11px; line-height: 1.7; }
+.flight-diagram .flight-diagram__caveat,
+.flight-diagram .flight-diagram__empty { margin: 12px 0 0; color: var(--flight-muted); font-size: 11px; line-height: 1.7; }
+.flight-diagram__scroll:focus-visible,
+.flight-species summary:focus-visible { outline: 2px solid var(--flight-teal); outline-offset: 3px; border-radius: 2px; }
+
+/* This is a corner illustration, not a modal or map-sized input layer.
+   Even the card passes pointer input through to the map. Only buttons catch it. */
+.flight-intro { position: fixed; right: 16px; bottom: 78px; z-index: 1100; width: min(420px, calc(100vw - 32px)); pointer-events: none; }
+.flight-intro__card { margin-bottom: 10px; padding: 16px; border: 1px solid var(--flight-rule); border-radius: 12px; background: rgba(12, 32, 41, .95); box-shadow: 0 12px 32px rgba(0, 0, 0, .18); }
+.flight-intro__card[hidden] { display: none !important; }
+.flight-intro__topline { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 10px; color: var(--flight-muted); }
+.flight-intro button { pointer-events: auto; font: inherit; cursor: pointer; color: var(--flight-ink); border: 1px solid var(--flight-rule); background: var(--flight-paper); }
+.flight-intro .flight-intro__close { display: inline-grid; place-items: center; flex: 0 0 32px; width: 32px; height: 32px; padding: 0; border-radius: 50%; font-size: 20px; line-height: 1; }
+.flight-intro__drawing { display: block; width: 100%; height: auto; margin: 8px 0 4px; overflow: visible; }
+.flight-intro__grid { fill: none; stroke: var(--flight-rule); stroke-opacity: .65; stroke-width: .5; }
+.flight-intro__route { fill: none; stroke: var(--flight-amber); stroke-width: 1.3; stroke-linecap: round; }
+.flight-intro h2 { margin: 8px 0 6px; font-size: 21px; font-weight: 400; letter-spacing: -.6px; line-height: 1.25; color: var(--flight-ink); }
+.flight-intro p { margin: 0; font-size: 11px; color: var(--flight-muted); line-height: 1.75; }
+.flight-intro small { display: block; margin-top: 10px; font-size: 9px; color: var(--flight-muted); }
+.flight-intro .flight-intro__replay { display: flex; align-items: center; gap: 8px; margin-left: auto; padding: 7px 12px; min-height: 36px; border-radius: 20px; font-size: 11px; }
+.flight-intro button:hover { background: #18343d; border-color: var(--flight-teal); }
+.flight-intro button:focus-visible { outline: 2px solid var(--flight-teal); outline-offset: 3px; }
+
+/* Finite motion avoids a continuously moving distraction on the map. */
+.flight-diagram .flight-draw,
+.flight-intro__card--playing .flight-draw { animation: flight-line-reveal 1.1s ease-out both; }
+.flight-diagram .flight-rotor,
+.flight-intro__card--playing .flight-rotor { transform-origin: 0 0; animation: flight-rotor-turn 3.6s ease-out both; }
+.flight-intro__card--playing { animation: flight-card-enter .45s ease-out both; }
+.flight-intro__card--playing .flight-intro__bird { animation: flight-bird-drift 2.8s ease-out both; }
+.flight-intro__card--playing .flight-intro__bird--second { animation-delay: .12s; }
+@keyframes flight-line-reveal { from { opacity: 0; clip-path: inset(0 100% 0 0); } to { opacity: 1; clip-path: inset(0); } }
+@keyframes flight-rotor-turn { from { transform: rotate(-28deg); } to { transform: rotate(16deg); } }
+@keyframes flight-card-enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes flight-bird-drift { from { opacity: 0; transform: translate(-10px, 4px); } 30% { opacity: 1; } to { opacity: 1; transform: translate(0, 0); } }
+
+@media (max-width: 600px) {
+    .flight-diagram { padding: 12px; }
+    .flight-dimensions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .flight-dimensions > div:last-child { grid-column: 1 / -1; }
+    .flight-intro { right: 12px; bottom: 94px; width: min(260px, calc(100vw - 24px)); }
+    .flight-intro__card { padding: 12px; }
+    .flight-intro__drawing { max-height: 90px; }
+    .flight-intro h2 { font-size: 19px; }
+    .flight-intro .flight-intro__close { flex-basis: 44px; width: 44px; height: 44px; }
+    .flight-intro .flight-intro__replay { min-height: 44px; }
+}
+
+@media (max-height: 500px) {
+    .flight-intro { bottom: 52px; }
+    .flight-intro__card { padding: 10px 12px; }
+    .flight-intro__drawing { max-height: 64px; margin: 0; }
+    .flight-intro h2 { margin: 4px 0; font-size: 17px; }
+    .flight-intro small { margin-top: 4px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .flight-diagram *,
+    .flight-intro * { animation: none !important; transition: none !important; }
+}
+
+.flight-intro__altitude-band { fill: var(--flight-teal); fill-opacity: .12; }
+.flight-intro__band-label { fill: var(--flight-muted); font: 9px "Roboto Mono", monospace; }
