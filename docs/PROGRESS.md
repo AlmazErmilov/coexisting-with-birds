@@ -1,5 +1,11 @@
 # Progress
 
+## 2026-10-09: resolve remaining data and geometry issues
+
+Hardened GBIF refreshes with bounded retries, explicit timeouts and atomic snapshot replacement. Invalid coordinates are discarded without dropping valid zero values, and a failed fetch keeps the last good snapshot intact. Added regression tests for the fetch path, zero coordinates and downsampling limits.
+
+Null or malformed GeoJSON geometry now skips point-in-polygon matching safely. The existing bird-data loading recovery and rendered-point cap were confirmed and tested; duplicate reports are being closed against the existing implementation.
+
 ## 2026-10-06: full screen flight intro and bird exploration
 
 Replaced the corner intro with a full viewport drawing, staged motion and a mobile composition. Flight intro replay stays open until dismissed. Keyboard focus, inert background and reduced motion are supported. Interface corners are nearly square. Municipality diagrams now fit their containers without horizontal clipping.

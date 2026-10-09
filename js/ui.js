@@ -86,7 +86,7 @@ export function applyFilters() {
         const speciesCounts = new Map();
         filtered.forEach(o => speciesCounts.set(o.species, (speciesCounts.get(o.species) || 0) + 1));
 
-        const step = Math.max(1, Math.ceil(filtered.length / MAX_RENDERED_POINTS));
+        const step = getPointRenderStep(filtered.length);
         for (let i = 0; i < filtered.length; i += step) {
             const d = filtered[i];
             const marker = L.circleMarker([d.lat, d.lon], {
@@ -119,6 +119,10 @@ export function applyFilters() {
 
     updateSpeciesList(filtered);
     onFiltersChange(filtered);
+}
+
+export function getPointRenderStep(filteredCount) {
+    return Math.max(1, Math.ceil(filteredCount / MAX_RENDERED_POINTS));
 }
 
 export function updateSpeciesList(data) {
