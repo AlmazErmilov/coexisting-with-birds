@@ -1,7 +1,7 @@
 /* Versioned, same-origin application snapshot. No third party tiles are stored.
  * ASVS 1.2.2: cache only an explicit allowlist of paths from our own origin.
  */
-const VERSION = 'birds-9c5302416095656b';
+const VERSION = 'birds-b51fc69413ac1da7';
 const SNAPSHOT_KEY = '__snapshot_info__';
 const CORE = [
     "./",
