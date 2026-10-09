@@ -19,6 +19,7 @@ jobs:
       - run: npm run snapshot
       - run: git diff --exit-code -- service-worker.js vercel.json
       - run: npm audit --audit-level=low
+      - run: python3 -m unittest discover -s tests -p 'test_*.py'
       - run: npm test
       - uses: actions/upload-artifact@v4
         if: failure()

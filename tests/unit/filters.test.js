@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { FILTER_PREDICATES } from '../../js/ui.js';
+import { FILTER_PREDICATES, getPointRenderStep } from '../../js/ui.js';
+import { MAX_RENDERED_POINTS } from '../../js/data.js';
 
 describe('FILTER_PREDICATES', () => {
     describe('red-list', () => {
@@ -65,6 +66,20 @@ describe('FILTER_PREDICATES', () => {
         it('fails for unknown species (no flight data)', () => {
             expect(FILTER_PREDICATES['rotor-risk']({ species: 'Unknown species' })).toBe(false);
         });
+    });
+});
+
+describe('point render sampling', () => {
+    it('keeps the default dataset below the rendered point cap', () => {
+        const count = 9996;
+        const step = getPointRenderStep(count);
+
+        expect(step).toBe(2);
+        expect(Math.ceil(count / step)).toBeLessThanOrEqual(MAX_RENDERED_POINTS);
+    });
+
+    it('does not thin datasets that already fit the cap', () => {
+        expect(getPointRenderStep(MAX_RENDERED_POINTS)).toBe(1);
     });
 });
 

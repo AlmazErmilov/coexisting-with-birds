@@ -68,6 +68,17 @@ describe('pointInRing', () => {
 });
 
 describe('pointInFeature', () => {
+    it.each([null, undefined, {}])('returns false for missing geometry (%s)', geometry => {
+        expect(pointInFeature(5, 5, geometry)).toBe(false);
+    });
+
+    it('returns false for malformed polygon rings', () => {
+        expect(pointInFeature(5, 5, {
+            type: 'Polygon',
+            coordinates: [[[0, 0], [10, 0], [10, 10], [0, 10], [0, 0]], null]
+        })).toBe(false);
+    });
+
     it('handles Polygon geometry', () => {
         const polygon = {
             type: 'Polygon',

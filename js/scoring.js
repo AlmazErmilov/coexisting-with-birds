@@ -32,14 +32,29 @@ export function pointInRing(lat, lon, ring) {
     return inside;
 }
 
+function isLinearRing(ring) {
+    return Array.isArray(ring) && ring.length >= 4 && ring.every(position =>
+        Array.isArray(position) && position.length >= 2 &&
+        Number.isFinite(position[0]) && Number.isFinite(position[1])
+    );
+}
+
+function isPolygonCoordinates(coordinates) {
+    return Array.isArray(coordinates) && coordinates.length > 0 && coordinates.every(isLinearRing);
+}
+
 export function pointInFeature(lat, lon, geometry) {
+    if (!geometry || typeof geometry !== 'object' || !Array.isArray(geometry.coordinates)) return false;
+
     if (geometry.type === 'Polygon') {
+        if (!isPolygonCoordinates(geometry.coordinates)) return false;
         if (!pointInRing(lat, lon, geometry.coordinates[0])) return false;
         for (let i = 1; i < geometry.coordinates.length; i++) {
             if (pointInRing(lat, lon, geometry.coordinates[i])) return false;
         }
         return true;
     } else if (geometry.type === 'MultiPolygon') {
+        if (!geometry.coordinates.every(isPolygonCoordinates)) return false;
         for (const poly of geometry.coordinates) {
             if (pointInRing(lat, lon, poly[0])) {
                 let inHole = false;
