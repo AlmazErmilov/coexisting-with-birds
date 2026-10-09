@@ -2,7 +2,7 @@
 
 ## 2026-10-09: resolve remaining data and geometry issues
 
-Hardened GBIF refreshes with bounded retries, explicit timeouts and atomic snapshot replacement. Invalid coordinates are discarded without dropping valid zero values, and a failed fetch keeps the last good snapshot intact. Added regression tests for the fetch path, zero coordinates and downsampling limits.
+Hardened GBIF refreshes with bounded retries, explicit timeouts and atomic snapshot replacement. Invalid coordinates are discarded without dropping valid zero values, and a failed fetch keeps the last good snapshot intact. Python regression tests now run in CI alongside the downsampling and geometry checks.
 
 Null or malformed GeoJSON geometry now skips point-in-polygon matching safely. The existing bird-data loading recovery and rendered-point cap were confirmed and tested; duplicate reports are being closed against the existing implementation.
 
